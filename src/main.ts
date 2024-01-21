@@ -31,9 +31,9 @@ async function bootstrap() {
 
   // Set up Swagger documentation
   setUpSwagger(app, configService);
-
+  
   // Start the application and listen on the specified port
-  await app.listen(configService.get('PORT'));
+  await app.listen(configService.get<number>('PORT'));
 }
 
 const setUpSwagger = (app: INestApplication<any>, configService: ConfigService) => {
