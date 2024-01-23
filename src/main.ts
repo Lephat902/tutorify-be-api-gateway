@@ -42,7 +42,7 @@ const setUpSwagger = (app: INestApplication<any>, configService: ConfigService) 
     .setTitle('API Gateway')
     .setDescription('List of endpoints to communicate with microservices/APIs')
     .setVersion('1.0')
-    .addServer(`http://localhost:${configService.get('PORT')}`, 'LOCAL')
+    .addServer(`http://localhost`, 'LOCAL')
     .addBearerAuth()
     .build();
 
