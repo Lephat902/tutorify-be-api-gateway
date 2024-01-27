@@ -4,24 +4,23 @@ import { JwtService } from '@nestjs/jwt';
 import { AuthConstants } from './auth.constants';
 import { CreateUserDto, LoginDto, UserDto } from './auth.dto';
 import { IAccessToken, TokenType } from './auth.interfaces';
-import { firstValueFrom, lastValueFrom } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
-    @Inject('AUTH_SERVICE') private client: ClientProxy
+    @Inject('AUTH_SERVICE') private readonly client: ClientProxy,
   ) { }
 
   public async getUser(id: string): Promise<UserDto> {
-    return lastValueFrom(this.client.send<UserDto>({ cmd: 'getUser' }, id))
+    return firstValueFrom(this.client.send<UserDto>({ cmd: 'getUser' }, id))
       .catch((error) => {
         throw new HttpException(error, error.status);
       });
   }
 
   public async createUser(createUserDto: CreateUserDto): Promise<UserDto> {
-    console.log(createUserDto);
     return firstValueFrom(this.client.send<UserDto>({ cmd: 'createUser' }, createUserDto))
       .catch((error) => {
         throw new HttpException(error, error.status);
@@ -31,7 +30,7 @@ export class AuthService {
   public async login(loginDto: LoginDto): Promise<UserDto> {
     return firstValueFrom(this.client.send<UserDto>({ cmd: 'login' }, loginDto))
       .catch((error) => {
-        throw new HttpException(error, error.status);
+        throw new HttpException(error.message, error.error.status);
       });
   }
 

@@ -20,7 +20,7 @@ export class AuthController {
   public async getSelf(
     @Token() token: IAccessToken
   ): Promise<UserDto> {
-    return this.authService.getUser(token.id)
+    return this.authService.getUser(token.id);
   }
 
   @Post('signup')
@@ -28,10 +28,10 @@ export class AuthController {
   public async signup(
     @Body() createUserDto: CreateUserDto
   ): Promise<{ user: UserDto; token: string }> {
-    const authUser = await this.authService.createUser(createUserDto)
+    const user = await this.authService.createUser(createUserDto);
     return {
-      user: authUser,
-      token: this.authService.createAccessTokenFromAuthUser(authUser),
+      user,
+      token: this.authService.createAccessTokenFromAuthUser(user),
     }
   }
 
@@ -41,7 +41,9 @@ export class AuthController {
     @Body() loginDto: LoginDto
   ): Promise<{ user: UserDto; token: string }> {
     const user = await this.authService.login(loginDto);
-    console.log(user)
-    return { user, token: this.authService.createAccessTokenFromAuthUser(user) }
+    return {
+      user,
+      token: this.authService.createAccessTokenFromAuthUser(user),
+    }
   }
 }
