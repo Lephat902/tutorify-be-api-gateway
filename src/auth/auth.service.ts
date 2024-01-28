@@ -1,10 +1,10 @@
-import { HttpException, Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { JwtService } from '@nestjs/jwt';
 import { AuthConstants } from './auth.constants';
-import { CreateUserDto, LoginDto, UserDto } from './auth.dto';
-import { IAccessToken, TokenType } from './auth.interfaces';
+import { IAccessToken, TokenType, UserRole } from './auth.interfaces';
 import { firstValueFrom } from 'rxjs';
+import { LoginDto } from './dto';
 
 @Injectable()
 export class AuthService {
@@ -13,25 +13,23 @@ export class AuthService {
     @Inject('AUTH_SERVICE') private readonly client: ClientProxy,
   ) { }
 
-  public async getUser(id: string): Promise<UserDto> {
-    return firstValueFrom(this.client.send<UserDto>({ cmd: 'getUser' }, id))
-      .catch((error) => {
-        throw new HttpException(error, error.status);
-      });
+  public async getUser(id: string) {
+    return firstValueFrom(this.client.send({ cmd: 'getUser' }, id));
   }
 
-  public async createUser(createUserDto: CreateUserDto): Promise<UserDto> {
-    return firstValueFrom(this.client.send<UserDto>({ cmd: 'createUser' }, createUserDto))
-      .catch((error) => {
-        throw new HttpException(error, error.status);
-      });
+  public async verifyEmail(token: string) {
+    return firstValueFrom(this.client.send({ cmd: 'verifyEmail' }, token));
   }
 
-  public async login(loginDto: LoginDto): Promise<UserDto> {
-    return firstValueFrom(this.client.send<UserDto>({ cmd: 'login' }, loginDto))
-      .catch((error) => {
-        throw new HttpException(error.message, error.error.status);
-      });
+  public async createUser(createUserDto: any, role: UserRole) {
+    return firstValueFrom(this.client.send({ cmd: 'createUser' }, {
+      ...createUserDto,
+      role
+    }));
+  }
+
+  public async login(loginDto: LoginDto) {
+    return firstValueFrom(this.client.send({ cmd: 'login' }, loginDto));
   }
 
   public validateAccessToken(token: string): IAccessToken {
@@ -40,7 +38,7 @@ export class AuthService {
     });
   }
 
-  public createAccessTokenFromAuthUser(user: UserDto): string {
+  public createAccessTokenFromAuthUser(user: any): string {
     const payload = {
       email: user.email,
       id: user.id,
