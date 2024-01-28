@@ -4,6 +4,7 @@ import helmet from 'helmet';
 import { ClassSerializerInterceptor, INestApplication, ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
+import { GlobalExceptionsFilter } from './global-exception-handler';
 
 async function bootstrap() {
   // Create Nest application instance
@@ -14,6 +15,9 @@ async function bootstrap() {
 
   // Enable CORS (Note: Remove this line or configure properly for production)
   app.enableCors();
+
+  // Apply the custom exception filter globally
+  app.useGlobalFilters(new GlobalExceptionsFilter());
 
   // Use helmet middleware for security headers
   app.use(helmet());
