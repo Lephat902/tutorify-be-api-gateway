@@ -16,14 +16,16 @@ export class FeedbackService {
   async getFeedbacksByTutorId(tutorId: string) {
     return  firstValueFrom(this.client.send({ cmd: 'getFeedbacksByTutorId' }, tutorId));
   }
-  async createFeedback(tutorId: string, feedback: FeedbackDto) {
-    return firstValueFrom(this.client.send({ cmd: 'createFeedback' },{tutorId, ...feedback} ));
+  async createFeedback(tutorId: string, studentId: string, feedback: FeedbackDto) {
+    return firstValueFrom(this.client.send({ cmd: 'createFeedback' },{tutorId, studentId, ...feedback} ));
 }
 
-  async createFeedbackReply(feedbackId: string, feedbackReply: FeedbackReplyDto) {
+  async createFeedbackReply(feedbackId: string, userId: string, feedbackReply: FeedbackReplyDto) {
     return firstValueFrom(this.client.send({ cmd: 'createFeedbackReply' }, {
-      feedbackId,
-        feedbackReply
+      feedbackId,feedbackReply: {
+      userId,
+        ...feedbackReply
+      }
     }));
   }
 

@@ -1,8 +1,11 @@
-import {  Controller, Get, Post, Param, Body} from '@nestjs/common'
-import { ApiOperation, ApiTags } from '@nestjs/swagger'
+import {  Controller, Get, Post, Param, Body, UseGuards} from '@nestjs/common'
+import { ApiOperation, ApiTags, ApiBearerAuth } from '@nestjs/swagger'
 import { FeedbackService } from './feedback.service'
 import { FeedbackDto, FeedbackReplyDto } from './dtos';
-
+import { TokenGuard } from '../auth/token.guard'
+import { TokenRequirements } from '../auth/token-requirements.decorator'
+import { IAccessToken, TokenType , UserRole} from '../auth/auth.interfaces'
+import { Token } from '../auth/token.decorator';
 
 @Controller()
 @ApiTags('feedback')
@@ -34,19 +37,29 @@ export class FeedbackController {
 
   @Post('tutors/:id/feedbacks')
   @ApiOperation({ summary: 'Student creates a feedback for a tutor.' })
+  @ApiBearerAuth()
+  @UseGuards(TokenGuard)
+  @TokenRequirements(TokenType.CLIENT, [UserRole.STUDENT])
   async createFeedback(
     @Param('id') tutorId: string,
     @Body() feedback: FeedbackDto,
+    @Token() token: IAccessToken,
   ) {
-    return this.feedbackService.createFeedback(tutorId, feedback);
+    const studentId = token.id;
+    return this.feedbackService.createFeedback(tutorId, studentId, feedback);
   }
 
   @Post('feedbacks/:feedbackId/feedback-replies')
   @ApiOperation({ summary: 'Student creates a feedback reply.' })
+  @ApiBearerAuth()
+  @UseGuards(TokenGuard)
+  @TokenRequirements(TokenType.CLIENT, [])
   async createFeedbackReply(
     @Param('feedbackId') feedbackId: string,
     @Body() feedbackReply: FeedbackReplyDto,
+    @Token() token: IAccessToken,
   ) {
-    return this.feedbackService.createFeedbackReply(feedbackId, feedbackReply);
+    const userId = token.id;
+    return this.feedbackService.createFeedbackReply(feedbackId, userId, feedbackReply);
   }
 }
