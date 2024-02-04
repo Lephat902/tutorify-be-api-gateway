@@ -17,12 +17,4 @@ export class FeedbackDto {
     })
     @IsNumber()
     public readonly rate: number;
-  
-    @ApiProperty({
-      description: 'Student\'s id',
-      example: '1',
-      required: true,
-    })
-    @IsNotEmpty()
-    public readonly studentId: string;
   }

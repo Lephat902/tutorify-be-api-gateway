@@ -9,12 +9,4 @@ export class FeedbackReplyDto {
     })
     @IsNotEmpty()
     public readonly text: string;
-
-    @ApiProperty({
-      description: 'Student\'s id',
-      example: '1',
-      required: true,
-    })
-    @IsNotEmpty()
-    public readonly studentId: string;
   }
