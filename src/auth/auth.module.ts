@@ -1,10 +1,11 @@
-import { Module } from '@nestjs/common'
+import { Module, Global } from '@nestjs/common'
 import { AuthController } from './auth.controller'
 import { AuthService } from './auth.service'
 import { JwtModule } from '@nestjs/jwt'
 import { ConfigService } from '@nestjs/config'
 import { ClientsModule, Transport } from '@nestjs/microservices'
 
+@Global()
 @Module({
   imports: [
     JwtModule.registerAsync({
@@ -34,6 +35,6 @@ import { ClientsModule, Transport } from '@nestjs/microservices'
   ],
   controllers: [AuthController],
   providers: [AuthService],
-  exports: [AuthService, JwtModule]
+  exports: [AuthService, JwtModule, ClientsModule]
 })
 export class AuthModule { }

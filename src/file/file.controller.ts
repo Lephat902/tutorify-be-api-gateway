@@ -1,75 +1,144 @@
 import {
-  Body,
   Controller,
   Get,
+  MaxFileSizeValidator,
+  Param,
+  ParseFilePipe,
   Post,
   UploadedFile,
-  UseGuards,
+  UploadedFiles,
   UseInterceptors,
-} from '@nestjs/common'
-import { FileInterceptor } from '@nestjs/platform-express';
+} from '@nestjs/common';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import {
-  ApiBearerAuth,
-  ApiBody,
   ApiConsumes,
-  ApiOperation,
+  ApiBody,
+  ApiCreatedResponse,
+  ApiBadRequestResponse,
+  ApiOkResponse,
   ApiTags,
-} from '@nestjs/swagger'
+} from '@nestjs/swagger';
+import { FilesUploadDto } from './dtos/files-upload.dto';
+import { AvatarUploadDto } from './dtos/avatar-upload.dto';
+import { CustomFileTypeValidator } from './validators/custom-file-type.validator';
+import { AvatarRatioValidator } from './validators/avatar-ratio.validator';
+import { AvatarTypeValidator } from './validators/avatar-type.validator';
+import { FileService } from './file.service';
 
-import { IAccessToken, TokenType } from '../auth/auth.interfaces'
-import { TokenRequirements } from '../auth/token-requirements.decorator'
-import { Token } from '../auth/token.decorator'
-import { TokenGuard } from '../auth/token.guard'
-import { FileMetadataDto } from './file.dto'
-import { FileService } from './file.service'
-
-@Controller('file')
+@Controller()
 @ApiTags('file')
-@UseGuards(TokenGuard)
 export class FileController {
-  constructor(private readonly fileService: FileService) {}
+  constructor(private readonly fileService: FileService) { }
 
-  @Post('upload')
-  @ApiOperation({ summary: 'Upload a file' })
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(FilesInterceptor('files'))
   @ApiConsumes('multipart/form-data')
   @ApiBody({
-    schema: {
-      type: 'object',
-      properties: {
-        file: {
-          type: 'string',
-          format: 'binary',
-        },
-      },
-    },
-  })  
-  @ApiBearerAuth()
-  @TokenRequirements(TokenType.CLIENT, [])
-  public async uploadFile(
-    @UploadedFile() file: Express.Multer.File,
-    @Body() meta: FileMetadataDto
+    description: 'Files to upload',
+    type: FilesUploadDto,
+  })
+  @ApiCreatedResponse({
+    description: 'The files have been uploaded successfully.',
+  })
+  @ApiBadRequestResponse({
+    description:
+      'File formats are invalid or file sizes are too large or file is required.',
+  })
+  @Post('tutors/:id/upload/portfolio')
+  uploadTutorFiles(
+    @Param('id') tutorId: string,
+    @UploadedFiles(
+      new ParseFilePipe({
+        validators: [
+          new MaxFileSizeValidator({
+            maxSize: 1024 * 1024 * 20,
+            message: 'Maximum file size is 20MB',
+          }),
+          new CustomFileTypeValidator(),
+        ],
+      }),
+    )
+    files: Array<Express.Multer.File>,
   ) {
-    return this.fileService.upload(file, meta)
+    return this.fileService.createPortfolios(tutorId, files);
   }
 
-  @Post('download')
-  @ApiOperation({ summary: 'Download a file' })
-  @ApiBearerAuth()
-  @TokenRequirements(TokenType.CLIENT, [])
-  public async downloadFile(@Body() meta: FileMetadataDto) {
-    return this.fileService.download(meta)
+  @UseInterceptors(FileInterceptor('avatar'))
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    description: 'Avatar to upload',
+    type: AvatarUploadDto,
+  })
+  @ApiCreatedResponse({
+    description: 'The avatar has been uploaded successfully.',
+  })
+  @ApiBadRequestResponse({
+    description:
+      'File format is invalid or file size is too large or file is required.',
+  })
+  @Post('upload/avatar')
+  uploadAvatar(
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          new MaxFileSizeValidator({
+            maxSize: 1024 * 1024,
+            message: 'Maximum image size is 1MB.',
+          }),
+          new AvatarTypeValidator(),
+          new AvatarRatioValidator(),
+        ],
+      }),
+    )
+    avatar: Express.Multer.File,
+  ) {
+    return this.fileService.uploadAvatar(avatar);
   }
 
-  @Get('avatar')
-  @ApiOperation({ summary: 'Download user avatar' })
-  @ApiBearerAuth()
-  @TokenRequirements(TokenType.CLIENT, [])
-  public async downloadAvatar(@Token() token: IAccessToken) {
-    const meta: FileMetadataDto = {
-      container: 'avatar',
-      name: `user-${token.id}`,
-    }
-    return this.fileService.download(meta)
+  @UseInterceptors(FilesInterceptor('files'))
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    description: 'Files to upload',
+    type: FilesUploadDto,
+  })
+  @ApiCreatedResponse({
+    description: 'The files have been uploaded successfully.',
+  })
+  @ApiBadRequestResponse({
+    description:
+      'File formats are invalid or file sizes are too large or file is required.',
+  })
+  @Post('sessions/:id/upload/materials')
+  uploadSesssionFiles(
+    @Param('id') sessionId: string,
+    @UploadedFiles(
+      new ParseFilePipe({
+        validators: [
+          new MaxFileSizeValidator({
+            maxSize: 1024 * 1024 * 20,
+            message: 'Maximum file size is 20MB',
+          }),
+          new CustomFileTypeValidator(),
+        ],
+      }),
+    )
+    files: Array<Express.Multer.File>,
+  ) {
+    return this.fileService.createSessionMaterials(sessionId, files);
+  }
+
+  @ApiOkResponse({
+    description: 'Get all portfolios by tutorId  successfully.',
+  })
+  @Get('tutors/:id/portfolios')
+  getAllPortfoliosByUserId(@Param('id') tutorId: string) {
+    return this.fileService.getAllPortfoliosByTutorId(tutorId);
+  }
+
+  @ApiOkResponse({
+    description: 'Get all materials by sessionId successfully.',
+  })
+  @Get('sessions/:id/materials')
+  getAllSessionMaterialBySessionId(@Param('id') sessionId: string) {
+    return this.fileService.getAllSessionMaterialBySessionId(sessionId);
   }
 }

@@ -1,34 +1,84 @@
-import { HttpException, Injectable } from '@nestjs/common'
-import { Client, ClientProxy, Transport } from '@nestjs/microservices'
-import { lastValueFrom } from 'rxjs';
-import { FileMetadataDto } from './file.dto'
+import axios, { AxiosError, AxiosInstance } from 'axios';
+import { HttpException } from '@nestjs/common';
+import * as FormData from 'form-data';
 
-@Injectable()
 export class FileService {
-  @Client({
-    options: { host: 'file', port: 3000 },
-    transport: Transport.TCP,
-  })
-  public client: ClientProxy
+  private readonly httpClient: AxiosInstance;
 
-  public async upload(
-    file: Express.Multer.File,
-    meta: FileMetadataDto
-  ): Promise<Express.Multer.File> {
-    const result = this.client
-      .send<Express.Multer.File>({ cmd: 'uploadFile' }, { file, meta });
-    return lastValueFrom(result)
-      .catch(error => {
-        throw new HttpException(error, error.status);
-      });
+  constructor() {
+    this.httpClient = axios.create({
+      baseURL: process.env.FILE_SERVICE_BASE_DOMAIN,
+    });
   }
 
-  public async download(meta: FileMetadataDto): Promise<string | Buffer> {
-    const result = this.client
-      .send<string | Buffer>({ cmd: 'downloadFile' }, meta);
-    return lastValueFrom(result)
-      .catch(error => {
-        throw new HttpException(error, error.status);
-      });
+  private buildUrl(path: string): string {
+    return `${this.httpClient.defaults.baseURL}${path}`;
+  }
+
+  private async handleRequest(requestPromise: Promise<any>) {
+    try {
+      const response = await requestPromise;
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        // convert AxiosError to HttpException
+        console.log(error);
+        throw new HttpException(error.response.data.message, error.response.data.statusCode);
+      } else {
+        throw error;
+      }
+    }
+  }
+
+  createPortfolios(tutorId: string, files: Express.Multer.File[]) {
+    const url = this.buildUrl(`tutors/${tutorId}/upload/portfolio`);
+
+    // Create a new FormData instance
+    const formData = new FormData();
+
+    // Append each file to the form data
+    files.forEach((file) => {
+      formData.append('files', file.buffer, file.originalname);
+    });
+
+    // Send the request
+    return this.handleRequest(this.httpClient.post(url, formData));
+  }
+
+  uploadAvatar(file: Express.Multer.File) {
+    const url = this.buildUrl('upload/avatar');
+    
+    // Create a new FormData instance
+    const formData = new FormData();
+    formData.append('avatar', file.buffer, file.originalname);
+    
+    // Send the request
+    return this.handleRequest(this.httpClient.post(url, formData));
+  }
+  
+  createSessionMaterials(sessionId: string, files: Express.Multer.File[]) {
+    const url = this.buildUrl(`sessions/${sessionId}/upload/materials`);
+    
+    // Create a new FormData instance
+    const formData = new FormData();
+    
+    // Append each file to the form data
+    files.forEach((file) => {
+      formData.append('files', file.buffer, file.originalname);
+    });
+    
+    // Send the request
+    return this.handleRequest(this.httpClient.post(url, formData));
+  }
+  
+
+  getAllPortfoliosByTutorId(tutorId: string) {
+    const url = this.buildUrl(`tutors/${tutorId}/portfolios`);
+    return this.handleRequest(this.httpClient.get(url));
+  }
+
+  getAllSessionMaterialBySessionId(sessionId: string) {
+    const url = this.buildUrl(`sessions/${sessionId}/materials`);
+    return this.handleRequest(this.httpClient.get(url));
   }
 }
