@@ -5,7 +5,7 @@ import { TokenGuard } from './token.guard'
 import { Token } from './token.decorator'
 import { IAccessToken, TokenType, UserRole } from './auth.interfaces'
 import { TokenRequirements } from './token-requirements.decorator'
-import { LoginDto, SignUpStudentDto, SignUpTutorDto } from './dto'
+import { LoginDto, SignUpStudentDto, SignUpTutorDto, VerifyEmailDto, } from './dto'
 
 @Controller()
 @ApiTags('authentication')
@@ -26,9 +26,9 @@ export class AuthController {
   @Get('confirm-email')
   @ApiOperation({ summary: 'User click this URL in email received to verify their email' })
   public async verifyEmail(
-    @Query('token') token: string,
+    @Query() verifyEmailDto: VerifyEmailDto,
   ) {
-    return this.authService.verifyEmail(token);
+    return this.authService.verifyEmail(verifyEmailDto.token);
   }
 
   @Post('students/signup')
