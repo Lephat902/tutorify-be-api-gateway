@@ -5,6 +5,7 @@ import { ConfigModule } from '@nestjs/config'
 import { FeedbackModule } from './feedback/feedback.module'
 import { FileModule } from './file/file.module'
 import { ClassCategoryModule } from './class-category/class-category.module'
+import { ClassModule } from './class/class.module'
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { ClassCategoryModule } from './class-category/class-category.module'
     FeedbackModule,
     FileModule,
     ClassCategoryModule,
+    ClassModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: ['.env', '.env.example'],
