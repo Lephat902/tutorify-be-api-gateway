@@ -19,6 +19,6 @@ export class TokenRequirementsHelper {
   }
 
   public tokenHasAllUserRoles(userRoles: UserRole[]): boolean {
-    return this.requiredUserRoles.every(requiredRole => userRoles.indexOf(requiredRole) > -1) || this.requiredUserRoles.length === 0;
+    return this.requiredUserRoles.some(requiredRole => userRoles.includes(requiredRole)) || this.requiredUserRoles.length === 0;
   }
 }
