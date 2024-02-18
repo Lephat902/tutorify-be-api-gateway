@@ -1,6 +1,15 @@
-import { IsString, IsNotEmpty, IsOptional, IsDate, IsNumber, IsBoolean, IsEnum } from 'class-validator';
+import { IsString, IsNotEmpty, IsOptional, IsDate, IsNumber, IsBoolean, IsEnum, ArrayNotEmpty, IsArray } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { GenderPref, TutorPositionPref } from './enums';
+import { GenderPref, TutorPositionPref } from '@tutorify/shared';
+import { ClassTimeSlotDto } from './class-timeslot.dto';
+import { Type } from 'class-transformer';
+
+const exampleStartDate = new Date();
+const exampleEndDate = new Date(exampleStartDate);
+exampleEndDate.setDate(exampleEndDate.getDate() + 7);
+
+exampleStartDate.setHours(0, 0, 0, 0);
+exampleEndDate.setHours(0, 0, 0, 0);
 
 export class ClassCreateDto {
     @ApiProperty({
@@ -8,7 +17,8 @@ export class ClassCreateDto {
         type: () => [String],
         example: ['d48f22f9-72db-4109-a7e6-3e32c2751a88', 'd48f22f9-72db-4109-a7e6-3e32c2751a88']
     })
-    @IsNotEmpty()
+    @IsArray()
+    @ArrayNotEmpty()
     classCategoryIds: string[];
 
     @ApiProperty({ description: 'Description of the class', example: 'Math tutoring for high school students' })
@@ -21,14 +31,16 @@ export class ClassCreateDto {
     @IsString()
     requirement?: string;
 
-    @ApiProperty({ description: 'The start date of the class', type: Date, required: false, example: '2024-03-01' })
+    @ApiProperty({ description: 'The start date of the class', format: 'date', type: Date, required: false, example: exampleStartDate })
     @IsOptional()
     @IsDate()
+    @Type(() => Date)
     startDate?: Date;
 
-    @ApiProperty({ description: 'The end date of the class', type: Date, required: false, example: '2024-06-30' })
+    @ApiProperty({ description: 'The end date of the class', format: 'date', type: Date, required: false, example: exampleEndDate })
     @IsOptional()
     @IsDate()
+    @Type(() => Date)
     endDate?: Date;
 
     @ApiProperty({ description: 'The wages offered for the class', required: false, example: 25 })
@@ -77,4 +89,10 @@ export class ClassCreateDto {
     @IsOptional()
     @IsEnum(GenderPref)
     tutorGenderPref?: GenderPref;
+
+    @ApiProperty({ type: [ClassTimeSlotDto] })
+    @IsArray()
+    @ArrayNotEmpty()
+    @IsNotEmpty({ each: true })
+    timeSlots: ClassTimeSlotDto[];
 }

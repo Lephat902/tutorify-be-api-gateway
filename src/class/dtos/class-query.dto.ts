@@ -1,7 +1,7 @@
 import { IsBoolean, IsOptional } from 'class-validator';
 import { ApiProperty, IntersectionType } from '@nestjs/swagger';
 import { PaginationDto, SortingDirectionDto } from 'src/common/dtos';
-import { ClassOrderBy } from './enums/class-order-by.enum';
+import { ClassOrderBy } from '@tutorify/shared';
 import { Transform } from 'class-transformer';
 import { ToBoolean } from 'src/common/decorators';
 

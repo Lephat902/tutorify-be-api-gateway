@@ -1,8 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { ClassCategoryDto } from 'src/class-category/dtos';
-import { GenderPref, TutorPositionPref } from './enums';
+import { GenderPref, TutorPositionPref } from '@tutorify/shared';
+import { ClassTimeSlotDto } from './class-timeslot.dto';
 
 export class ClassDto {
+    @ApiProperty({ description: 'The ID of the class', example: '123abc' })
+    id: string;
+
     @ApiProperty({ description: 'The ID of the student who owns the class', example: '123abc' })
     studentId: string;
 
@@ -44,4 +48,7 @@ export class ClassDto {
 
     @ApiProperty({ description: 'Preferred gender of the tutor for the class', enum: GenderPref, enumName: 'GenderPref', example: 'MALE' })
     tutorGenderPref: GenderPref;
+
+    @ApiProperty({ description: 'The categories associated with the class', type: () => [ClassCategoryDto], example: [{ name: 'Math' }, { name: 'Science' }] })
+    timeSlots: ClassTimeSlotDto[];
 }
