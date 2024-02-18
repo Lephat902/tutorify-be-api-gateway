@@ -18,6 +18,14 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "resolveJsonModule": true, // help VSCode to autocomplete and suggest quick-fixes
+    "paths": {
+      "@tutorify/shared": [
+        "../shared/"
+      ],
+      "@tutorify/shared/*": [
+        "../shared/*"
+      ]
+    }  
   },
   "exclude": [
     "test-fixtures",
