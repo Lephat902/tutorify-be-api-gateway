@@ -1,7 +1,7 @@
 export const AuthConstants = {
   access_token: {
     options: {
-      expiresIn: '30m',
+      expiresIn: '1d',
       issuer: 'ISSUER_NAME',
     },
   },

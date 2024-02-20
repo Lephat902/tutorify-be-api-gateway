@@ -43,10 +43,9 @@ async function bootstrap() {
 const setUpSwagger = (app: INestApplication<any>, configService: ConfigService) => {
   // Configure Swagger options
   const swaggerOptions = new DocumentBuilder()
-    .setTitle('API Gateway')
-    .setDescription('List of endpoints to communicate with microservices/APIs')
+    .setTitle('Tutorify')
+    .setDescription('List of endpoints to communicate with Tutorify system')
     .setVersion('1.0')
-    .addServer('', 'LOCAL')
     .addBearerAuth()
     .build();
 
