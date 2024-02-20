@@ -6,6 +6,7 @@ import { FeedbackModule } from './feedback/feedback.module'
 import { FileModule } from './file/file.module'
 import { ClassCategoryModule } from './class-category/class-category.module'
 import { ClassModule } from './class/class.module'
+import { TutorApplyForClassModule } from './tutor-apply-for-class/tutor-apply-for-class.module'
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { ClassModule } from './class/class.module'
     FileModule,
     ClassCategoryModule,
     ClassModule,
+    TutorApplyForClassModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: ['.env', '.env.example'],

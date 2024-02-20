@@ -1,7 +1,8 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { ForbiddenException, Inject, Injectable } from '@nestjs/common';
 import { ClassCreateDto, ClassDto, ClassQueryDto, ClassUpdateDto } from './dtos';
 import { ClientProxy } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
+import { IAccessToken, UserRole } from 'src/auth/auth.interfaces';
 
 @Injectable()
 export class ClassService {
@@ -19,6 +20,14 @@ export class ClassService {
     async deleteClassById(id: string): Promise<void> {
         return firstValueFrom(this.client.send({ cmd: 'deleteClassById' }, {
             id,
+        }));
+    }
+
+    async hideClass(id: string): Promise<ClassDto> {
+        const updateDto = { isHidden: true };
+        return firstValueFrom(this.client.send({ cmd: 'updateClass' }, {
+            id,
+            updateDto,
         }));
     }
 
@@ -51,5 +60,18 @@ export class ClassService {
             tutorId,
             filters,
         }));
+    }
+
+    // Return class data in case of success, throw error if failed
+    async validateClassOwnership(token: IAccessToken, classId: string) {
+        const userId = token.id;
+        const userRole = token.roles[0];
+        const cl = await this.getClassById(classId);
+
+        if (userRole === UserRole.STUDENT && cl.studentId !== userId) {
+            throw new ForbiddenException('You are not the owner of this class');
+        }
+
+        return cl;
     }
 }
