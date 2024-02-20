@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsOptional, IsDate, IsNumber, IsBoolean, IsEnum, ArrayNotEmpty, IsArray } from 'class-validator';
+import { IsString, IsNotEmpty, IsOptional, IsDate, IsNumber, IsBoolean, IsEnum, ArrayNotEmpty, IsArray, ArrayMaxSize } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { GenderPref, TutorPositionPref } from '@tutorify/shared';
 import { ClassTimeSlotDto } from './class-timeslot.dto';
@@ -95,4 +95,15 @@ export class ClassCreateDto {
     @ArrayNotEmpty()
     @IsNotEmpty({ each: true })
     timeSlots: ClassTimeSlotDto[];
+
+    @IsOptional()
+    @ApiProperty({
+        description: "List of desired tutors' id",
+        type: () => [String],
+        example: ['d48f22f9-72db-4109-a7e6-3e32c2751a88', 'd48f22f9-72db-4109-a7e6-3e32c2751a88']
+    })
+    @IsArray()
+    @ArrayNotEmpty()
+    @ArrayMaxSize(5, { message: "Desired tutors list length must be shorter than or equal 5" })
+    desiredTutorIds?: string[];
 }
