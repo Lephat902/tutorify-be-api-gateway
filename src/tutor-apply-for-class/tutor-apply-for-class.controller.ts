@@ -59,6 +59,17 @@ export class TutorApplyForClassController {
         await this.tutorApplyForClassService.cancelApplication(applicationId);
     }
 
+    @ApiOperation({ summary: "Tutor accept an invite to teach a class, set all other pending applications' status to FILLED" })
+    @Patch('/my/applications/:applicationId/approve')
+    @TokenRequirements(TokenType.CLIENT, [UserRole.TUTOR])
+    async approveTutoringInvite(
+        @Token() token: IAccessToken,
+        @Param('applicationId') applicationId: string
+    ) {
+        await this.tutorApplyForClassService.validateApplicationOwnership(token, applicationId);
+        await this.tutorApplyForClassService.approveApplication(applicationId);
+    }
+
     @ApiOperation({ summary: 'Student retrieves an application to his class by its id.' })
     @Get('/applications/:applicationId')
     @TokenRequirements(TokenType.CLIENT, [UserRole.STUDENT])
