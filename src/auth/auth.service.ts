@@ -5,12 +5,13 @@ import { AuthConstants } from './auth.constants';
 import { IAccessToken, TokenType, UserRole } from './auth.interfaces';
 import { firstValueFrom } from 'rxjs';
 import { LoginDto } from './dto';
+import { QueueNames } from '@tutorify/shared';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
-    @Inject('AUTH_SERVICE') private readonly client: ClientProxy,
+    @Inject(QueueNames.TUTOR_APPLY_FOR_CLASS) private readonly client: ClientProxy,
   ) { }
 
   public async getUser(id: string) {

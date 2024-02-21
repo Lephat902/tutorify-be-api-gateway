@@ -2,11 +2,12 @@ import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
 import { ClassCategoryDto, LevelDto, SubjectDto } from './dtos';
+import { QueueNames } from '@tutorify/shared';
 
 @Injectable()
 export class ClassCategoryService {
     constructor(
-        @Inject('CLASS_CATEGORY_SERVICE') private readonly client: ClientProxy,
+        @Inject(QueueNames.CLASS_AND_CATEGORY) private readonly client: ClientProxy,
     ) { }
 
     findAll(): Promise<ClassCategoryDto[]> {

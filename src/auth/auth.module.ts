@@ -4,6 +4,7 @@ import { AuthService } from './auth.service'
 import { JwtModule } from '@nestjs/jwt'
 import { ConfigService } from '@nestjs/config'
 import { ClientsModule, Transport } from '@nestjs/microservices'
+import { QueueNames } from '@tutorify/shared'
 
 @Global()
 @Module({
@@ -18,13 +19,13 @@ import { ClientsModule, Transport } from '@nestjs/microservices'
     }),
     ClientsModule.registerAsync([
       {
-        name: 'AUTH_SERVICE',
+        name: QueueNames.TUTOR_APPLY_FOR_CLASS,
         inject: [ConfigService],
         useFactory: async (configService: ConfigService) => ({
           transport: Transport.RMQ,
           options: {
             urls: [configService.get<string>('RABBITMQ_URI')],
-            queue: 'auth',
+            queue: QueueNames.TUTOR_APPLY_FOR_CLASS,
             queueOptions: {
               durable: false,
             },

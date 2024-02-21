@@ -3,11 +3,12 @@ import { ClassCreateDto, ClassDto, ClassQueryDto, ClassUpdateDto } from './dtos'
 import { ClientProxy } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
 import { IAccessToken, UserRole } from 'src/auth/auth.interfaces';
+import { QueueNames } from '@tutorify/shared';
 
 @Injectable()
 export class ClassService {
     constructor(
-        @Inject('CLASS_SERVICE') private readonly client: ClientProxy,
+        @Inject(QueueNames.CLASS_AND_CATEGORY) private readonly client: ClientProxy,
     ) { }
 
     async addClass(studentId: string, classData: ClassCreateDto): Promise<ClassDto> {
