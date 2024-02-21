@@ -3,18 +3,19 @@ import { ConfigService } from '@nestjs/config'
 import { ClientsModule, Transport } from '@nestjs/microservices'
 import { ClassCategoryController } from './class-category.controller'
 import { ClassCategoryService } from './class-category.service'
+import { QueueNames } from '@tutorify/shared'
 
 @Module({
   imports: [
     ClientsModule.registerAsync([
       {
-        name: 'CLASS_CATEGORY_SERVICE',
+        name: QueueNames.CLASS_AND_CATEGORY,
         inject: [ConfigService],
         useFactory: async (configService: ConfigService) => ({
           transport: Transport.RMQ,
           options: {
             urls: [configService.get<string>('RABBITMQ_URI')],
-            queue: 'class-category',
+            queue: QueueNames.CLASS_AND_CATEGORY,
             queueOptions: {
               durable: false,
             },

@@ -2,11 +2,12 @@ import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
 import { FeedbackDto, FeedbackReplyDto } from './dtos';
+import { QueueNames } from '@tutorify/shared';
 
 @Injectable()
 export class FeedbackService {
   constructor(
-    @Inject('FEEDBACK_SERVICE') private readonly client: ClientProxy,
+    @Inject(QueueNames.FEEDBACK) private readonly client: ClientProxy,
   ) { }
 
   async getAllFeedbacks() {

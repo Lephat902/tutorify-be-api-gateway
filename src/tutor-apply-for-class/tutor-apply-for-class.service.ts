@@ -3,11 +3,12 @@ import { TutorApplyForClassDto, TutorApplyForClassCreateDto, TutorApplyForClassQ
 import { ClientProxy } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
 import { IAccessToken } from 'src/auth/auth.interfaces';
+import { QueueNames } from '@tutorify/shared';
 
 @Injectable()
 export class TutorApplyForClassService {
     constructor(
-        @Inject('TUTOR_APPLY_FOR_CLASS_SERVICE') private readonly client: ClientProxy,
+        @Inject(QueueNames.TUTOR_APPLY_FOR_CLASS) private readonly client: ClientProxy,
     ) { }
 
     async applyForClass(tutorId: string, classId: string): Promise<TutorApplyForClassDto> {
