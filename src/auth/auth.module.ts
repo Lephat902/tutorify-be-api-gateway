@@ -19,13 +19,13 @@ import { QueueNames } from '@tutorify/shared'
     }),
     ClientsModule.registerAsync([
       {
-        name: QueueNames.TUTOR_APPLY_FOR_CLASS,
+        name: QueueNames.AUTH,
         inject: [ConfigService],
         useFactory: async (configService: ConfigService) => ({
           transport: Transport.RMQ,
           options: {
             urls: [configService.get<string>('RABBITMQ_URI')],
-            queue: QueueNames.TUTOR_APPLY_FOR_CLASS,
+            queue: QueueNames.AUTH,
             queueOptions: {
               durable: false,
             },
