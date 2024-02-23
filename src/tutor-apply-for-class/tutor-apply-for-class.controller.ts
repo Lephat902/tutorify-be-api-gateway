@@ -2,11 +2,12 @@ import { Controller, Post, Get, Param, Query, UseGuards, Patch } from '@nestjs/c
 import { TutorApplyForClassService } from './tutor-apply-for-class.service';
 import { TutorApplyForClassDto, TutorApplyForClassQueryDto } from './dtos';
 import { TokenRequirements } from 'src/auth/token-requirements.decorator';
-import { IAccessToken, TokenType, UserRole } from 'src/auth/auth.interfaces';
+import { IAccessToken, TokenType } from 'src/auth/auth.interfaces';
 import { Token } from 'src/auth/token.decorator';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { TokenGuard } from 'src/auth/token.guard';
 import { ClassService } from 'src/class/class.service';
+import { UserRole } from '@tutorify/shared';
 
 @Controller('classes')
 @ApiTags('Class Application')

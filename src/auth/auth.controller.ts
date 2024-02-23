@@ -1,17 +1,22 @@
-import { Body, Query, Controller, Get, Post, UseGuards } from '@nestjs/common'
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger'
+import { Body, Query, Controller, Get, Post, UseGuards, UploadedFiles, UseInterceptors, UploadedFile } from '@nestjs/common'
+import { ApiBearerAuth, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger'
 import { AuthService } from './auth.service'
 import { TokenGuard } from './token.guard'
 import { Token } from './token.decorator'
-import { IAccessToken, TokenType, UserRole } from './auth.interfaces'
+import { IAccessToken, TokenType } from './auth.interfaces'
 import { TokenRequirements } from './token-requirements.decorator'
-import { LoginDto, SignUpStudentDto, SignUpTutorDto, VerifyEmailDto, } from './dto'
+import { LoginDto, SignUpStudentDto, SignUpTutorDto, VerifyEmailDto, } from './dtos'
+import { FileFieldsInterceptor, FileInterceptor } from '@nestjs/platform-express'
+import { UserRole } from '@tutorify/shared'
+import { validateAvatar, validatePortfolios } from './helpers'
 
 @Controller()
 @ApiTags('authentication')
 @UseGuards(TokenGuard)
 export class AuthController {
-  constructor(private readonly authService: AuthService) { }
+  constructor(
+    private readonly authService: AuthService,
+  ) { }
 
   @Get('auth')
   @ApiOperation({ summary: 'Get self information' })
@@ -32,20 +37,53 @@ export class AuthController {
   }
 
   @Post('students/signup')
+  @UseInterceptors(FileInterceptor('avatar'))
+  @ApiConsumes('multipart/form-data')
   @ApiOperation({ summary: 'Sign up a new student' })
   public async signUpStudent(
-    @Body() signupStudentDto: SignUpStudentDto
+    @Body() signupStudentDto: SignUpStudentDto,
+    @UploadedFile() avatar?: Express.Multer.File,
   ) {
-    const student = await this.authService.createUser(signupStudentDto, UserRole.STUDENT);
+    if (avatar)
+      await validateAvatar(avatar);
+
+    const fullSignupStudentDto: SignUpStudentDto & { role: string } = {
+      ...signupStudentDto,
+      avatar,
+      role: UserRole.STUDENT,
+    }
+
+    const student = await this.authService.createUser(fullSignupStudentDto);
     return this.returnUserAndToken(student);
   }
 
   @Post('tutors/signup')
+  @UseInterceptors(FileFieldsInterceptor([
+    { name: 'avatar', maxCount: 1 },
+    { name: 'portfolios', maxCount: 10 }
+  ]))
+  @ApiConsumes('multipart/form-data')
   @ApiOperation({ summary: 'Sign up a new tutor' })
   public async signUpTutor(
-    @Body() signupTutorDto: SignUpTutorDto
+    @Body() signupTutorDto: SignUpTutorDto,
+    @UploadedFiles() files?: { avatar?: Express.Multer.File[], portfolios?: Express.Multer.File[] },
   ) {
-    const tutor = await this.authService.createUser(signupTutorDto, UserRole.TUTOR);
+    const { portfolios } = files;
+    const avatar = files.avatar?.[0] ?? undefined;
+
+    if (avatar)
+      await validateAvatar(avatar);
+    if (portfolios)
+      await validatePortfolios(portfolios);
+
+    const fullSignupTutorDto: SignUpTutorDto & { role: string } = {
+      ...signupTutorDto,
+      portfolios,
+      avatar,
+      role: UserRole.TUTOR,
+    }
+
+    const tutor = await this.authService.createUser(fullSignupTutorDto);
     return this.returnUserAndToken(tutor);
   }
 
