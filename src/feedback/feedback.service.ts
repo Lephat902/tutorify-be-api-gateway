@@ -15,16 +15,16 @@ export class FeedbackService {
   }
 
   async getFeedbacksByTutorId(tutorId: string) {
-    return  firstValueFrom(this.client.send({ cmd: 'getFeedbacksByTutorId' }, tutorId));
+    return firstValueFrom(this.client.send({ cmd: 'getFeedbacksByTutorId' }, tutorId));
   }
   async createFeedback(tutorId: string, studentId: string, feedback: FeedbackDto) {
-    return firstValueFrom(this.client.send({ cmd: 'createFeedback' },{tutorId, studentId, ...feedback} ));
-}
+    return firstValueFrom(this.client.send({ cmd: 'createFeedback' }, { tutorId, studentId, ...feedback }));
+  }
 
   async createFeedbackReply(feedbackId: string, userId: string, feedbackReply: FeedbackReplyDto) {
     return firstValueFrom(this.client.send({ cmd: 'createFeedbackReply' }, {
-      feedbackId,feedbackReply: {
-      userId,
+      feedbackId, feedbackReply: {
+        userId,
         ...feedbackReply
       }
     }));
@@ -32,7 +32,7 @@ export class FeedbackService {
 
   async getFeedbackRepliesByFeedbackId(feedbackId: string) {
     return firstValueFrom(this.client.send({
-      cmd:'getFeedbackRepliesByFeedback', 
-    },feedbackId))
+      cmd: 'getFeedbackRepliesByFeedback',
+    }, feedbackId))
   }
 }

@@ -2,11 +2,12 @@ import { Controller, Post, Delete, Get, Body, Param, Query, UseGuards, Patch } f
 import { ClassService } from './class.service';
 import { ClassCreateDto, ClassDto, ClassQueryDto } from './dtos';
 import { TokenRequirements } from 'src/auth/token-requirements.decorator';
-import { IAccessToken, TokenType, UserRole } from 'src/auth/auth.interfaces';
+import { IAccessToken, TokenType } from 'src/auth/auth.interfaces';
 import { Token } from 'src/auth/token.decorator';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { TokenGuard } from 'src/auth/token.guard';
 import { ClassUpdateDto } from './dtos/class-update.dto';
+import { UserRole } from '@tutorify/shared';
 
 @Controller()
 @ApiTags('Class')
@@ -90,5 +91,13 @@ export class ClassController {
     @ApiBearerAuth()
     async getClassesByTutorId(@Param('tutorId') tutorId: string, @Query() filters: ClassQueryDto): Promise<ClassDto[]> {
         return this.classService.getClassesByTutorId(tutorId, filters);
+    }
+
+    @ApiOperation({ summary: "Admin/Manager retrieves a list of classes by user id." })
+    @Get('classes/user/:userId')
+    @TokenRequirements(TokenType.CLIENT, [UserRole.ADMIN, UserRole.MANAGER])
+    @ApiBearerAuth()
+    async getClassesByUserId(@Param('userId') userId: string, @Query() filters: ClassQueryDto): Promise<ClassDto[]> {
+        return this.classService.getClassesByUserId(userId, filters);
     }
 }

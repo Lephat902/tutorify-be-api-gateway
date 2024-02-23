@@ -2,16 +2,16 @@ import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { JwtService } from '@nestjs/jwt';
 import { AuthConstants } from './auth.constants';
-import { IAccessToken, TokenType, UserRole } from './auth.interfaces';
+import { IAccessToken, TokenType } from './auth.interfaces';
 import { firstValueFrom } from 'rxjs';
-import { LoginDto } from './dto';
+import { LoginDto, SignUpDto } from './dtos';
 import { QueueNames } from '@tutorify/shared';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
-    @Inject(QueueNames.TUTOR_APPLY_FOR_CLASS) private readonly client: ClientProxy,
+    @Inject(QueueNames.AUTH) private readonly client: ClientProxy,
   ) { }
 
   public async getUser(id: string) {
@@ -22,11 +22,8 @@ export class AuthService {
     return firstValueFrom(this.client.send({ cmd: 'verifyEmail' }, token));
   }
 
-  public async createUser(createUserDto: any, role: UserRole) {
-    return firstValueFrom(this.client.send({ cmd: 'createUser' }, {
-      ...createUserDto,
-      role
-    }));
+  public async createUser(createUserDto: SignUpDto) {
+    return firstValueFrom(this.client.send({ cmd: 'createUser' }, createUserDto));
   }
 
   public async login(loginDto: LoginDto) {

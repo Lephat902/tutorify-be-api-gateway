@@ -1,11 +1,12 @@
-import {  Controller, Get, Post, Param, Body, UseGuards} from '@nestjs/common'
+import { Controller, Get, Post, Param, Body, UseGuards } from '@nestjs/common'
 import { ApiOperation, ApiTags, ApiBearerAuth } from '@nestjs/swagger'
 import { FeedbackService } from './feedback.service'
 import { FeedbackDto, FeedbackReplyDto } from './dtos';
 import { TokenGuard } from '../auth/token.guard'
 import { TokenRequirements } from '../auth/token-requirements.decorator'
-import { IAccessToken, TokenType , UserRole} from '../auth/auth.interfaces'
+import { IAccessToken, TokenType } from '../auth/auth.interfaces'
 import { Token } from '../auth/token.decorator';
+import { UserRole } from '@tutorify/shared';
 
 @Controller()
 @ApiTags('feedback')

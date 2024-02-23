@@ -1,3 +1,5 @@
+import { UserRole } from "@tutorify/shared"
+
 export interface IAccessToken {
   readonly email: string
   readonly exp: number
@@ -11,17 +13,4 @@ export interface IAccessToken {
 export enum TokenType {
   CLIENT,
   SYSTEM,
-}
-
-export enum UserRole {
-  STUDENT = 'STUDENT',
-  TUTOR = 'TUTOR',
-  MANAGER = 'MANAGER',
-  ADMIN = 'ADMIN',
-}
-
-export enum Gender {
-  MALE = 'MALE',
-  FEMALE = 'FEMALE',
-  OTHER = 'OTHER',
 }

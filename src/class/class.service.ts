@@ -2,8 +2,8 @@ import { ForbiddenException, Inject, Injectable } from '@nestjs/common';
 import { ClassCreateDto, ClassDto, ClassQueryDto, ClassUpdateDto } from './dtos';
 import { ClientProxy } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
-import { IAccessToken, UserRole } from 'src/auth/auth.interfaces';
-import { QueueNames } from '@tutorify/shared';
+import { IAccessToken } from 'src/auth/auth.interfaces';
+import { QueueNames, UserRole } from '@tutorify/shared';
 
 @Injectable()
 export class ClassService {
@@ -59,6 +59,13 @@ export class ClassService {
     async getClassesByTutorId(tutorId: string, filters: ClassQueryDto): Promise<ClassDto[]> {
         return firstValueFrom(this.client.send({ cmd: 'getClassesByTutorId' }, {
             tutorId,
+            filters,
+        }));
+    }
+
+    async getClassesByUserId(userId: string, filters: ClassQueryDto): Promise<ClassDto[]> {
+        return firstValueFrom(this.client.send({ cmd: 'getClassesByUserId' }, {
+            userId,
             filters,
         }));
     }
