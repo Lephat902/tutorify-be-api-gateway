@@ -1,4 +1,4 @@
-import { Body, Query, Controller, Get, Post, UseGuards, UploadedFiles, UseInterceptors, UploadedFile } from '@nestjs/common'
+import { Body, Query, Controller, Get, Post, UseGuards, UploadedFiles, UseInterceptors, UploadedFile, Param } from '@nestjs/common'
 import { ApiBearerAuth, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger'
 import { AuthService } from './auth.service'
 import { TokenGuard } from './token.guard'
@@ -26,6 +26,16 @@ export class AuthController {
     @Token() token: IAccessToken
   ) {
     return this.authService.getUser(token.id);
+  }
+
+  @Get('token/user/:id')
+  @ApiOperation({ summary: 'Get access token by user id' })
+  @ApiBearerAuth()
+  public async getTokenByUserId(
+    @Param('id') id: string,
+  ) {
+    const user = this.authService.getUser(id);
+    return this.returnUserAndToken(user);
   }
 
   @Get('confirm-email')
