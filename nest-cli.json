@@ -4,6 +4,8 @@
   "sourceRoot": "src",
   "entryFile": "./app/src/main.js",
   "compilerOptions": {
-    "deleteOutDir": true
+    "deleteOutDir": true,
+    "assets": ["**/*.graphql"],
+    "watchAssets": true
   }
 }

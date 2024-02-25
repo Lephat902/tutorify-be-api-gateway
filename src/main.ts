@@ -20,7 +20,17 @@ async function bootstrap() {
   app.useGlobalFilters(new GlobalExceptionsFilter());
 
   // Use helmet middleware for security headers
-  app.use(helmet());
+  app.use(helmet({
+    // crossOriginEmbedderPolicy: false,
+    contentSecurityPolicy: {
+      directives: {
+        imgSrc: [`'self'`, 'data:', 'apollo-server-landing-page.cdn.apollographql.com'],
+        scriptSrc: [`'self'`, `https: 'unsafe-inline'`],
+        manifestSrc: [`'self'`, 'apollo-server-landing-page.cdn.apollographql.com'],
+        frameSrc: [`'self'`, 'sandbox.embed.apollographql.com'],
+      },
+    },
+  }));
 
   // Set up global validation pipe to validate input
   app.useGlobalPipes(
@@ -35,7 +45,7 @@ async function bootstrap() {
 
   // Set up Swagger documentation
   setUpSwagger(app, configService);
-  
+
   // Start the application and listen on the specified port
   await app.listen(configService.get<number>('PORT'));
 }

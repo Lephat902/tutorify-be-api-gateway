@@ -1,8 +1,8 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
-
-import { AuthService } from './auth.service'
-import { TokenRequirementsHelper } from './token-requirements.decorator'
+import { AuthService } from '../auth.service'
+import { TokenRequirementsHelper } from '../decorators'
+import { getRequest } from '../helpers';
 
 @Injectable()
 export class TokenGuard implements CanActivate {
@@ -47,20 +47,19 @@ export class TokenGuard implements CanActivate {
   }
 
   private assignTokenToRequest(context: ExecutionContext, token: any): void {
-    const req = context.switchToHttp().getRequest();
+    const req = getRequest(context);
     req.token = token;
   }
 
   private isBearerTokenPresent(context: ExecutionContext): boolean {
-    const req = context.switchToHttp().getRequest();
+    const req = getRequest(context);
     return (
       req.headers.authorization &&
       (req.headers.authorization as string).split(' ')[0] === 'Bearer'
     );
   }
-
   private extractBearerToken(context: ExecutionContext): string | null {
-    const req = context.switchToHttp().getRequest();
+    const req = getRequest(context);
     if (!req.headers.authorization) {
       return null;
     }

@@ -1,5 +1,5 @@
 import { SetMetadata } from '@nestjs/common';
-import { TokenType } from './auth.interfaces';
+import { TokenType } from '../auth.interfaces';
 import { UserRole } from '@tutorify/shared';
 
 export const TokenRequirements = (requiredTokenType: TokenType, requiredUserRoles: UserRole[]) =>

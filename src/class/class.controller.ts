@@ -1,11 +1,10 @@
 import { Controller, Post, Delete, Get, Body, Param, Query, UseGuards, Patch } from '@nestjs/common';
 import { ClassService } from './class.service';
 import { ClassCreateDto, ClassDto, ClassQueryDto } from './dtos';
-import { TokenRequirements } from 'src/auth/token-requirements.decorator';
+import { TokenRequirements, Token } from 'src/auth/decorators';
 import { IAccessToken, TokenType } from 'src/auth/auth.interfaces';
-import { Token } from 'src/auth/token.decorator';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { TokenGuard } from 'src/auth/token.guard';
+import { TokenGuard } from 'src/auth/guards';
 import { ClassUpdateDto } from './dtos/class-update.dto';
 import { UserRole } from '@tutorify/shared';
 

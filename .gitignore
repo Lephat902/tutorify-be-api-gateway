@@ -46,3 +46,6 @@ build/config.gypi
 
 .npmrc
 pnpm-lock.yaml
+
+# GraphQL
+src/schema.gql
