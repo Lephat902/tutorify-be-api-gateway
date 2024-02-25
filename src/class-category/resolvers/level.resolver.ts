@@ -11,7 +11,10 @@ export class LevelResolver {
         return this.classCategoryService.findAllLevels();
     }
 
-    @ResolveField('subjects', returns => [Subject])
+    @ResolveField('subjects', returns => [Subject], {
+        nullable: true,
+        description: 'All subjects compatible with this level.',
+    })
     async findSubjectsByLevel(@Parent() level: Level): Promise<Level[]> {
         const { id } = level;
         return this.classCategoryService.findSubjectsByLevel(id);
