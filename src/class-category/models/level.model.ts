@@ -1,5 +1,4 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-import { Subject } from '.';
 
 @ObjectType()
 export class Level {
@@ -8,10 +7,4 @@ export class Level {
 
   @Field()
   name: string;
-
-  @Field(() => [Subject], {
-    nullable: true,
-    description: 'All subjects compatible with this level.'
-  })
-  subjects?: Subject[];
 }
