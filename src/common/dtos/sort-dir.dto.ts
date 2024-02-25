@@ -1,16 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { SortingDirection } from '@tutorify/shared';
 import { IsOptional } from 'class-validator';
 
-enum SortingDirectionEnum {
-    ASC = 'ASC',
-    DESC = 'DESC',
-}
 export class SortingDirectionDto {
     @IsOptional()
     @ApiProperty({
         description: 'The sorting direction',
-        enum: SortingDirectionEnum,
+        enum: SortingDirection,
         required: false,
     })
-    readonly dir?: SortingDirectionEnum = SortingDirectionEnum.ASC;
+    readonly dir?: SortingDirection = SortingDirection.ASC;
 }

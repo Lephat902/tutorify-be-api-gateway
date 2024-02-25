@@ -1,11 +1,10 @@
 import { Controller, Post, Delete, Param, Get, UseGuards } from '@nestjs/common';
 import { StudentFavoriteTutorService } from './student-favorite-tutor.service';
 import { UserRole } from '@tutorify/shared';
-import { TokenRequirements } from 'src/auth/token-requirements.decorator';
+import { TokenRequirements, Token } from 'src/auth/decorators';
 import { IAccessToken, TokenType } from 'src/auth/auth.interfaces';
-import { Token } from 'src/auth/token.decorator';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { TokenGuard } from 'src/auth/token.guard';
+import { TokenGuard } from 'src/auth/guards';
 
 @Controller('my/favorite-tutors')
 @ApiTags('Student Favorites Tutor')
