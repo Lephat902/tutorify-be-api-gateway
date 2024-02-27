@@ -1,6 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsEmail, IsEnum, IsInt, IsNotEmpty, IsString, MinLength } from "class-validator";
-import { Type } from "class-transformer";
+import { IsEmail, IsEnum, IsNotEmpty, IsString, MinLength } from "class-validator";
 import { Gender } from "@tutorify/shared";
 
 export class SignUpDto {
@@ -57,13 +56,11 @@ export class SignUpDto {
 
   @ApiProperty({
     description: 'Ward ID',
-    example: 1,
+    example: '1',
     required: false,
-    type: 'integer',
   })
-  @IsInt()
-  @Type(() => Number)
-  public readonly wardId: number;
+  @IsString()
+  public readonly wardId: string;
 
   @ApiProperty({
     description: 'Student first name',

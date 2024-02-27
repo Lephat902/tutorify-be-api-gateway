@@ -9,7 +9,9 @@ import { TutorApplyForClassService } from 'src/tutor-apply-for-class/tutor-apply
 import { TutorApplyForClassArgs } from 'src/tutor-apply-for-class/args';
 import { Token, TokenRequirements } from 'src/auth/decorators';
 import { IAccessToken, TokenType } from 'src/auth/auth.interfaces';
-import { UserRole } from '@tutorify/shared';
+import { SortingDirection, TutorApplyForClassOrderBy, UserRole } from '@tutorify/shared';
+import { Tutor } from 'src/auth/models';
+import { AuthService } from 'src/auth/auth.service';
 
 @Resolver(of => Class)
 @UseGuards(TokenGuard)
@@ -17,6 +19,7 @@ export class ClassResolver {
     constructor(
         private readonly classService: ClassService,
         private readonly tutorApplyForClassService: TutorApplyForClassService,
+        private readonly authService: AuthService,
     ) { }
 
     @Query(returns => Class, { name: 'class' })
@@ -42,5 +45,42 @@ export class ClassResolver {
             this.classService.validateClassOwnership(token, id);
         }
         return this.tutorApplyForClassService.getTutorApplicationsByClassId(id, filters);
+    }
+
+    @ResolveField('tutor', () => Tutor, {
+        nullable: true,
+        description: 'Whenever tutorId is not enough, use this field'
+      })
+    @TokenRequirements(TokenType.CLIENT, [UserRole.STUDENT, UserRole.ADMIN, UserRole.MANAGER])
+    async getTutorOfClass(
+        @Parent() cl: Class,
+        @Token() token: IAccessToken,
+    ): Promise<Tutor> {
+        const { id, tutorId } = cl;
+        const userRole = token.roles[0];
+        if (userRole === UserRole.STUDENT) {
+            this.classService.validateClassOwnership(token, id);
+        }
+        return this.authService.getUser(tutorId);
+    }
+
+    @ResolveField('lastApplication', () => TutorApplyForClass, {
+        nullable: true,
+        description: 'The last application of the tutor to this class',
+      })
+    @TokenRequirements(TokenType.CLIENT, [UserRole.TUTOR])
+    async getLatestApplicationToClass(
+        @Parent() cl: Class,
+        @Token() token: IAccessToken,
+    ): Promise<TutorApplyForClass> {
+        const { id } = cl;
+        const userId = token.id;
+        const applicationsToClass = await this.tutorApplyForClassService.getMyApplicationsToClass(id, userId, {
+            page: 1,
+            limit: 1,
+            order: TutorApplyForClassOrderBy.APPLY_DAY,
+            dir: SortingDirection.DESC,
+        })
+        return applicationsToClass[0];
     }
 }

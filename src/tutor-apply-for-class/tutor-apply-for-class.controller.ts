@@ -45,7 +45,7 @@ export class TutorApplyForClassController {
         @Query() filters: TutorApplyForClassQueryDto,
     ): Promise<TutorApplyForClassDto[]> {
         const userId = token.id;
-        return this.tutorApplyForClassService.getMyApplicationsByTutor(userId, filters);
+        return this.tutorApplyForClassService.getMyApplications(userId, filters);
     }
 
     @ApiOperation({ summary: 'Tutor cancels an application by its id.' })

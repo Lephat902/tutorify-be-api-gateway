@@ -31,8 +31,13 @@ export class TutorApplyForClassService {
         return firstValueFrom(this.client.send({ cmd: 'getAllApplications' }, queryDto));
     }
 
-    async getMyApplicationsByTutor(tutorId: string, filters: TutorApplyForClassQueryDto): Promise<TutorApplyForClassDto[]> {
+    async getMyApplications(tutorId: string, filters: TutorApplyForClassQueryDto): Promise<TutorApplyForClassDto[]> {
         const queryDto = { ...filters, tutorId };
+        return firstValueFrom(this.client.send({ cmd: 'getAllApplications' }, queryDto));
+    }
+
+    async getMyApplicationsToClass(classId: string, tutorId: string, filters: TutorApplyForClassQueryDto): Promise<TutorApplyForClassDto[]> {
+        const queryDto = { ...filters, tutorId, classId };
         return firstValueFrom(this.client.send({ cmd: 'getAllApplications' }, queryDto));
     }
 

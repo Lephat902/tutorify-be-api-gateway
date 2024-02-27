@@ -15,6 +15,8 @@ export class AuthService {
   ) { }
 
   public async getUser(id: string) {
+    if (!id)
+      return null;
     return firstValueFrom(this.client.send({ cmd: 'getUser' }, id));
   }
 

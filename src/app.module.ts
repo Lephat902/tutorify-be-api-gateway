@@ -27,6 +27,8 @@ import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin
       autoSchemaFile: true,
       playground: false,
       plugins: [ApolloServerPluginLandingPageLocalDefault()],
+      fieldResolverEnhancers: ['guards'], // Enable Guard for Field Resolver
+      introspection: true,
     }),
   ],
 })

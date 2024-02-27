@@ -1,4 +1,4 @@
-import { Resolver, Query, Args } from '@nestjs/graphql';
+import { Resolver, Query, Args, ResolveField, Parent } from '@nestjs/graphql';
 import { TutorApplyForClassArgs } from '../args';
 import { UseGuards } from '@nestjs/common';
 import { TokenGuard } from 'src/auth/guards';
@@ -8,6 +8,7 @@ import { IAccessToken, TokenType } from 'src/auth/auth.interfaces';
 import { Token, TokenRequirements } from 'src/auth/decorators';
 import { UserRole } from '@tutorify/shared';
 import { ClassService } from 'src/class/class.service';
+import { Class } from 'src/class/models';
 
 @Resolver(of => TutorApplyForClass)
 @UseGuards(TokenGuard)
@@ -35,6 +36,17 @@ export class TutorApplyForClassResolver {
     @TokenRequirements(TokenType.CLIENT, [UserRole.TUTOR])
     async getMyApplicationsByTutor(@Args() filters: TutorApplyForClassArgs, @Token() token: IAccessToken) {
         const tutorId = token.id;
-        return this.tutorApplyForClassService.getMyApplicationsByTutor(tutorId, filters);
+        return this.tutorApplyForClassService.getMyApplications(tutorId, filters);
+    }
+
+    @ResolveField('class', () => Class, {
+        nullable: true,
+        description: 'If the classId alone does not provide sufficient information, consider using this additional field.'
+    })
+    async getClassOfApplication(
+        @Parent() classApplication: TutorApplyForClass,
+    ): Promise<Class> {
+        const { classId } = classApplication;
+        return this.classService.getClassById(classId);
     }
 }
