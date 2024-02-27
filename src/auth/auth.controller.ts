@@ -17,6 +17,13 @@ export class AuthController {
     private readonly authService: AuthService,
   ) { }
 
+  // @Get('testt')
+  // @ApiOperation({ summary: 'Get access token by user id' })
+  // public async test(
+  // ) {
+  //   return this.authService.getUsers();
+  // }
+
   @Get('auth')
   @ApiOperation({ summary: 'Get self information' })
   @ApiBearerAuth()
@@ -24,7 +31,7 @@ export class AuthController {
   public async getSelf(
     @Token() token: IAccessToken
   ) {
-    return this.authService.getUser(token.id);
+    return this.authService.getUserById(token.id);
   }
 
   @Get('token/user/:id')
@@ -33,7 +40,7 @@ export class AuthController {
   public async getTokenByUserId(
     @Param('id') id: string,
   ) {
-    const user = this.authService.getUser(id);
+    const user = this.authService.getUserById(id);
     return this.returnUserAndToken(user);
   }
 
