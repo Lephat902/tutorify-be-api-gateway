@@ -5,6 +5,7 @@ import { JwtModule } from '@nestjs/jwt'
 import { ConfigService } from '@nestjs/config'
 import { ClientsModule, Transport } from '@nestjs/microservices'
 import { QueueNames } from '@tutorify/shared'
+import { Resolvers } from './resolvers'
 
 @Global()
 @Module({
@@ -35,7 +36,7 @@ import { QueueNames } from '@tutorify/shared'
     ]),
   ],
   controllers: [AuthController],
-  providers: [AuthService],
+  providers: [AuthService, ...Resolvers],
   exports: [AuthService, JwtModule, ClientsModule]
 })
 export class AuthModule { }
