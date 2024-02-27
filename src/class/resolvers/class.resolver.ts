@@ -61,7 +61,7 @@ export class ClassResolver {
         if (userRole === UserRole.STUDENT) {
             this.classService.validateClassOwnership(token, id);
         }
-        return this.authService.getUser(tutorId);
+        return this.authService.getUserById(tutorId);
     }
 
     @ResolveField('lastApplication', () => TutorApplyForClass, {
