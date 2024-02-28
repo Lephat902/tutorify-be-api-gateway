@@ -10,8 +10,8 @@ import { TutorApplyForClassArgs } from 'src/tutor-apply-for-class/args';
 import { Token, TokenRequirements } from 'src/auth/decorators';
 import { IAccessToken, TokenType } from 'src/auth/auth.interfaces';
 import { SortingDirection, TutorApplyForClassOrderBy, UserRole } from '@tutorify/shared';
-import { Tutor } from 'src/auth/models';
 import { AuthService } from 'src/auth/auth.service';
+import { Tutor } from 'src/tutor-query/models';
 
 @Resolver(of => Class)
 @UseGuards(TokenGuard)

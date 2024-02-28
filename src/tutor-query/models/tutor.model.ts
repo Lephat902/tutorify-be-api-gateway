@@ -1,6 +1,7 @@
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { Gender, UserRole } from '@tutorify/shared';
-import { User, TutorPortfolio } from '.';
+import { TutorPortfolio } from '.';
+import { User } from 'src/auth/models';
 
 registerEnumType(Gender, {
   name: 'Gender',
