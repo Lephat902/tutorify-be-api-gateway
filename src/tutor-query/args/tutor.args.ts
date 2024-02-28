@@ -1,8 +1,8 @@
 import { ArgsType, Field, OmitType, registerEnumType } from "@nestjs/graphql";
 import { TutorOrderBy } from "@tutorify/shared";
 import { IsBoolean, IsOptional } from "class-validator";
+import { UserArgs } from "src/auth/args";
 import { ToBoolean } from "src/common/decorators";
-import { UserArgs } from ".";
 
 registerEnumType(TutorOrderBy, {
     name: 'TutorOrderBy',
