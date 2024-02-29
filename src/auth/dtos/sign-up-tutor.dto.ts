@@ -1,7 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsInt, IsString } from "class-validator";
+import { IsArray, IsInt, IsString } from "class-validator";
 import { SignUpDto } from "./sign-up-base-user.dto";
-import { Type } from "class-transformer";
+import { Transform, Type } from "class-transformer";
 
 export class SignUpTutorDto extends SignUpDto {
   @ApiProperty({
@@ -54,6 +54,19 @@ export class SignUpTutorDto extends SignUpDto {
   @Type(() => Number)
   public readonly graduationYear: number;
 
+  @ApiProperty({
+    description: "Class Categories' ids that tutor claim to be able to teach",
+    type: 'array', 
+    items: { type: 'string' },
+    example: ['3b5e5abb-f7ca-4503-bf8d-8e02dbc249e2', '83bdcea4-c6bf-4e7a-a9e0-d0894f5841bb']
+  })
+  @IsArray()
+  @IsString({ each: true })
+  @Type(() => String)
+  @Transform(({ value }) => value.split(','))
+  public readonly proficienciesIds: string[];
+
+  // Any validation here has no effect for File type, this line just facilitates uploading file in swagger-ui
   @ApiProperty({ type: 'array', items: { type: 'string', format: 'binary' }, required: false })
   public readonly portfolios?: Array<Express.Multer.File>;
 }
