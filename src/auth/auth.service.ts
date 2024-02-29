@@ -38,6 +38,18 @@ export class AuthService {
     return firstValueFrom(this.client.send({ cmd: 'login' }, loginDto));
   }
 
+  public async approveTutor(tutorId: string) {
+    return firstValueFrom(this.client.send({ cmd: 'approveTutor' }, tutorId));
+  }
+
+  public async blockUser(userId: string) {
+    return firstValueFrom(this.client.send({ cmd: 'blockUser' }, userId));
+  }
+
+  public async unblockUser(userId: string) {
+    return firstValueFrom(this.client.send({ cmd: 'unblockUser' }, userId));
+  }
+
   public validateAccessToken(token: string): IAccessToken {
     return this.jwtService.verify(token, {
       issuer: AuthConstants.access_token.options.issuer,

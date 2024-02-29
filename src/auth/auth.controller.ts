@@ -1,4 +1,4 @@
-import { Body, Query, Controller, Get, Post, UseGuards, UploadedFiles, UseInterceptors, UploadedFile, Param } from '@nestjs/common'
+import { Body, Query, Controller, Get, Post, UseGuards, UploadedFiles, UseInterceptors, UploadedFile, Param, Patch } from '@nestjs/common'
 import { ApiBearerAuth, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger'
 import { AuthService } from './auth.service'
 import { TokenGuard } from './guards'
@@ -104,6 +104,36 @@ export class AuthController {
   ) {
     const user = await this.authService.login(loginDto);
     return this.returnUserAndToken(user);
+  }
+
+  @Patch('tutors/:tutorId/approve')
+  @ApiOperation({ summary: 'Admin/Manager approves a tutor to the system' })
+  @TokenRequirements(TokenType.CLIENT, [UserRole.ADMIN, UserRole.MANAGER])
+  @ApiBearerAuth()
+  public async approveTutor(
+    @Param('tutorId') tutorId: string,
+  ) {
+    return this.authService.approveTutor(tutorId);
+  }
+
+  @Patch('user/:userId/block')
+  @ApiOperation({ summary: 'Admin/Manager blocks a user' })
+  @TokenRequirements(TokenType.CLIENT, [UserRole.ADMIN, UserRole.MANAGER])
+  @ApiBearerAuth()
+  public async blockUser(
+    @Param('userId') userId: string,
+  ) {
+    return this.authService.blockUser(userId);
+  }
+
+  @Patch('user/:userId/unblock')
+  @ApiOperation({ summary: 'Admin/Manager unblocks a user' })
+  @TokenRequirements(TokenType.CLIENT, [UserRole.ADMIN, UserRole.MANAGER])
+  @ApiBearerAuth()
+  public async unblockUser(
+    @Param('userId') userId: string,
+  ) {
+    return this.authService.unblockUser(userId);
   }
 
   private returnUserAndToken(user: any) {
