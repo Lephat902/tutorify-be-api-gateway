@@ -17,13 +17,6 @@ export class AuthController {
     private readonly authService: AuthService,
   ) { }
 
-  // @Get('testt')
-  // @ApiOperation({ summary: 'Get access token by user id' })
-  // public async test(
-  // ) {
-  //   return this.authService.getUsers();
-  // }
-
   @Get('auth')
   @ApiOperation({ summary: 'Get self information' })
   @ApiBearerAuth()
@@ -35,12 +28,13 @@ export class AuthController {
   }
 
   @Get('token/user/:id')
+  @TokenRequirements(TokenType.SYSTEM, [])
   @ApiOperation({ summary: 'Get access token by user id' })
   @ApiBearerAuth()
   public async getTokenByUserId(
     @Param('id') id: string,
   ) {
-    const user = this.authService.getUserById(id);
+    const user = await this.authService.getUserById(id);
     return this.returnUserAndToken(user);
   }
 
