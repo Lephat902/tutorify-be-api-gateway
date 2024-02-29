@@ -1,5 +1,6 @@
 import { Field, ID, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { Gender, UserRole } from '@tutorify/shared';
+import { FileObject } from 'src/common/graphql';
 
 registerEnumType(Gender, {
     name: 'Gender',
@@ -35,8 +36,8 @@ export class User {
     @Field()
     phoneNumber: string;
 
-    @Field()
-    imgUrl: string;
+    @Field(() => FileObject, { nullable: true })
+    avatar: FileObject;
 
     @Field(() => UserRole)
     role: UserRole;
