@@ -1,7 +1,7 @@
-import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
+import { Field, ObjectType, OmitType, registerEnumType } from '@nestjs/graphql';
 import { Gender, UserRole } from '@tutorify/shared';
-import { TutorPortfolio } from '.';
 import { User } from 'src/auth/models';
+import {FileObject} from 'src/common/graphql';
 
 registerEnumType(Gender, {
   name: 'Gender',
@@ -12,7 +12,10 @@ registerEnumType(UserRole, {
 });
 
 @ObjectType()
-export class Tutor extends User {
+export class Tutor extends OmitType(User, [
+  'phoneNumber',
+  'role',
+] as const) {
   @Field()
   biography: string;
 
@@ -37,6 +40,6 @@ export class Tutor extends User {
   @Field({ nullable: true })
   graduationYear: number;
 
-  @Field(() => [TutorPortfolio])
-  tutorPortfolios: TutorPortfolio[];
+  @Field(() => [FileObject])
+  tutorPortfolios: FileObject[];
 }
