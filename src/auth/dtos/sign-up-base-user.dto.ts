@@ -86,6 +86,7 @@ export class SignUpDto {
   @IsString()
   public readonly lastName: string;
 
+  // Any validation here has no effect for File type, this line just facilitates uploading file in swagger-ui
   @ApiProperty({ type: 'string', format: 'binary', required: false })
   public readonly avatar?: Express.Multer.File;
 }
