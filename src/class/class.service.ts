@@ -19,9 +19,7 @@ export class ClassService {
     }
 
     async deleteClassById(id: string): Promise<void> {
-        return firstValueFrom(this.client.send({ cmd: 'deleteClassById' }, {
-            id,
-        }));
+        return firstValueFrom(this.client.send({ cmd: 'deleteClassById' }, id));
     }
 
     async hideClass(id: string): Promise<ClassDto> {
@@ -44,9 +42,7 @@ export class ClassService {
     }
 
     async getClasses(filters: ClassQueryDto): Promise<ClassDto[]> {
-        return firstValueFrom(this.client.send({ cmd: 'getClasses' }, {
-            filters,
-        }));
+        return firstValueFrom(this.client.send({ cmd: 'getClasses' }, filters));
     }
 
     async getClassesByStudentId(studentId: string, filters: ClassQueryDto): Promise<ClassDto[]> {
