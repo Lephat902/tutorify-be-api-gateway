@@ -14,7 +14,11 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
 
   // Enable CORS (Note: Remove this line or configure properly for production)
-  app.enableCors();
+  app.enableCors({
+    allowedHeaders: ['content-type'],
+    origin: process.env.FRONT_END_BASE_DOMAIN,
+    credentials: true,
+  });
 
   // Apply the custom exception filter globally
   app.useGlobalFilters(new GlobalExceptionsFilter());
