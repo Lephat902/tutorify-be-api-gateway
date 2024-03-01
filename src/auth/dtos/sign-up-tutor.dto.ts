@@ -69,4 +69,16 @@ export class SignUpTutorDto extends SignUpDto {
   // Any validation here has no effect for File type, this line just facilitates uploading file in swagger-ui
   @ApiProperty({ type: 'array', items: { type: 'string', format: 'binary' }, required: false })
   public readonly portfolios?: Array<Express.Multer.File>;
+
+  @ApiProperty({
+    description: "Social Media Profiles of the tutor",
+    type: 'array', 
+    items: { type: 'string' },
+    example: ['https://www.facebook.com/tran.thanh.ne', 'https://www.facebook.com/groups/elonmusk1']
+  })
+  @IsArray()
+  @IsString({ each: true })
+  @Type(() => String)
+  @Transform(({ value }) => value.split(','))
+  public readonly socialProfiles: string[];
 }
