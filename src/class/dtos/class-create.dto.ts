@@ -106,4 +106,13 @@ export class ClassCreateDto {
     @ArrayNotEmpty()
     @ArrayMaxSize(5, { message: "Desired tutors list length must be shorter than or equal 5" })
     desiredTutorIds?: string[];
+
+    @ApiProperty({
+        description: 'The background image of the class',
+        required: false,
+        example: 'https://img.freepik.com/premium-photo/asian-students-taking-exam_33745-1142.jpg'
+    })
+    @IsOptional()
+    @IsString()
+    imgUrl?: string;
 }

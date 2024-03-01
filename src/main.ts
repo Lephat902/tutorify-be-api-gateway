@@ -29,7 +29,12 @@ async function bootstrap() {
       const localhostPattern = /^https?:\/\/localhost(?::\d+)?$/; // Match http://localhost[:port_number]
 
       // Use RegExp.test() to match the patterns
-      if (origin === 'https://tutorify-project.vercel.app' || vercelPattern.test(origin) || localhostPattern.test(origin)) {
+      if (
+        origin === 'https://tutorify.southeastasia.cloudapp.azure.com'
+        || origin === 'https://tutorify-project.vercel.app'
+        || vercelPattern.test(origin)
+        || localhostPattern.test(origin)
+      ) {
         callback(null, true);
       } else {
         callback(new InternalServerErrorException('Not allowed by CORS'));
