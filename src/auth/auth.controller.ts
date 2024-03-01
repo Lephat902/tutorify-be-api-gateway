@@ -93,8 +93,7 @@ export class AuthController {
       role: UserRole.TUTOR,
     }
 
-    const tutor = await this.authService.createUser(fullSignupTutorDto);
-    return this.returnUserAndToken(tutor);
+    return this.authService.createUser(fullSignupTutorDto);
   }
 
   @Post('login')
