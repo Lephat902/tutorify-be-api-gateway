@@ -10,6 +10,7 @@ import { GraphQLModule } from '@nestjs/graphql'
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo'
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import { TutorQueryModule } from './tutor-query/tutor-query.module'
+import { AddressModule } from './address/address.module'
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { TutorQueryModule } from './tutor-query/tutor-query.module'
     TutorApplyForClassModule,
     StudentFavoriteTutorModule,
     TutorQueryModule,
+    AddressModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: ['.env', '.env.example'],
