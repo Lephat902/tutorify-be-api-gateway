@@ -5,7 +5,7 @@ import { UserArgs } from '../args';
 
 @Resolver(() => User)
 export class UserResolver {
-  constructor(private readonly authService: AuthService) { }
+  constructor(private readonly authService: AuthService) {}
 
   @Query(() => User, { name: 'user' })
   async getUser(@Args('id') id: string): Promise<User> {

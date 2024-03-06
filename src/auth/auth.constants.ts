@@ -5,4 +5,4 @@ export const AuthConstants = {
       issuer: 'ISSUER_NAME',
     },
   },
-}
+};

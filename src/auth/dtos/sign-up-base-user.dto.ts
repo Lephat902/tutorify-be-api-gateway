@@ -1,6 +1,12 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { IsEmail, IsEnum, IsNotEmpty, IsString, MinLength } from "class-validator";
-import { Gender } from "@tutorify/shared";
+import { ApiProperty } from '@nestjs/swagger';
+import {
+  IsEmail,
+  IsEnum,
+  IsNotEmpty,
+  IsString,
+  MinLength,
+} from 'class-validator';
+import { Gender } from '@tutorify/shared';
 
 export class SignUpDto {
   @ApiProperty({

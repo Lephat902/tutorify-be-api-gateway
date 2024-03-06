@@ -1,11 +1,11 @@
-import { Module, forwardRef } from '@nestjs/common'
-import { ConfigService } from '@nestjs/config'
-import { ClientsModule, Transport } from '@nestjs/microservices'
-import { ClassController } from './class.controller'
-import { ClassService } from './class.service'
-import { QueueNames } from '@tutorify/shared'
-import { ClassResolver } from './resolvers'
-import { TutorApplyForClassModule } from 'src/tutor-apply-for-class/tutor-apply-for-class.module'
+import { Module, forwardRef } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { ClientsModule, Transport } from '@nestjs/microservices';
+import { ClassController } from './class.controller';
+import { ClassService } from './class.service';
+import { QueueNames } from '@tutorify/shared';
+import { ClassResolver } from './resolvers';
+import { TutorApplyForClassModule } from 'src/tutor-apply-for-class/tutor-apply-for-class.module';
 
 @Module({
   imports: [
@@ -29,6 +29,6 @@ import { TutorApplyForClassModule } from 'src/tutor-apply-for-class/tutor-apply-
   ],
   controllers: [ClassController],
   providers: [ClassService, ClassResolver],
-  exports: [ClassService,]
+  exports: [ClassService],
 })
-export class ClassModule { }
+export class ClassModule {}

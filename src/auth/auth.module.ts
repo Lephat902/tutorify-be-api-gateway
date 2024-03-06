@@ -1,11 +1,11 @@
-import { Module, Global } from '@nestjs/common'
-import { AuthController } from './auth.controller'
-import { AuthService } from './auth.service'
-import { JwtModule } from '@nestjs/jwt'
-import { ConfigService } from '@nestjs/config'
-import { ClientsModule, Transport } from '@nestjs/microservices'
-import { QueueNames } from '@tutorify/shared'
-import { Resolvers } from './resolvers'
+import { Module, Global } from '@nestjs/common';
+import { AuthController } from './auth.controller';
+import { AuthService } from './auth.service';
+import { JwtModule } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
+import { ClientsModule, Transport } from '@nestjs/microservices';
+import { QueueNames } from '@tutorify/shared';
+import { Resolvers } from './resolvers';
 
 @Global()
 @Module({
@@ -16,7 +16,7 @@ import { Resolvers } from './resolvers'
         secret: configService.get('SECRET'),
         global: true,
       }),
-      inject: [ConfigService]
+      inject: [ConfigService],
     }),
     ClientsModule.registerAsync([
       {
@@ -37,6 +37,6 @@ import { Resolvers } from './resolvers'
   ],
   controllers: [AuthController],
   providers: [AuthService, ...Resolvers],
-  exports: [AuthService, JwtModule, ClientsModule]
+  exports: [AuthService, JwtModule, ClientsModule],
 })
-export class AuthModule { }
+export class AuthModule {}

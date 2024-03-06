@@ -1,7 +1,12 @@
 import { NestFactory, Reflector } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import helmet from 'helmet';
-import { ClassSerializerInterceptor, INestApplication, InternalServerErrorException, ValidationPipe } from '@nestjs/common';
+import {
+  ClassSerializerInterceptor,
+  INestApplication,
+  InternalServerErrorException,
+  ValidationPipe,
+} from '@nestjs/common';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import { GlobalExceptionsFilter } from './global-exception-handler';
@@ -17,46 +22,58 @@ async function bootstrap() {
   app.enableCors({
     allowedHeaders: ['content-type'],
     credentials: true,
-    methods: "GET,PUT,POST,PATCH,DELETE,UPDATE,OPTIONS",
+    methods: 'GET,PUT,POST,PATCH,DELETE,UPDATE,OPTIONS',
     origin: (origin, callback) => {
       if (!origin) {
         // Allow requests with no origin (like mobile apps or curl requests)
         return callback(null, true);
       }
       // Define the regular expression pattern for the Vercel app domain
-      const vercelPattern = /^https:\/\/tutorify-[a-zA-Z0-9-]+-caotrananhkhoa\.vercel\.app$/;
+      const vercelPattern =
+        /^https:\/\/tutorify-[a-zA-Z0-9-]+-caotrananhkhoa\.vercel\.app$/;
       // Define the regular expression pattern for localhost
       const localhostPattern = /^https?:\/\/localhost(?::\d+)?$/; // Match http://localhost[:port_number]
+      // Define the regular expression pattern for tutorify.site subdomains
+      const tutorifyPattern = /^https?:\/\/[a-zA-Z0-9-]+\.tutorify\.site$/;
 
       // Use RegExp.test() to match the patterns
       if (
-        origin === 'https://tutorify.southeastasia.cloudapp.azure.com'
-        || origin === 'https://tutorify-project.vercel.app'
-        || vercelPattern.test(origin)
-        || localhostPattern.test(origin)
+        origin === 'https://tutorify-project.vercel.app' ||
+        vercelPattern.test(origin) ||
+        localhostPattern.test(origin) ||
+        tutorifyPattern.test(origin)
       ) {
         callback(null, true);
       } else {
         callback(new InternalServerErrorException('Not allowed by CORS'));
       }
-    }
+    },
   });
 
   // Apply the custom exception filter globally
   app.useGlobalFilters(new GlobalExceptionsFilter());
 
   // Use helmet middleware for security headers
-  app.use(helmet({
-    // crossOriginEmbedderPolicy: false,
-    contentSecurityPolicy: {
-      directives: {
-        imgSrc: [`'self'`, 'data:', 'apollo-server-landing-page.cdn.apollographql.com'],
-        scriptSrc: [`'self'`, `https: 'unsafe-inline'`],
-        manifestSrc: [`'self'`, 'apollo-server-landing-page.cdn.apollographql.com'],
-        frameSrc: [`'self'`, 'sandbox.embed.apollographql.com'],
+  app.use(
+    helmet({
+      // crossOriginEmbedderPolicy: false,
+      contentSecurityPolicy: {
+        directives: {
+          imgSrc: [
+            `'self'`,
+            'data:',
+            'apollo-server-landing-page.cdn.apollographql.com',
+          ],
+          scriptSrc: [`'self'`, `https: 'unsafe-inline'`],
+          manifestSrc: [
+            `'self'`,
+            'apollo-server-landing-page.cdn.apollographql.com',
+          ],
+          frameSrc: [`'self'`, 'sandbox.embed.apollographql.com'],
+        },
       },
-    },
-  }));
+    }),
+  );
 
   // Set up global validation pipe to validate input
   app.useGlobalPipes(
@@ -76,7 +93,10 @@ async function bootstrap() {
   await app.listen(configService.get<number>('PORT'));
 }
 
-const setUpSwagger = (app: INestApplication<any>, configService: ConfigService) => {
+const setUpSwagger = (
+  app: INestApplication<any>,
+  configService: ConfigService,
+) => {
   // Configure Swagger options
   const swaggerOptions = new DocumentBuilder()
     .setTitle('Tutorify')

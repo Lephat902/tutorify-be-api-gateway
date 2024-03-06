@@ -8,31 +8,57 @@ import { QueueNames } from '@tutorify/shared';
 export class FeedbackService {
   constructor(
     @Inject(QueueNames.FEEDBACK) private readonly client: ClientProxy,
-  ) { }
+  ) {}
 
   async getAllFeedbacks() {
     return firstValueFrom(this.client.send({ cmd: 'getAllFeedbacks' }, {}));
   }
 
   async getFeedbacksByTutorId(tutorId: string) {
-    return firstValueFrom(this.client.send({ cmd: 'getFeedbacksByTutorId' }, tutorId));
+    return firstValueFrom(
+      this.client.send({ cmd: 'getFeedbacksByTutorId' }, tutorId),
+    );
   }
-  async createFeedback(tutorId: string, studentId: string, feedback: FeedbackDto) {
-    return firstValueFrom(this.client.send({ cmd: 'createFeedback' }, { tutorId, studentId, ...feedback }));
+  async createFeedback(
+    tutorId: string,
+    studentId: string,
+    feedback: FeedbackDto,
+  ) {
+    return firstValueFrom(
+      this.client.send(
+        { cmd: 'createFeedback' },
+        { tutorId, studentId, ...feedback },
+      ),
+    );
   }
 
-  async createFeedbackReply(feedbackId: string, userId: string, feedbackReply: FeedbackReplyDto) {
-    return firstValueFrom(this.client.send({ cmd: 'createFeedbackReply' }, {
-      feedbackId, feedbackReply: {
-        userId,
-        ...feedbackReply
-      }
-    }));
+  async createFeedbackReply(
+    feedbackId: string,
+    userId: string,
+    feedbackReply: FeedbackReplyDto,
+  ) {
+    return firstValueFrom(
+      this.client.send(
+        { cmd: 'createFeedbackReply' },
+        {
+          feedbackId,
+          feedbackReply: {
+            userId,
+            ...feedbackReply,
+          },
+        },
+      ),
+    );
   }
 
   async getFeedbackRepliesByFeedbackId(feedbackId: string) {
-    return firstValueFrom(this.client.send({
-      cmd: 'getFeedbackRepliesByFeedback',
-    }, feedbackId))
+    return firstValueFrom(
+      this.client.send(
+        {
+          cmd: 'getFeedbackRepliesByFeedback',
+        },
+        feedbackId,
+      ),
+    );
   }
 }

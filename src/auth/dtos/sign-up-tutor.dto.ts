@@ -1,7 +1,7 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { IsArray, IsInt, IsString } from "class-validator";
-import { SignUpDto } from "./sign-up-base-user.dto";
-import { Transform, Type } from "class-transformer";
+import { ApiProperty } from '@nestjs/swagger';
+import { IsArray, IsInt, IsString } from 'class-validator';
+import { SignUpDto } from './sign-up-base-user.dto';
+import { Transform, Type } from 'class-transformer';
 
 export class SignUpTutorDto extends SignUpDto {
   @ApiProperty({
@@ -56,9 +56,12 @@ export class SignUpTutorDto extends SignUpDto {
 
   @ApiProperty({
     description: "Class Categories' ids that tutor claim to be able to teach",
-    type: 'array', 
+    type: 'array',
     items: { type: 'string' },
-    example: ['3b5e5abb-f7ca-4503-bf8d-8e02dbc249e2', '83bdcea4-c6bf-4e7a-a9e0-d0894f5841bb']
+    example: [
+      '3b5e5abb-f7ca-4503-bf8d-8e02dbc249e2',
+      '83bdcea4-c6bf-4e7a-a9e0-d0894f5841bb',
+    ],
   })
   @IsArray()
   @IsString({ each: true })
@@ -67,14 +70,21 @@ export class SignUpTutorDto extends SignUpDto {
   public readonly proficienciesIds: string[];
 
   // Any validation here has no effect for File type, this line just facilitates uploading file in swagger-ui
-  @ApiProperty({ type: 'array', items: { type: 'string', format: 'binary' }, required: false })
+  @ApiProperty({
+    type: 'array',
+    items: { type: 'string', format: 'binary' },
+    required: false,
+  })
   public readonly portfolios?: Array<Express.Multer.File>;
 
   @ApiProperty({
-    description: "Social Media Profiles of the tutor",
-    type: 'array', 
+    description: 'Social Media Profiles of the tutor',
+    type: 'array',
     items: { type: 'string' },
-    example: ['https://www.facebook.com/tran.thanh.ne', 'https://www.facebook.com/groups/elonmusk1']
+    example: [
+      'https://www.facebook.com/tran.thanh.ne',
+      'https://www.facebook.com/groups/elonmusk1',
+    ],
   })
   @IsArray()
   @IsString({ each: true })

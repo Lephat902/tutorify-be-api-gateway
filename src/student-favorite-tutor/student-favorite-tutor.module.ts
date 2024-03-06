@@ -1,10 +1,10 @@
-import { Module } from '@nestjs/common'
-import { ConfigService } from '@nestjs/config'
-import { ClientsModule, Transport } from '@nestjs/microservices'
-import { StudentFavoriteTutorService } from './student-favorite-tutor.service'
-import { ClassModule } from 'src/class/class.module'
-import { QueueNames } from '@tutorify/shared'
-import { StudentFavoriteTutorController } from './student-favorite-tutor.controller'
+import { Module } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { ClientsModule, Transport } from '@nestjs/microservices';
+import { StudentFavoriteTutorService } from './student-favorite-tutor.service';
+import { ClassModule } from 'src/class/class.module';
+import { QueueNames } from '@tutorify/shared';
+import { StudentFavoriteTutorController } from './student-favorite-tutor.controller';
 
 @Module({
   imports: [
@@ -29,4 +29,4 @@ import { StudentFavoriteTutorController } from './student-favorite-tutor.control
   controllers: [StudentFavoriteTutorController],
   providers: [StudentFavoriteTutorService],
 })
-export class StudentFavoriteTutorModule { }
+export class StudentFavoriteTutorModule {}

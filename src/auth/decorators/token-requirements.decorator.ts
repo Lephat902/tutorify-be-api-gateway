@@ -2,11 +2,16 @@ import { SetMetadata } from '@nestjs/common';
 import { TokenType } from '../auth.interfaces';
 import { UserRole } from '@tutorify/shared';
 
-export const TokenRequirements = (requiredTokenType: TokenType, requiredUserRoles: UserRole[]) =>
-  SetMetadata('tokenrequirements', new TokenRequirementsHelper(requiredTokenType, requiredUserRoles));
+export const TokenRequirements = (
+  requiredTokenType: TokenType,
+  requiredUserRoles: UserRole[],
+) =>
+  SetMetadata(
+    'tokenrequirements',
+    new TokenRequirementsHelper(requiredTokenType, requiredUserRoles),
+  );
 
 export class TokenRequirementsHelper {
-
   private requiredTokenType: TokenType;
   private requiredUserRoles: UserRole[];
 
@@ -20,6 +25,10 @@ export class TokenRequirementsHelper {
   }
 
   public tokenHasAllUserRoles(userRoles: UserRole[]): boolean {
-    return this.requiredUserRoles.some(requiredRole => userRoles.includes(requiredRole)) || this.requiredUserRoles.length === 0;
+    return (
+      this.requiredUserRoles.some((requiredRole) =>
+        userRoles.includes(requiredRole),
+      ) || this.requiredUserRoles.length === 0
+    );
   }
 }

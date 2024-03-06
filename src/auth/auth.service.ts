@@ -13,11 +13,10 @@ export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
     @Inject(QueueNames.AUTH) private readonly client: ClientProxy,
-  ) { }
+  ) {}
 
   public async getUserById(id: string) {
-    if (!id)
-      return null;
+    if (!id) return null;
     return firstValueFrom(this.client.send({ cmd: 'getUserById' }, id));
   }
 
@@ -31,7 +30,9 @@ export class AuthService {
   }
 
   public async createUser(createUserDto: SignUpDto) {
-    return firstValueFrom(this.client.send({ cmd: 'createUser' }, createUserDto));
+    return firstValueFrom(
+      this.client.send({ cmd: 'createUser' }, createUserDto),
+    );
   }
 
   public async login(loginDto: LoginDto) {

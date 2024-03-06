@@ -3,7 +3,6 @@ export class DistrictResponseDto {
   readonly name: string;
 }
 
-
 export class FullDistrictResponseDto {
   code: string;
   name: string;

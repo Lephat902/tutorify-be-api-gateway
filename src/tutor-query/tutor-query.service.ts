@@ -6,11 +6,11 @@ import { TutorArgs } from './args';
 
 @Injectable()
 export class TutorQueryService {
-    constructor(
-        @Inject(QueueNames.TUTOR_QUERY) private readonly client: ClientProxy,
-    ) { }
+  constructor(
+    @Inject(QueueNames.TUTOR_QUERY) private readonly client: ClientProxy,
+  ) {}
 
-    getTutors(filters: TutorArgs) {
-        return firstValueFrom(this.client.send({ cmd: 'getTutors' }, filters));
-    }
+  getTutors(filters: TutorArgs) {
+    return firstValueFrom(this.client.send({ cmd: 'getTutors' }, filters));
+  }
 }

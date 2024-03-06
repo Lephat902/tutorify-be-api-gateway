@@ -7,7 +7,7 @@ registerEnumType(ApplicationStatus, {
 
 @ObjectType()
 export class TutorApplyForClass {
-  @Field(type => ID)
+  @Field((type) => ID)
   id: string;
 
   @Field()
