@@ -21,7 +21,6 @@ import { UserRole } from '@tutorify/shared';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { validateMaterials } from './helpers';
 import { ClassSessionService } from './class-session.service';
-import { ClassService } from 'src/class/class.service';
 
 @Controller('/classess/:classId/sessions')
 @ApiTags('Class Session')
@@ -30,7 +29,6 @@ import { ClassService } from 'src/class/class.service';
 export class ClassSessionController {
   constructor(
     private readonly classSessionService: ClassSessionService,
-    private readonly classService: ClassService,
   ) {}
 
   @UseInterceptors(FilesInterceptor('files'))
@@ -44,7 +42,7 @@ export class ClassSessionController {
     @Body() classSessionCreateDto: ClassSessionCreateDto,
     @UploadedFiles() files: Array<Express.Multer.File>,
   ) {
-    await this.classService.assertTutorOfTheClass(token, classId);
+    const tutorId = token.id;
     if (files) {
       await validateMaterials(files);
     }
@@ -64,6 +62,7 @@ export class ClassSessionController {
     }
 
     return this.classSessionService.addClassSession(
+      tutorId,
       classId,
       fullClassSesionCreateDto,
     );
@@ -77,9 +76,9 @@ export class ClassSessionController {
     @Param('classId') classId: string,
     @Body() classSessionCreateByQtyDto: ClassSessionCreateByQtyDto,
   ) {
-    await this.classService.assertTutorOfTheClass(token, classId);
-
+    const tutorId = token.id;
     return this.classSessionService.createClassSessionsWithNumberOfSessions(
+      tutorId,
       classId,
       classSessionCreateByQtyDto.numberOfSessions,
     );

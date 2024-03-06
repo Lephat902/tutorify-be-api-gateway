@@ -13,6 +13,7 @@ export class ClassSessionService {
   ) {}
 
   async addClassSession(
+    tutorId: string,
     classId: string,
     classSessionData: ClassSessionCreateDto,
   ) {
@@ -20,6 +21,7 @@ export class ClassSessionService {
       this.client.send(
         { cmd: 'createClassSession' },
         {
+          tutorId,
           classId,
           ...classSessionData,
         },
@@ -28,6 +30,7 @@ export class ClassSessionService {
   }
 
   async createClassSessionsWithNumberOfSessions(
+    tutorId: string,
     classId: string,
     numberOfSessions: number,
   ) {
@@ -35,6 +38,7 @@ export class ClassSessionService {
       this.client.send(
         { cmd: 'createClassSessionsWithNumberOfSessions' },
         {
+          tutorId,
           classId,
           numberOfSessions,
         },
