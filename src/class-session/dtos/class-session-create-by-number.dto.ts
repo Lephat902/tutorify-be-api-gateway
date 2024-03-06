@@ -1,4 +1,4 @@
-import { IsInt, IsNotEmpty, IsPositive } from 'class-validator';
+import { IsInt, IsNotEmpty, IsPositive, Max } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class ClassSessionCreateByQtyDto {
@@ -9,5 +9,6 @@ export class ClassSessionCreateByQtyDto {
   @IsInt()
   @IsPositive()
   @IsNotEmpty()
+  @Max(10)
   numberOfSessions: number;
 }
