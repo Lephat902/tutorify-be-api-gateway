@@ -1,6 +1,6 @@
 import { FileTypeValidator } from '@nestjs/common';
 
-export class CustomFileTypeValidator extends FileTypeValidator {
+export class PortfolioFileTypeValidator extends FileTypeValidator {
   constructor() {
     super({ fileType: /.(jpg|jpeg|png|pdf)/ });
   }

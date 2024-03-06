@@ -1,37 +1,32 @@
-import { Controller, Get, Post, Param, Body, UseGuards } from '@nestjs/common'
-import { ApiOperation, ApiTags, ApiBearerAuth } from '@nestjs/swagger'
-import { FeedbackService } from './feedback.service'
+import { Controller, Get, Post, Param, Body, UseGuards } from '@nestjs/common';
+import { ApiOperation, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
+import { FeedbackService } from './feedback.service';
 import { FeedbackDto, FeedbackReplyDto } from './dtos';
-import { TokenGuard } from 'src/auth/guards'
-import { TokenRequirements, Token } from 'src/auth/decorators'
-import { IAccessToken, TokenType } from '../auth/auth.interfaces'
+import { TokenGuard } from 'src/auth/guards';
+import { TokenRequirements, Token } from 'src/auth/decorators';
+import { IAccessToken, TokenType } from '../auth/auth.interfaces';
 import { UserRole } from '@tutorify/shared';
 
 @Controller()
 @ApiTags('feedback')
 export class FeedbackController {
-  constructor(private readonly feedbackService: FeedbackService) { }
+  constructor(private readonly feedbackService: FeedbackService) {}
 
   @Get('feedbacks')
   @ApiOperation({ summary: 'Get all feedbacks.' })
-  async getFeedbacks(
-  ) {
+  async getFeedbacks() {
     return this.feedbackService.getAllFeedbacks();
   }
 
   @Get('tutors/:id/feedbacks')
   @ApiOperation({ summary: 'Get all feedbacks of a tutor.' })
-  async getFeedbacksByTutorId(
-    @Param('id') tutorId: string
-  ) {
+  async getFeedbacksByTutorId(@Param('id') tutorId: string) {
     return this.feedbackService.getFeedbacksByTutorId(tutorId);
   }
 
   @Get('feedbacks/:id/feedback-replies')
   @ApiOperation({ summary: 'Get all feedback replies of a feedback.' })
-  async getFeedbackRepliesByFeedback(
-    @Param('id') feedbackId: string
-  ) {
+  async getFeedbackRepliesByFeedback(@Param('id') feedbackId: string) {
     return this.feedbackService.getFeedbackRepliesByFeedbackId(feedbackId);
   }
 
@@ -60,6 +55,10 @@ export class FeedbackController {
     @Token() token: IAccessToken,
   ) {
     const userId = token.id;
-    return this.feedbackService.createFeedbackReply(feedbackId, userId, feedbackReply);
+    return this.feedbackService.createFeedbackReply(
+      feedbackId,
+      userId,
+      feedbackReply,
+    );
   }
 }

@@ -8,8 +8,8 @@ import { getRequest } from '../helpers';
 export class TokenGuard implements CanActivate {
   constructor(
     private readonly reflector: Reflector,
-    private readonly authService: AuthService
-  ) { }
+    private readonly authService: AuthService,
+  ) {}
 
   /**
    * Determines whether the request is allowed to proceed.
@@ -20,7 +20,7 @@ export class TokenGuard implements CanActivate {
     // Retrieve token requirements set by decorators
     const tokenRequirements = this.reflector.get<TokenRequirementsHelper>(
       'tokenrequirements',
-      context.getHandler()
+      context.getHandler(),
     );
 
     // If no bearer token is present in the request

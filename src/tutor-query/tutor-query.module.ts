@@ -1,10 +1,10 @@
-import { Module } from '@nestjs/common'
-import { ConfigService } from '@nestjs/config'
-import { ClientsModule, Transport } from '@nestjs/microservices'
-import { TutorQueryService } from './tutor-query.service'
-import { ClassModule } from 'src/class/class.module'
-import { QueueNames } from '@tutorify/shared'
-import { TutorResolver } from './resolvers'
+import { Module } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { ClientsModule, Transport } from '@nestjs/microservices';
+import { TutorQueryService } from './tutor-query.service';
+import { ClassModule } from 'src/class/class.module';
+import { QueueNames } from '@tutorify/shared';
+import { TutorResolver } from './resolvers';
 
 @Module({
   imports: [
@@ -28,4 +28,4 @@ import { TutorResolver } from './resolvers'
   ],
   providers: [TutorQueryService, TutorResolver],
 })
-export class TutorQueryModule { }
+export class TutorQueryModule {}

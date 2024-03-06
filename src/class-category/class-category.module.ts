@@ -1,10 +1,10 @@
-import { Module } from '@nestjs/common'
-import { ConfigService } from '@nestjs/config'
-import { ClientsModule, Transport } from '@nestjs/microservices'
-import { ClassCategoryController } from './class-category.controller'
-import { ClassCategoryService } from './class-category.service'
-import { QueueNames } from '@tutorify/shared'
-import { Resolvers } from './resolvers'
+import { Module } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { ClientsModule, Transport } from '@nestjs/microservices';
+import { ClassCategoryController } from './class-category.controller';
+import { ClassCategoryService } from './class-category.service';
+import { QueueNames } from '@tutorify/shared';
+import { Resolvers } from './resolvers';
 
 @Module({
   imports: [
@@ -27,6 +27,6 @@ import { Resolvers } from './resolvers'
   ],
   controllers: [ClassCategoryController],
   providers: [ClassCategoryService, ...Resolvers],
-  exports: [ClassCategoryService,]
+  exports: [ClassCategoryService],
 })
-export class ClassCategoryModule { }
+export class ClassCategoryModule {}

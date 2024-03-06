@@ -1,63 +1,68 @@
-import { ArgsType, Field, IntersectionType, registerEnumType } from "@nestjs/graphql";
-import { ClassOrderBy } from "@tutorify/shared";
-import { Transform } from "class-transformer";
-import { IsBoolean, IsOptional } from "class-validator";
-import { ToBoolean } from "src/common/decorators";
-import { PaginationArgs, SortingDirectionArgs } from "src/common/graphql";
+import {
+  ArgsType,
+  Field,
+  IntersectionType,
+  registerEnumType,
+} from '@nestjs/graphql';
+import { ClassOrderBy } from '@tutorify/shared';
+import { Transform } from 'class-transformer';
+import { IsBoolean, IsOptional } from 'class-validator';
+import { ToBoolean } from 'src/common/decorators';
+import { PaginationArgs, SortingDirectionArgs } from 'src/common/graphql';
 
 registerEnumType(ClassOrderBy, {
-    name: 'ClassOrderBy',
+  name: 'ClassOrderBy',
 });
 
 @ArgsType()
 export class ClassQueryArgs extends IntersectionType(
-    PaginationArgs,
-    SortingDirectionArgs,
+  PaginationArgs,
+  SortingDirectionArgs,
 ) {
-    @IsOptional()
-    @Field({
-        nullable: true,
-        description: 'Query string'
-    })
-    q?: string;
+  @IsOptional()
+  @Field({
+    nullable: true,
+    description: 'Query string',
+  })
+  q?: string;
 
-    @IsOptional()
-    @Field(() => ClassOrderBy, {
-        nullable: true,
-        description: 'The sorting attribute',
-    })
-    order?: ClassOrderBy;
+  @IsOptional()
+  @Field(() => ClassOrderBy, {
+    nullable: true,
+    description: 'The sorting attribute',
+  })
+  order?: ClassOrderBy;
 
-    @IsOptional()
-    @Transform(({ value }) => (Array.isArray(value) ? value : Array(value)))
-    @Field(() => [String], {
-        nullable: true,
-        description: "Classes' ids Categories classes categorized to",
-    })
-    classCategoryIds?: string[];
+  @IsOptional()
+  @Transform(({ value }) => (Array.isArray(value) ? value : Array(value)))
+  @Field(() => [String], {
+    nullable: true,
+    description: "Classes' ids Categories classes categorized to",
+  })
+  classCategoryIds?: string[];
 
-    @IsOptional()
-    @Transform(({ value }) => (Array.isArray(value) ? value : Array(value)))
-    @Field(() => [String], {
-        nullable: true,
-        description: "Subjects' ids classes categorized to",
-    })
-    subjectIds?: string[];
+  @IsOptional()
+  @Transform(({ value }) => (Array.isArray(value) ? value : Array(value)))
+  @Field(() => [String], {
+    nullable: true,
+    description: "Subjects' ids classes categorized to",
+  })
+  subjectIds?: string[];
 
-    @IsOptional()
-    @Transform(({ value }) => (Array.isArray(value) ? value : Array(value)))
-    @Field(() => [String], {
-        nullable: true,
-        description: "Levels' ids classes categorized to",
-    })
-    levelIds?: string[];
+  @IsOptional()
+  @Transform(({ value }) => (Array.isArray(value) ? value : Array(value)))
+  @Field(() => [String], {
+    nullable: true,
+    description: "Levels' ids classes categorized to",
+  })
+  levelIds?: string[];
 
-    @IsOptional()
-    @IsBoolean()
-    @ToBoolean()
-    @Field({
-        nullable: true,
-        description: 'Include hidden classes',
-    })
-    includeHidden?: boolean;
+  @IsOptional()
+  @IsBoolean()
+  @ToBoolean()
+  @Field({
+    nullable: true,
+    description: 'Include hidden classes',
+  })
+  includeHidden?: boolean;
 }

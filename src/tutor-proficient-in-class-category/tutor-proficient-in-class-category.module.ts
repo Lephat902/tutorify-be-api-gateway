@@ -1,10 +1,10 @@
-import { Module } from '@nestjs/common'
-import { ConfigService } from '@nestjs/config'
-import { ClientsModule, Transport } from '@nestjs/microservices'
-import { TutorProficientInClassCategoryService } from './tutor-proficient-in-class-category.service'
-import { ClassModule } from 'src/class/class.module'
-import { QueueNames } from '@tutorify/shared'
-import { TutorProficientInClassCategoryController } from './tutor-proficient-in-class-category.controller'
+import { Module } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { ClientsModule, Transport } from '@nestjs/microservices';
+import { TutorProficientInClassCategoryService } from './tutor-proficient-in-class-category.service';
+import { ClassModule } from 'src/class/class.module';
+import { QueueNames } from '@tutorify/shared';
+import { TutorProficientInClassCategoryController } from './tutor-proficient-in-class-category.controller';
 
 @Module({
   imports: [
@@ -29,4 +29,4 @@ import { TutorProficientInClassCategoryController } from './tutor-proficient-in-
   controllers: [TutorProficientInClassCategoryController],
   providers: [TutorProficientInClassCategoryService],
 })
-export class TutorProficientInClassCategoryModule { }
+export class TutorProficientInClassCategoryModule {}

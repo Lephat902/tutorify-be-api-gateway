@@ -13,4 +13,3 @@ export class FullProvinceResponseDto {
   readonly administrativeUnitId: number;
   readonly administrativeRegionId: number;
 }
-

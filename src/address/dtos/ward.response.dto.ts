@@ -12,4 +12,3 @@ export class FullWardResponseDto {
   readonly codeName: string;
   readonly administrativeUnitId: number;
 }
-  
