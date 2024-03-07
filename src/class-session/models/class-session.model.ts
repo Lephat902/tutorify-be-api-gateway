@@ -1,9 +1,9 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-import { ClassSessionMaterial } from './class-session-material.model';
+import { FileObject } from 'src/common/graphql';
 
 @ObjectType()
 export class ClassSession {
-  @Field((type) => ID)
+  @Field(() => ID)
   id: string;
 
   @Field()
@@ -36,8 +36,8 @@ export class ClassSession {
   @Field()
   isOnline: boolean;
 
-  @Field(() => [ClassSessionMaterial])
-  materials: ClassSessionMaterial[];
+  @Field(() => [FileObject])
+  materials: FileObject[];
 
   @Field()
   tutorFeedback: string;

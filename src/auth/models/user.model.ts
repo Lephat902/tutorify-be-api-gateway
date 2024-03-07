@@ -12,7 +12,7 @@ registerEnumType(UserRole, {
 
 @ObjectType()
 export class User {
-  @Field((type) => ID)
+  @Field(() => ID)
   id: string;
 
   @Field()

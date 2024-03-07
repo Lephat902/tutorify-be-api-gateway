@@ -10,7 +10,7 @@ import { UserRole } from '@tutorify/shared';
 import { ClassService } from 'src/class/class.service';
 import { Class } from 'src/class/models';
 
-@Resolver((of) => TutorApplyForClass)
+@Resolver(() => TutorApplyForClass)
 @UseGuards(TokenGuard)
 export class TutorApplyForClassResolver {
   constructor(
@@ -18,7 +18,7 @@ export class TutorApplyForClassResolver {
     private readonly classService: ClassService,
   ) {}
 
-  @Query((returns) => TutorApplyForClass, { name: 'classApplication' })
+  @Query(() => TutorApplyForClass, { name: 'classApplication' })
   @TokenRequirements(TokenType.CLIENT, [])
   async getClassApplicationById(
     @Args('id') applicationId: string,
@@ -39,7 +39,7 @@ export class TutorApplyForClassResolver {
     return application;
   }
 
-  @Query((returns) => [TutorApplyForClass], { name: 'myClassApplications' })
+  @Query(() => [TutorApplyForClass], { name: 'myClassApplications' })
   @TokenRequirements(TokenType.CLIENT, [UserRole.TUTOR])
   async getMyApplicationsByTutor(
     @Args() filters: TutorApplyForClassArgs,

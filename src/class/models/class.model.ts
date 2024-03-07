@@ -13,7 +13,7 @@ registerEnumType(TutorPositionPref, {
 
 @ObjectType()
 export class Class {
-  @Field((type) => ID)
+  @Field(() => ID)
   id: string;
 
   @Field()
