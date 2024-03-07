@@ -87,16 +87,13 @@ async function bootstrap() {
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
 
   // Set up Swagger documentation
-  setUpSwagger(app, configService);
+  setUpSwagger(app);
 
   // Start the application and listen on the specified port
   await app.listen(configService.get<number>('PORT'));
 }
 
-const setUpSwagger = (
-  app: INestApplication<any>,
-  configService: ConfigService,
-) => {
+const setUpSwagger = (app: INestApplication<any>) => {
   // Configure Swagger options
   const swaggerOptions = new DocumentBuilder()
     .setTitle('Tutorify')

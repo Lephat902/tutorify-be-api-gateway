@@ -12,14 +12,14 @@ export class ClassSessionService {
     @Inject(QueueNames.CLASS_SESSION) private readonly client: ClientProxy,
   ) {}
 
-  async addClassSession(
+  async createClassSessions(
     tutorId: string,
     classId: string,
     classSessionData: ClassSessionCreateDto,
   ) {
     return firstValueFrom(
       this.client.send(
-        { cmd: 'createClassSession' },
+        { cmd: 'createClassSessions' },
         {
           tutorId,
           classId,

@@ -7,7 +7,7 @@ import {
   Param,
   Body,
 } from '@nestjs/common';
-import { ClassSessionCreateDto, ClassSessionCreateByQtyDto } from './dtos';
+import { ClassSessionCreateDto } from './dtos';
 import { Token, TokenRequirements } from 'src/auth/decorators';
 import { IAccessToken, TokenType } from 'src/auth/auth.interfaces';
 import {
@@ -27,16 +27,18 @@ import { ClassSessionService } from './class-session.service';
 @UseGuards(TokenGuard)
 @ApiBearerAuth()
 export class ClassSessionController {
-  constructor(
-    private readonly classSessionService: ClassSessionService,
-  ) {}
+  constructor(private readonly classSessionService: ClassSessionService) {}
 
   @UseInterceptors(FilesInterceptor('files'))
   @ApiConsumes('multipart/form-data')
-  @ApiOperation({ summary: 'Tutor creates a new class session to a class.' })
+  @ApiOperation({
+    summary: 'Tutor creates class session(s) for a class.',
+    description:
+      'Tutor create at least one class, with options to create either a specific number of classes or to a specific time',
+  })
   @Post()
   @TokenRequirements(TokenType.CLIENT, [UserRole.TUTOR])
-  async createClassSession(
+  async createClassSessions(
     @Token() token: IAccessToken,
     @Param('classId') classId: string,
     @Body() classSessionCreateDto: ClassSessionCreateDto,
@@ -47,40 +49,15 @@ export class ClassSessionController {
       await validateMaterials(files);
     }
 
-    const fullClassSesionCreateDto: ClassSessionCreateDto & {
-      materials?: {
-        description: string;
-        file: Express.Multer.File;
-      }[];
-    } = { ...classSessionCreateDto };
+    const fullClassSesionCreateDto: ClassSessionCreateDto = {
+      ...classSessionCreateDto,
+      files,
+    };
 
-    if (classSessionCreateDto.description && files) {
-      fullClassSesionCreateDto.materials = files.map((file, index) => ({
-        description: classSessionCreateDto.description[index] || '',
-        file: file,
-      }));
-    }
-
-    return this.classSessionService.addClassSession(
+    return this.classSessionService.createClassSessions(
       tutorId,
       classId,
       fullClassSesionCreateDto,
-    );
-  }
-
-  @ApiOperation({ summary: 'Tutor creates class sessions by number desired.' })
-  @Post('create_by_qty')
-  @TokenRequirements(TokenType.CLIENT, [UserRole.TUTOR])
-  async createClassSessionsWithNumberOfSessions(
-    @Token() token: IAccessToken,
-    @Param('classId') classId: string,
-    @Body() classSessionCreateByQtyDto: ClassSessionCreateByQtyDto,
-  ) {
-    const tutorId = token.id;
-    return this.classSessionService.createClassSessionsWithNumberOfSessions(
-      tutorId,
-      classId,
-      classSessionCreateByQtyDto.numberOfSessions,
     );
   }
 }

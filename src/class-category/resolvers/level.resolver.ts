@@ -2,16 +2,16 @@ import { Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { Level, Subject } from '../models';
 import { ClassCategoryService } from '../class-category.service';
 
-@Resolver((of) => Level)
+@Resolver(() => Level)
 export class LevelResolver {
   constructor(private readonly classCategoryService: ClassCategoryService) {}
 
-  @Query((returns) => [Level], { name: 'levels' })
+  @Query(() => [Level], { name: 'levels' })
   async findAllLevels(): Promise<Level[]> {
     return this.classCategoryService.findAllLevels();
   }
 
-  @ResolveField('subjects', (returns) => [Subject], {
+  @ResolveField('subjects', () => [Subject], {
     nullable: true,
     description: 'All subjects compatible with this level.',
   })

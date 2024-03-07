@@ -3,7 +3,7 @@ import { Level, Subject } from '.';
 
 @ObjectType()
 export class ClassCategory {
-  @Field((type) => ID)
+  @Field(() => ID)
   id: string;
 
   @Field()

@@ -3,7 +3,7 @@ import { Weekday } from '@tutorify/shared';
 import { IsEnum, IsNotEmpty, IsString, Matches } from 'class-validator';
 
 export class ClassTimeSlotDto {
-  @ApiProperty({ example: '00:00' })
+  @ApiProperty({ example: '19:00' })
   @IsNotEmpty()
   @IsString()
   @Matches(/^([01]\d|2[0-3]):([0-5]\d)$/, {
@@ -11,7 +11,7 @@ export class ClassTimeSlotDto {
   })
   startTime: string;
 
-  @ApiProperty({ example: '23:59' })
+  @ApiProperty({ example: '21:00' })
   @IsNotEmpty()
   @IsString()
   @Matches(/^([01]\d|2[0-3]):([0-5]\d)$/, {
