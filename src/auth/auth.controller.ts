@@ -115,6 +115,8 @@ export class AuthController {
       role: UserRole.TUTOR,
     };
 
+console.log(fullSignupTutorDto);
+
     return this.authService.createUser(fullSignupTutorDto);
   }
 

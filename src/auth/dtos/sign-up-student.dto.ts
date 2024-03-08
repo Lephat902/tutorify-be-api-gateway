@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { SignUpDto } from './sign-up-base-user.dto';
-import { IsString } from 'class-validator';
+import { IsString, IsOptional } from 'class-validator';
 
 export class SignUpStudentDto extends SignUpDto {
   @ApiProperty({
@@ -8,6 +8,7 @@ export class SignUpStudentDto extends SignUpDto {
     example: 'Jane',
     required: false,
   })
+  @IsOptional()
   @IsString()
   public readonly parentFirstName: string;
 
@@ -16,6 +17,7 @@ export class SignUpStudentDto extends SignUpDto {
     example: 'Anne',
     required: false,
   })
+  @IsOptional()
   @IsString()
   public readonly parentMiddleName: string;
 
@@ -24,6 +26,7 @@ export class SignUpStudentDto extends SignUpDto {
     example: 'Smith',
     required: false,
   })
+  @IsOptional()
   @IsString()
   public readonly parentLastName: string;
 }

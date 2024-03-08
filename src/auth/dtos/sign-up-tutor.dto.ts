@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsInt, IsString } from 'class-validator';
+import { IsArray, IsInt, IsOptional, IsString } from 'class-validator';
 import { SignUpDto } from './sign-up-base-user.dto';
 import { Transform, Type } from 'class-transformer';
 
@@ -10,6 +10,7 @@ export class SignUpTutorDto extends SignUpDto {
     required: false,
   })
   @IsString()
+  @IsOptional()
   public readonly biography: string;
 
   @ApiProperty({
@@ -18,6 +19,7 @@ export class SignUpTutorDto extends SignUpDto {
     required: false,
   })
   @IsString()
+  @IsOptional()
   public readonly minimumWage: string;
 
   @ApiProperty({
@@ -26,6 +28,7 @@ export class SignUpTutorDto extends SignUpDto {
     required: false,
   })
   @IsString()
+  @IsOptional()
   public readonly currentWorkplace: string;
 
   @ApiProperty({
@@ -34,6 +37,7 @@ export class SignUpTutorDto extends SignUpDto {
     required: false,
   })
   @IsString()
+  @IsOptional()
   public readonly currentPosition: string;
 
   @ApiProperty({
@@ -42,6 +46,7 @@ export class SignUpTutorDto extends SignUpDto {
     required: false,
   })
   @IsString()
+  @IsOptional()
   public readonly major: string;
 
   @ApiProperty({
@@ -50,6 +55,7 @@ export class SignUpTutorDto extends SignUpDto {
     required: false,
     type: 'integer',
   })
+  @IsOptional()
   @IsInt()
   @Type(() => Number)
   public readonly graduationYear: number;
@@ -58,6 +64,7 @@ export class SignUpTutorDto extends SignUpDto {
     description: "Class Categories' ids that tutor claim to be able to teach",
     type: 'array',
     items: { type: 'string' },
+    required: false,
     example: [
       '3b5e5abb-f7ca-4503-bf8d-8e02dbc249e2',
       '83bdcea4-c6bf-4e7a-a9e0-d0894f5841bb',
@@ -75,12 +82,14 @@ export class SignUpTutorDto extends SignUpDto {
     items: { type: 'string', format: 'binary' },
     required: false,
   })
+  @IsOptional()
   public readonly portfolios?: Array<Express.Multer.File>;
 
   @ApiProperty({
     description: 'Social Media Profiles of the tutor',
     type: 'array',
     items: { type: 'string' },
+    required: false,
     example: [
       'https://www.facebook.com/tran.thanh.ne',
       'https://www.facebook.com/groups/elonmusk1',
@@ -90,5 +99,6 @@ export class SignUpTutorDto extends SignUpDto {
   @IsString({ each: true })
   @Type(() => String)
   @Transform(({ value }) => value.split(','))
+  @IsOptional()
   public readonly socialProfiles: string[];
 }
