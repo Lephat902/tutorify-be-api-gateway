@@ -4,7 +4,9 @@ import {
   IsEnum,
   IsNotEmpty,
   IsString,
+  IsOptional,
   MinLength,
+  ValidateIf,
 } from 'class-validator';
 import { Gender } from '@tutorify/shared';
 
@@ -40,6 +42,7 @@ export class SignUpDto {
     required: false,
     enum: Object.values(Gender),
   })
+  @ValidateIf((_object, value) => value)
   @IsEnum(Gender)
   public readonly gender: Gender;
 
@@ -48,7 +51,7 @@ export class SignUpDto {
     example: '1234567890',
     required: false,
   })
-  // @IsPhoneNumber()
+  @IsOptional()
   @IsString()
   public readonly phoneNumber: string;
 
@@ -57,6 +60,7 @@ export class SignUpDto {
     example: '123 Main St',
     required: false,
   })
+  @IsOptional()
   @IsString()
   public readonly address: string;
 
@@ -65,6 +69,7 @@ export class SignUpDto {
     example: '1',
     required: false,
   })
+  @IsOptional()
   @IsString()
   public readonly wardId: string;
 
@@ -73,6 +78,7 @@ export class SignUpDto {
     example: 'John',
     required: false,
   })
+  @IsOptional()
   @IsString()
   public readonly firstName: string;
 
@@ -81,6 +87,7 @@ export class SignUpDto {
     example: 'William',
     required: false,
   })
+  @IsOptional()
   @IsString()
   public readonly middleName: string;
 
@@ -89,10 +96,12 @@ export class SignUpDto {
     example: 'Doe',
     required: false,
   })
+  @IsOptional()
   @IsString()
   public readonly lastName: string;
 
   // Any validation here has no effect for File type, this line just facilitates uploading file in swagger-ui
   @ApiProperty({ type: 'string', format: 'binary', required: false })
+  @IsOptional()
   public readonly avatar?: Express.Multer.File;
 }
