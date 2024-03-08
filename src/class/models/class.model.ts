@@ -60,4 +60,7 @@ export class Class {
 
   @Field(() => [ClassTimeSlot])
   timeSlots: ClassTimeSlot[];
+
+  @Field({ nullable: true })
+  imgUrl: string;
 }

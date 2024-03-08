@@ -60,11 +60,11 @@ export class ClassService {
     );
   }
 
-  async getClassById(id: string): Promise<ClassDto> {
+  async getClassById(id: string) {
     return firstValueFrom(this.client.send({ cmd: 'getClassById' }, id));
   }
 
-  async getClasses(filters: ClassQueryDto): Promise<ClassDto[]> {
+  async getClasses(filters: ClassQueryDto) {
     return firstValueFrom(this.client.send({ cmd: 'getClasses' }, filters));
   }
 
