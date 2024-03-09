@@ -14,8 +14,6 @@ export class ClassPaginatedResultsResolver {
 
   @Query(() => ClassPaginatedResults, { name: 'classes' })
   async getClassesAndTotalCount(@Args() filters: ClassQueryArgs) {
-    const a = await this.classService.getClassesAndTotalCount(filters);
-    console.log(a);
-    return a;
+    return this.classService.getClassesAndTotalCount(filters);
   }
 }

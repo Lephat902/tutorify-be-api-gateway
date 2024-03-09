@@ -4,7 +4,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
 import { TutorQueryService } from './tutor-query.service';
 import { ClassModule } from 'src/class/class.module';
 import { QueueNames } from '@tutorify/shared';
-import { TutorResolver } from './resolvers';
+import { TutorPaginatedResultsResolver } from './resolvers';
 
 @Module({
   imports: [
@@ -26,6 +26,6 @@ import { TutorResolver } from './resolvers';
     ]),
     ClassModule,
   ],
-  providers: [TutorQueryService, TutorResolver],
+  providers: [TutorQueryService, TutorPaginatedResultsResolver],
 })
 export class TutorQueryModule {}
