@@ -1,1 +1,1 @@
-export * from './tutor.resolver';
+export * from './tutor-paginated-results.resolver';
