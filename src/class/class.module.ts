@@ -4,7 +4,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
 import { ClassController } from './class.controller';
 import { ClassService } from './class.service';
 import { QueueNames } from '@tutorify/shared';
-import { ClassResolver } from './resolvers';
+import { ClassPaginatedResultsResolver, ClassResolver } from './resolvers';
 import { TutorApplyForClassModule } from 'src/tutor-apply-for-class/tutor-apply-for-class.module';
 
 @Module({
@@ -28,7 +28,7 @@ import { TutorApplyForClassModule } from 'src/tutor-apply-for-class/tutor-apply-
     forwardRef(() => TutorApplyForClassModule),
   ],
   controllers: [ClassController],
-  providers: [ClassService, ClassResolver],
+  providers: [ClassService, ClassResolver, ClassPaginatedResultsResolver],
   exports: [ClassService],
 })
 export class ClassModule {}
