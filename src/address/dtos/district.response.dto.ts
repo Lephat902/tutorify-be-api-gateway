@@ -1,10 +1,10 @@
 export class DistrictResponseDto {
-  readonly code: string;
+  readonly id: string;
   readonly name: string;
 }
 
 export class FullDistrictResponseDto {
-  code: string;
+  id: string;
   name: string;
   nameEn: string;
   fullName: string;

@@ -15,47 +15,50 @@ import { QueueNames } from '@tutorify/shared';
 export class AddressService {
   constructor(
     @Inject(QueueNames.ADDRESS) private readonly client: ClientProxy,
-  ) {}
+  ) { }
 
   async getAllProvinces(): Promise<ProvinceResponseDto[]> {
     return firstValueFrom(this.client.send({ cmd: 'getAllProvinces' }, {}));
   }
 
-  async getAllDistricts(provinceCode: string): Promise<DistrictResponseDto[]> {
+  async getAllDistricts(provinceId: string): Promise<DistrictResponseDto[]> {
     return firstValueFrom(
-      this.client.send({ cmd: 'getAllDistricts' }, provinceCode),
+      this.client.send({ cmd: 'getAllDistricts' }, provinceId),
     );
   }
 
-  async getAllWards(districtCode: string): Promise<WardResponseDto[]> {
+  async getAllWards(districtId: string): Promise<WardResponseDto[]> {
     return firstValueFrom(
-      this.client.send({ cmd: 'getAllWards' }, districtCode),
+      this.client.send({ cmd: 'getAllWards' }, districtId),
     );
   }
 
   async getProvinceByCode(
-    provinceCode: string,
+    provinceId: string,
   ): Promise<FullProvinceResponseDto> {
     return firstValueFrom(
-      this.client.send({ cmd: 'getProvinceByCode' }, provinceCode),
+      this.client.send({ cmd: 'getProvinceByCode' }, provinceId),
     );
   }
 
   async getDistrictByCode(
-    districtCode: string,
+    districtId: string,
   ): Promise<FullDistrictResponseDto> {
     return firstValueFrom(
-      this.client.send({ cmd: 'getDistrictByCode' }, districtCode),
+      this.client.send({ cmd: 'getDistrictByCode' }, districtId),
     );
   }
 
-  async getWardByCode(wardCode: string): Promise<FullWardResponseDto> {
-    return firstValueFrom(this.client.send({ cmd: 'getWardByCode' }, wardCode));
+  async getWardByCode(wardId: string): Promise<FullWardResponseDto> {
+    return firstValueFrom(this.client.send({ cmd: 'getWardByCode' }, wardId));
   }
 
-  async getGeoLocation(address: string, wardCode: string) {
+  async getGeoLocation(address: string, wardId: string) {
     return firstValueFrom(
-      this.client.send({ cmd: 'getGeoLocation' }, { address, wardCode }),
+      this.client.send({ cmd: 'getGeoLocation' }, {
+        address,
+        wardCode: wardId
+      }),
     );
   }
 }

@@ -4,6 +4,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
 import { QueueNames } from '@tutorify/shared';
 import { AddressService } from './address.service';
 import { AddressController } from './address.controller';
+import { Resolvers } from './resolvers';
 
 @Module({
   imports: [
@@ -25,7 +26,7 @@ import { AddressController } from './address.controller';
     ]),
   ],
   controllers: [AddressController],
-  providers: [AddressService],
+  providers: [AddressService, ...Resolvers],
   exports: [AddressService],
 })
 export class AddressModule {}
