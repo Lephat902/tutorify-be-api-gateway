@@ -1,7 +1,6 @@
 import { Resolver, Query, Args, Parent, ResolveField } from '@nestjs/graphql';
 import { ClassService } from '../class.service';
 import { Class } from '../models';
-import { ClassQueryArgs } from '../args';
 import { UseGuards } from '@nestjs/common';
 import { TokenGuard } from 'src/auth/guards';
 import { TutorApplyForClass } from 'src/tutor-apply-for-class/models';
@@ -29,11 +28,6 @@ export class ClassResolver {
   @Query(() => Class, { name: 'class' })
   async getClassById(@Args('id') id: string) {
     return this.classService.getClassById(id);
-  }
-
-  @Query(() => [Class], { name: 'classes' })
-  async getClasses(@Args() filters: ClassQueryArgs) {
-    return this.classService.getClasses(filters);
   }
 
   @ResolveField('tutorApplications', () => [TutorApplyForClass], {
