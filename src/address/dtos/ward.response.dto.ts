@@ -1,10 +1,10 @@
 export class WardResponseDto {
-  readonly code: string;
+  readonly id: string;
   readonly name: string;
 }
 
 export class FullWardResponseDto {
-  readonly code: string;
+  readonly id: string;
   readonly name: string;
   readonly nameEn: string;
   readonly fullName: string;
