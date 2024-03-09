@@ -14,6 +14,7 @@ import { AddressModule } from './address/address.module';
 import { ClassSessionModule } from './class-session/class-session.module';
 import { DateScalar } from './common/graphql';
 import { TutorProficientInClassCategoryModule } from './tutor-proficient-in-class-category/tutor-proficient-in-class-category.module';
+import { ReportModule } from './report/report.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { TutorProficientInClassCategoryModule } from './tutor-proficient-in-clas
     TutorQueryModule,
     AddressModule,
     ClassSessionModule,
+    ReportModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: ['.env', '.env.example'],
