@@ -1,10 +1,10 @@
 export class ProvinceResponseDto {
-  readonly code: string;
+  readonly id: string;
   readonly name: string;
 }
 
 export class FullProvinceResponseDto {
-  readonly code: string;
+  readonly id: string;
   readonly name: string;
   readonly nameEn: string;
   readonly fullName: string;
