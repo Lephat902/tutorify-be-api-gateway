@@ -10,10 +10,10 @@ export class TutorProficientInClassCategoryService {
     private readonly client: ClientProxy,
   ) {}
 
-  addToProficienciesList(tutorId: string, classCategoryId: string) {
+  addOneToProficienciesList(tutorId: string, classCategoryId: string) {
     return firstValueFrom(
       this.client.send(
-        { cmd: 'addToProficienciesList' },
+        { cmd: 'addOneToProficienciesList' },
         {
           tutorId,
           classCategoryId,
