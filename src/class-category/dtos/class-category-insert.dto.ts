@@ -6,7 +6,7 @@ export class ClassCategoryInsertDto {
   @ApiProperty({
     description: 'Subject Object',
     example: {
-      id: '02f1815b-3da9-45d9-9aba-7a2f87cef7d7',
+      id: '845958e5-3b8b-47db-a817-896f62e399c0',
       name: 'Math',
     },
     required: true,
@@ -17,7 +17,7 @@ export class ClassCategoryInsertDto {
   @ApiProperty({
     description: 'Level Object',
     example: {
-      id: '02f1815b-3da9-45d9-9aba-7a2f87cef7d7',
+      id: '845958e5-3b8b-47db-a817-896f62e399c0',
       name: '1',
     },
     required: true,

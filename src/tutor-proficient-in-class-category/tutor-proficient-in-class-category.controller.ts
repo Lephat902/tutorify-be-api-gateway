@@ -27,12 +27,12 @@ export class TutorProficientInClassCategoryController {
   @Post('/proficiencies/:classCategoryId')
   @TokenRequirements(TokenType.CLIENT, [UserRole.TUTOR])
   @ApiBearerAuth()
-  addToProficienciesList(
+  addOneToProficienciesList(
     @Token() token: IAccessToken,
     @Param('classCategoryId') classCategoryId: string,
   ) {
     const tutorId = token.id;
-    return this.tutorProficientInClassCategoryService.addToProficienciesList(
+    return this.tutorProficientInClassCategoryService.addOneToProficienciesList(
       tutorId,
       classCategoryId,
     );

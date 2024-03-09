@@ -13,6 +13,7 @@ import { TutorQueryModule } from './tutor-query/tutor-query.module';
 import { AddressModule } from './address/address.module';
 import { ClassSessionModule } from './class-session/class-session.module';
 import { DateScalar } from './common/graphql';
+import { TutorProficientInClassCategoryModule } from './tutor-proficient-in-class-category/tutor-proficient-in-class-category.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { DateScalar } from './common/graphql';
     ClassModule,
     TutorApplyForClassModule,
     StudentFavoriteTutorModule,
+    TutorProficientInClassCategoryModule,
     TutorQueryModule,
     AddressModule,
     ClassSessionModule,

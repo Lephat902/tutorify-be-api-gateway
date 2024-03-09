@@ -1,6 +1,7 @@
 import { Field, ObjectType, OmitType, registerEnumType } from '@nestjs/graphql';
 import { Gender, UserRole } from '@tutorify/shared';
 import { User } from 'src/auth/models';
+import { ClassCategory } from 'src/class-category/models';
 import { FileObject } from 'src/common/graphql';
 
 registerEnumType(Gender, {
@@ -39,4 +40,7 @@ export class Tutor extends OmitType(User, ['phoneNumber', 'role'] as const) {
 
   @Field(() => [FileObject])
   tutorPortfolios: FileObject[];
+
+  @Field(() => [ClassCategory])
+  proficiencies: ClassCategory[];
 }
