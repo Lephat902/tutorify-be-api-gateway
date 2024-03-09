@@ -9,6 +9,8 @@ import { ClientProxy } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
 import { IAccessToken } from 'src/auth/auth.interfaces';
 import { QueueNames, UserRole } from '@tutorify/shared';
+import { Class } from './models';
+import { ClassQueryArgs } from './args';
 
 @Injectable()
 export class ClassService {
@@ -64,8 +66,15 @@ export class ClassService {
     return firstValueFrom(this.client.send({ cmd: 'getClassById' }, id));
   }
 
-  async getClasses(filters: ClassQueryDto) {
+  async getClasses(filters: ClassQueryDto): Promise<Class[]> {
     return firstValueFrom(this.client.send({ cmd: 'getClasses' }, filters));
+  }
+
+  async getClassesAndTotalCount(filters: ClassQueryArgs): Promise<{
+    results: Class[],
+    totalCount: number,
+  }> {
+    return firstValueFrom(this.client.send({ cmd: 'getClassesAndTotalCount' }, filters));
   }
 
   async getClassesByStudentId(
