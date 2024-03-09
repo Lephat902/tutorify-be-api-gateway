@@ -3,6 +3,7 @@ import { ClientProxy } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
 import { QueueNames } from '@tutorify/shared';
 import { TutorArgs } from './args';
+import { Tutor } from './models';
 
 @Injectable()
 export class TutorQueryService {
@@ -10,7 +11,10 @@ export class TutorQueryService {
     @Inject(QueueNames.TUTOR_QUERY) private readonly client: ClientProxy,
   ) {}
 
-  getTutors(filters: TutorArgs) {
-    return firstValueFrom(this.client.send({ cmd: 'getTutors' }, filters));
+  getTutorsAndTotalCount(filters: TutorArgs): Promise<{
+    results: Tutor[],
+    totalCount: number,
+  }> {
+    return firstValueFrom(this.client.send({ cmd: 'getTutorsAndTotalCount' }, filters));
   }
 }
