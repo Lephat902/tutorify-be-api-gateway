@@ -4,6 +4,7 @@ import {
   ArgumentsHost,
   HttpStatus,
   HttpException,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { Response } from 'express';
 
@@ -19,14 +20,19 @@ export class GlobalExceptionsFilter implements ExceptionFilter {
       return;
     }
 
-    if (exception.error?.statusCode !== undefined) {
-      response.status(exception.error.statusCode).json(exception.error.message);
-      console.log('CAN BE CATEGORIZED AS HTTP EXCEPTION');
-    } else {
+    const DEFAULT_ERROR_STATUS = HttpStatus.INTERNAL_SERVER_ERROR;
+    try {
+      if (exception.error?.statusCode !== undefined) {
+        response.status(exception.error.statusCode).json(exception.error.message);
+        console.log('CAN BE CATEGORIZED AS HTTP EXCEPTION');
+      } else {
+        console.log(exception);
+        console.log('UNABLE TO HANDLE THIS ERROR');
+        response.status(DEFAULT_ERROR_STATUS).json(JSON.stringify(exception));
+      }
+    } catch(e) {
       console.log(exception);
-      console.log('UNABLE TO HANDLE THIS ERROR');
-      const DEFAULT_ERROR_STATUS = HttpStatus.INTERNAL_SERVER_ERROR;
-      response.status(DEFAULT_ERROR_STATUS).json(JSON.stringify(exception));
+      throw new InternalServerErrorException(JSON.stringify(exception));
     }
   }
 }

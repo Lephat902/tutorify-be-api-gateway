@@ -135,5 +135,6 @@ export class ClassSessionCreateDto {
     items: { type: 'string', format: 'binary' },
     required: false,
   })
+  @IsOptional()
   files?: Array<Express.Multer.File>;
 }
