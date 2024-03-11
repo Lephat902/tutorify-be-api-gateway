@@ -6,8 +6,9 @@ import {
   UploadedFiles,
   Param,
   Body,
+  Patch,
 } from '@nestjs/common';
-import { ClassSessionCreateDto } from './dtos';
+import { ClassSessionCreateDto, ClassSessionUpdateDto } from './dtos';
 import { Token, TokenRequirements } from 'src/auth/decorators';
 import { IAccessToken, TokenType } from 'src/auth/auth.interfaces';
 import {
@@ -22,7 +23,7 @@ import { FilesInterceptor } from '@nestjs/platform-express';
 import { validateMaterials } from './helpers';
 import { ClassSessionService } from './class-session.service';
 
-@Controller('/classess/:classId/sessions')
+@Controller()
 @ApiTags('Class Session')
 @UseGuards(TokenGuard)
 @ApiBearerAuth()
@@ -36,7 +37,7 @@ export class ClassSessionController {
     description:
       'Tutor create at least one class, with options to create either a specific number of classes or to a specific time',
   })
-  @Post()
+  @Post('/classess/:classId/sessions')
   @TokenRequirements(TokenType.CLIENT, [UserRole.TUTOR])
   async createClassSessions(
     @Token() token: IAccessToken,
@@ -58,6 +59,36 @@ export class ClassSessionController {
       tutorId,
       classId,
       fullClassSesionCreateDto,
+    );
+  }
+
+  @UseInterceptors(FilesInterceptor('files'))
+  @ApiConsumes('multipart/form-data')
+  @ApiOperation({
+    summary: 'Tutor updates a class session.',
+  })
+  @Patch('/classess/sessions/:sessionId')
+  @TokenRequirements(TokenType.CLIENT, [UserRole.TUTOR])
+  async updateClassSession(
+    @Token() token: IAccessToken,
+    @Param('sessionId') sessionId: string,
+    @Body() classSessionUpdateDto: ClassSessionUpdateDto,
+    @UploadedFiles() files: Array<Express.Multer.File>,
+  ) {
+    const tutorId = token.id;
+    if (files) {
+      await validateMaterials(files);
+    }
+
+    const fullClassSessionUpdateDto: ClassSessionUpdateDto = {
+      ...classSessionUpdateDto,
+      files,
+    };
+
+    return this.classSessionService.updateClassSession(
+      tutorId,
+      sessionId,
+      fullClassSessionUpdateDto,
     );
   }
 }
