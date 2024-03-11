@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { ClassSessionCreateDto } from './dtos';
+import { ClassSessionCreateDto, ClassSessionUpdateDto } from './dtos';
 import { ClientProxy } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
 import { QueueNames } from '@tutorify/shared';
@@ -29,18 +29,18 @@ export class ClassSessionService {
     );
   }
 
-  async createClassSessionsWithNumberOfSessions(
+  async updateClassSession(
     tutorId: string,
-    classId: string,
-    numberOfSessions: number,
+    classSessionId: string,
+    classSessionUpdateDto: ClassSessionUpdateDto,
   ) {
     return firstValueFrom(
       this.client.send(
-        { cmd: 'createClassSessionsWithNumberOfSessions' },
+        { cmd: 'updateClassSession' },
         {
+          classSessionId,
           tutorId,
-          classId,
-          numberOfSessions,
+          ...classSessionUpdateDto,
         },
       ),
     );
