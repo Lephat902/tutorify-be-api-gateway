@@ -10,6 +10,7 @@ import {
   UploadedFile,
   Param,
   Patch,
+  BadRequestException,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -23,6 +24,7 @@ import { Token, TokenRequirements } from './decorators';
 import { IAccessToken, TokenType } from './auth.interfaces';
 import {
   LoginDto,
+  SignUpDto,
   SignUpStudentDto,
   SignUpTutorDto,
   VerifyEmailDto,
@@ -33,14 +35,15 @@ import {
 } from '@nestjs/platform-express';
 import { UserRole } from '@tutorify/shared';
 import { validateAvatar, validatePortfolios } from './helpers';
+import { UpdateDto, UpdateStudentDto, UpdateTutorDto } from './dtos/update';
 
 @Controller()
 @ApiTags('authentication')
 @UseGuards(TokenGuard)
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
 
-  @Get('auth')
+  @Get('profile')
   @ApiOperation({ summary: 'Get self information' })
   @ApiBearerAuth()
   @TokenRequirements(TokenType.CLIENT, [])
@@ -65,26 +68,6 @@ export class AuthController {
     return this.authService.verifyEmail(verifyEmailDto.token);
   }
 
-  @Post('students/signup')
-  @UseInterceptors(FileInterceptor('avatar'))
-  @ApiConsumes('multipart/form-data')
-  @ApiOperation({ summary: 'Sign up a new student' })
-  public async signUpStudent(
-    @Body() signupStudentDto: SignUpStudentDto,
-    @UploadedFile() avatar?: Express.Multer.File,
-  ) {
-    if (avatar) await validateAvatar(avatar);
-
-    const fullSignupStudentDto: SignUpStudentDto & { role: string } = {
-      ...signupStudentDto,
-      avatar,
-      role: UserRole.STUDENT,
-    };
-
-    const student = await this.authService.createUser(fullSignupStudentDto);
-    return this.returnUserAndToken(student);
-  }
-
   @Post('tutors/signup')
   @UseInterceptors(
     FileFieldsInterceptor([
@@ -93,7 +76,7 @@ export class AuthController {
     ]),
   )
   @ApiConsumes('multipart/form-data')
-  @ApiOperation({ summary: 'Sign up a new tutor' })
+  @ApiOperation({ summary: 'Sign up a new tutor.' })
   public async signUpTutor(
     @Body() signupTutorDto: SignUpTutorDto,
     @UploadedFiles()
@@ -102,22 +85,39 @@ export class AuthController {
       portfolios?: Express.Multer.File[];
     },
   ) {
-    const { portfolios } = files;
     const avatar = files.avatar?.[0] ?? undefined;
+    return this.handleSignUp(signupTutorDto, UserRole.TUTOR, {
+      ...files,
+      avatar: avatar,
+    });
+  }
 
-    if (avatar) await validateAvatar(avatar);
-    if (portfolios) await validatePortfolios(portfolios);
+  @Post('students/signup')
+  @UseInterceptors(FileInterceptor('avatar'))
+  @ApiConsumes('multipart/form-data')
+  @ApiOperation({ summary: 'Sign up a new student.' })
+  public async signUpStudent(
+    @Body() signUpStudentDto: SignUpStudentDto,
+    @UploadedFile() avatar?: Express.Multer.File,
+  ) {
+    return this.handleSignUp(signUpStudentDto, UserRole.TUTOR, {
+      avatar
+    });
+  }
 
-    const fullSignupTutorDto: SignUpTutorDto & { role: string } = {
-      ...signupTutorDto,
-      portfolios,
-      avatar,
-      role: UserRole.TUTOR,
-    };
-
-console.log(fullSignupTutorDto);
-
-    return this.authService.createUser(fullSignupTutorDto);
+  @Post('managers/signup')
+  @UseInterceptors(FileInterceptor('avatar'))
+  @ApiConsumes('multipart/form-data')
+  @ApiOperation({ summary: 'Admin creates new manager.' })
+  @TokenRequirements(TokenType.CLIENT, [UserRole.ADMIN])
+  @ApiBearerAuth()
+  public async signUpManager(
+    @Body() signUpManagerDto: SignUpDto,
+    @UploadedFile() avatar?: Express.Multer.File,
+  ) {
+    return this.handleSignUp(signUpManagerDto, UserRole.MANAGER, {
+      avatar
+    });
   }
 
   @Post('login')
@@ -125,6 +125,65 @@ console.log(fullSignupTutorDto);
   public async login(@Body() loginDto: LoginDto) {
     const user = await this.authService.login(loginDto);
     return this.returnUserAndToken(user);
+  }
+
+  @Patch('tutors/profile')
+  @UseInterceptors(
+    FileFieldsInterceptor([
+      { name: 'avatar', maxCount: 1 },
+      { name: 'portfolios', maxCount: 10 },
+    ]),
+  )
+  @ApiConsumes('multipart/form-data')
+  @ApiOperation({ summary: 'Tutor updates profile.' })
+  @TokenRequirements(TokenType.CLIENT, [UserRole.TUTOR])
+  @ApiBearerAuth()
+  public async updateTutor(
+    @Body() updateTutorDto: UpdateTutorDto,
+    @Token() token: IAccessToken,
+    @UploadedFiles()
+    files?: {
+      avatar?: Express.Multer.File[];
+      portfolios?: Express.Multer.File[];
+    },
+  ) {
+    const avatar = files.avatar?.[0] ?? undefined;
+    return this.handleUpdate(token, updateTutorDto, {
+      ...files,
+      avatar: avatar,
+    });
+  }
+
+  @Patch('students/profile')
+  @UseInterceptors(FileInterceptor('avatar'))
+  @ApiConsumes('multipart/form-data')
+  @ApiOperation({ summary: 'Student updates profile.' })
+  @TokenRequirements(TokenType.CLIENT, [UserRole.STUDENT])
+  @ApiBearerAuth()
+  public async updateStudent(
+    @Body() updateStudentDto: UpdateStudentDto,
+    @Token() token: IAccessToken,
+    @UploadedFile() avatar?: Express.Multer.File,
+  ) {
+    return this.handleUpdate(token, updateStudentDto, {
+      avatar
+    });
+  }
+
+  @Patch('managers/profile')
+  @UseInterceptors(FileInterceptor('avatar'))
+  @ApiConsumes('multipart/form-data')
+  @ApiOperation({ summary: 'Manager/Admin updates profile.' })
+  @TokenRequirements(TokenType.CLIENT, [UserRole.ADMIN, UserRole.MANAGER])
+  @ApiBearerAuth()
+  public async updateAdminOrManager(
+    @Body() updateDto: UpdateDto,
+    @Token() token: IAccessToken,
+    @UploadedFile() avatar?: Express.Multer.File,
+  ) {
+    return this.handleUpdate(token, updateDto, {
+      avatar
+    });
   }
 
   @Patch('tutors/:tutorId/approve')
@@ -135,7 +194,7 @@ console.log(fullSignupTutorDto);
     return this.authService.approveTutor(tutorId);
   }
 
-  @Patch('user/:userId/block')
+  @Patch('users/:userId/block')
   @ApiOperation({ summary: 'Admin/Manager blocks a user' })
   @TokenRequirements(TokenType.CLIENT, [UserRole.ADMIN, UserRole.MANAGER])
   @ApiBearerAuth()
@@ -143,7 +202,7 @@ console.log(fullSignupTutorDto);
     return this.authService.blockUser(userId);
   }
 
-  @Patch('user/:userId/unblock')
+  @Patch('users/:userId/unblock')
   @ApiOperation({ summary: 'Admin/Manager unblocks a user' })
   @TokenRequirements(TokenType.CLIENT, [UserRole.ADMIN, UserRole.MANAGER])
   @ApiBearerAuth()
@@ -157,4 +216,64 @@ console.log(fullSignupTutorDto);
       token: this.authService.createAccessTokenFromAuthUser(user),
     };
   }
+
+  private async handleSignUp(
+    signupDto: SignUpDto,
+    role: UserRole,
+    files?: {
+      avatar?: Express.Multer.File;
+      portfolios?: Express.Multer.File[];
+    },
+  ) {
+    if (role !== UserRole.STUDENT && role !== UserRole.TUTOR) {
+      throw new BadRequestException(`Unknown user role ${role}`);
+    }
+
+    const { portfolios, avatar } = files;
+
+    if (avatar) await validateAvatar(avatar);
+    if (portfolios) await validatePortfolios(portfolios);
+
+    const signupDtoWithAvatar: SignUpDto = {
+      ...signupDto,
+      avatar,
+    };
+
+    const fullSignupDto: SignUpDto & { role: UserRole } = {
+      ...signupDtoWithAvatar,
+      role,
+      ...(role === UserRole.TUTOR && { portfolios }),
+    };
+
+    return this.authService.createUser(fullSignupDto);
+  }
+
+  private async handleUpdate(
+    token: IAccessToken,
+    updateDto: UpdateDto,
+    files?: {
+      avatar?: Express.Multer.File;
+      portfolios?: Express.Multer.File[];
+    },
+  ) {
+    const { id, roles } = token;
+    const role = roles[0];
+    const { portfolios, avatar } = files;
+
+    if (avatar) await validateAvatar(avatar);
+    if (portfolios) await validatePortfolios(portfolios);
+
+    const updateDtoWithAvatar: UpdateDto = {
+      ...updateDto,
+      avatar,
+    };
+
+    const fullUpdateDto: UpdateDto = {
+      ...updateDtoWithAvatar,
+      ...(role === UserRole.TUTOR && { portfolios }),
+    };
+
+    return this.authService.updateUser(id, fullUpdateDto);
+  }
+
 }

@@ -7,6 +7,8 @@ import {
   IsOptional,
   MinLength,
   ValidateIf,
+  Matches, 
+  Length,
 } from 'class-validator';
 import { Gender } from '@tutorify/shared';
 
@@ -25,6 +27,7 @@ export class SignUpDto {
     required: true,
   })
   @IsNotEmpty()
+  @IsString()
   @MinLength(6)
   public readonly password: string;
 
@@ -34,6 +37,12 @@ export class SignUpDto {
     required: true,
   })
   @IsString()
+  @Length(5, 20, {
+    message: 'Username must be between 5 and 20 characters long',
+  })
+  @Matches(/^[a-zA-Z0-9_]+$/, {
+    message: 'Username can only contain letters, numbers, and underscores',
+  })
   public readonly username: string;
 
   @ApiProperty({
