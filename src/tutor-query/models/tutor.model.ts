@@ -24,7 +24,7 @@ export class Tutor extends OmitType(User, ['phoneNumber', 'role'] as const) {
   approvedAt: Date;
 
   @Field()
-  minimumWage: string;
+  minimumWage: number;
 
   @Field()
   currentWorkplace: string;
