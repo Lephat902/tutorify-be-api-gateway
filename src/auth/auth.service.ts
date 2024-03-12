@@ -7,6 +7,7 @@ import { firstValueFrom } from 'rxjs';
 import { LoginDto, SignUpDto } from './dtos';
 import { QueueNames } from '@tutorify/shared';
 import { UserArgs } from './args';
+import { UpdateDto } from './dtos/update';
 
 @Injectable()
 export class AuthService {
@@ -21,7 +22,6 @@ export class AuthService {
   }
 
   public async getUsers(filters: UserArgs) {
-    console.log(filters);
     return firstValueFrom(this.client.send({ cmd: 'getUsers' }, filters));
   }
 
@@ -32,6 +32,15 @@ export class AuthService {
   public async createUser(createUserDto: SignUpDto) {
     return firstValueFrom(
       this.client.send({ cmd: 'createUser' }, createUserDto),
+    );
+  }
+
+  public async updateUser(id: string, updateUserDto: UpdateDto) {
+    return firstValueFrom(
+      this.client.send({ cmd: 'updateUser' }, {
+        id, 
+        updateUserDto
+      }),
     );
   }
 

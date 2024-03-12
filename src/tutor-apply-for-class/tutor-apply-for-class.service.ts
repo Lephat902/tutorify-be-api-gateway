@@ -91,7 +91,6 @@ export class TutorApplyForClassService {
   ) {
     const userId = token.id;
     const application = await this.getApplicationById(applicationId);
-    console.log(application);
     if (application.tutorId !== userId) {
       throw new ForbiddenException(
         'You are not the owner of this application.',
