@@ -1,4 +1,4 @@
-import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
+import { Field, ID, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { Weekday } from '@tutorify/shared';
 
 registerEnumType(Weekday, {
@@ -7,6 +7,9 @@ registerEnumType(Weekday, {
 
 @ObjectType()
 export class ClassTimeSlot {
+  @Field(() => ID)
+  id: string;
+  
   @Field()
   startTime: string;
 
