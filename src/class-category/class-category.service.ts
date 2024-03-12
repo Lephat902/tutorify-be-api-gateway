@@ -48,4 +48,10 @@ export class ClassCategoryService {
       ),
     );
   }
+
+  getNumberOfClassesByCategoryId(classCategoryId: string): Promise<number> {
+    return firstValueFrom(
+      this.client.send<number>({ cmd: 'getNumberOfClassesByCategoryId' }, classCategoryId),
+    );
+  }
 }
