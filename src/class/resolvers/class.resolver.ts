@@ -25,7 +25,7 @@ export class ClassResolver {
     private readonly authService: AuthService,
   ) {}
 
-  @Query(() => Class, { name: 'class' })
+  @Query(() => Class, { name: 'class', nullable: true })
   async getClassById(@Args('id') id: string) {
     return this.classService.getClassById(id);
   }
