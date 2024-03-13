@@ -17,4 +17,8 @@ export class TutorQueryService {
   }> {
     return firstValueFrom(this.client.send({ cmd: 'getTutorsAndTotalCount' }, filters));
   }
+
+  getTutorById(id: string): Promise<Tutor> {
+    return firstValueFrom(this.client.send({ cmd: 'getTutorById' }, id));
+  }
 }
