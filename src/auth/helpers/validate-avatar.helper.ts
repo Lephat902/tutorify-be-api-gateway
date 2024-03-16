@@ -1,6 +1,5 @@
 import { MaxFileSizeValidator, ParseFilePipe } from '@nestjs/common';
 import {
-  AvatarRatioValidator,
   AvatarTypeValidator,
 } from 'src/common/file-validators';
 
@@ -12,7 +11,6 @@ export async function validateAvatar(avatar: Express.Multer.File) {
         message: 'Maximum image size is 1MB.',
       }),
       new AvatarTypeValidator(),
-      new AvatarRatioValidator(),
     ],
   }).transform(avatar);
 }
