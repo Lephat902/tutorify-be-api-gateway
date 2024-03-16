@@ -1,12 +1,13 @@
 import {
   ArgsType,
   Field,
+  HideField,
   IntersectionType,
   registerEnumType,
 } from '@nestjs/graphql';
 import { ClassOrderBy } from '@tutorify/shared';
 import { Transform } from 'class-transformer';
-import { IsBoolean, IsOptional } from 'class-validator';
+import { IsBoolean, IsOptional, IsString } from 'class-validator';
 import { ToBoolean } from 'src/common/decorators';
 import { PaginationArgs, SortingDirectionArgs } from 'src/common/graphql';
 
@@ -20,18 +21,28 @@ export class ClassQueryArgs extends IntersectionType(
   SortingDirectionArgs,
 ) {
   @IsOptional()
+  @IsBoolean()
+  @ToBoolean()
+  @Field({
+    nullable: true,
+    description: 'Only include my result',
+  })
+  me: boolean;
+
+  @IsOptional()
+  @IsString()
   @Field({
     nullable: true,
     description: 'Query string',
   })
-  q?: string;
+  q: string;
 
   @IsOptional()
   @Field(() => ClassOrderBy, {
     nullable: true,
     description: 'The sorting attribute',
   })
-  order?: ClassOrderBy;
+  order: ClassOrderBy;
 
   @IsOptional()
   @Transform(({ value }) => (Array.isArray(value) ? value : Array(value)))
@@ -39,7 +50,7 @@ export class ClassQueryArgs extends IntersectionType(
     nullable: true,
     description: "Classes' ids Categories classes categorized to",
   })
-  classCategoryIds?: string[];
+  classCategoryIds: string[];
 
   @IsOptional()
   @Transform(({ value }) => (Array.isArray(value) ? value : Array(value)))
@@ -47,7 +58,7 @@ export class ClassQueryArgs extends IntersectionType(
     nullable: true,
     description: "Subjects' ids classes categorized to",
   })
-  subjectIds?: string[];
+  subjectIds: string[];
 
   @IsOptional()
   @Transform(({ value }) => (Array.isArray(value) ? value : Array(value)))
@@ -55,7 +66,7 @@ export class ClassQueryArgs extends IntersectionType(
     nullable: true,
     description: "Levels' ids classes categorized to",
   })
-  levelIds?: string[];
+  levelIds: string[];
 
   @IsOptional()
   @IsBoolean()
@@ -64,5 +75,8 @@ export class ClassQueryArgs extends IntersectionType(
     nullable: true,
     description: 'Include hidden classes',
   })
-  includeHidden?: boolean;
+  includeHidden: boolean;
+
+  @HideField()
+  userId: string;
 }
