@@ -1,14 +1,12 @@
 import {
   Controller,
   Post,
-  Get,
   Param,
-  Query,
   UseGuards,
   Patch,
 } from '@nestjs/common';
 import { TutorApplyForClassService } from './tutor-apply-for-class.service';
-import { TutorApplyForClassDto, TutorApplyForClassQueryDto } from './dtos';
+import { TutorApplyForClassDto } from './dtos';
 import { TokenRequirements, Token } from 'src/auth/decorators';
 import { IAccessToken, TokenType } from 'src/auth/auth.interfaces';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
@@ -35,31 +33,6 @@ export class TutorApplyForClassController {
   ): Promise<TutorApplyForClassDto> {
     const tutorId = token.id;
     return this.tutorApplyForClassService.applyForClass(tutorId, classId);
-  }
-
-  @ApiOperation({ summary: 'Tutor retrieves an application of his by its id.' })
-  @Get('/my/applications/:applicationId')
-  @TokenRequirements(TokenType.CLIENT, [UserRole.TUTOR])
-  async getMyApplicationById(
-    @Token() token: IAccessToken,
-    @Param('applicationId') applicationId: string,
-  ): Promise<TutorApplyForClassDto> {
-    await this.tutorApplyForClassService.validateApplicationOwnership(
-      token,
-      applicationId,
-    );
-    return this.tutorApplyForClassService.getApplicationById(applicationId);
-  }
-
-  @ApiOperation({ summary: 'Tutor retrieves all of his applications.' })
-  @Get('/my/applications')
-  @TokenRequirements(TokenType.CLIENT, [UserRole.TUTOR])
-  async getMyApplicationsByTutor(
-    @Token() token: IAccessToken,
-    @Query() filters: TutorApplyForClassQueryDto,
-  ): Promise<TutorApplyForClassDto[]> {
-    const userId = token.id;
-    return this.tutorApplyForClassService.getMyApplications(userId, filters);
   }
 
   @ApiOperation({ summary: 'Tutor cancels an application by its id.' })
@@ -91,39 +64,6 @@ export class TutorApplyForClassController {
       applicationId,
     );
     await this.tutorApplyForClassService.approveApplication(applicationId);
-  }
-
-  @ApiOperation({
-    summary: 'Student retrieves an application to his class by its id.',
-  })
-  @Get('/applications/:applicationId')
-  @TokenRequirements(TokenType.CLIENT, [UserRole.STUDENT])
-  async getApplicationById(
-    @Token() token: IAccessToken,
-    @Param('applicationId') applicationId: string,
-  ): Promise<TutorApplyForClassDto> {
-    const application =
-      await this.tutorApplyForClassService.getApplicationById(applicationId);
-    const classId = application.classId;
-    await this.classService.assertClassOwnership(token, classId);
-    return this.tutorApplyForClassService.getApplicationById(applicationId);
-  }
-
-  @ApiOperation({
-    summary: 'Student retrieves all tutor applications to his class.',
-  })
-  @Get('/:classId/applications')
-  @TokenRequirements(TokenType.CLIENT, [UserRole.STUDENT])
-  async getTutorApplicationsByClassId(
-    @Token() token: IAccessToken,
-    @Param('classId') classId: string,
-    @Query() filters: TutorApplyForClassQueryDto,
-  ): Promise<TutorApplyForClassDto[]> {
-    await this.classService.assertClassOwnership(token, classId);
-    return this.tutorApplyForClassService.getTutorApplicationsByClassId(
-      classId,
-      filters,
-    );
   }
 
   @ApiOperation({

@@ -1,4 +1,4 @@
-import { Field, ID, ObjectType, registerEnumType } from '@nestjs/graphql';
+import { Field, HideField, ID, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { GenderPref, TutorPositionPref } from '@tutorify/shared';
 import { ClassTimeSlot } from './class-timeslot.model';
 import { ClassCategory } from 'src/class-category/models';
@@ -19,7 +19,7 @@ export class Class {
   @Field()
   studentId: string;
 
-  @Field({ nullable: true })
+  @HideField()
   tutorId: string;
 
   @Field(() => [ClassCategory])

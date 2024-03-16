@@ -1,6 +1,7 @@
 import {
   ArgsType,
   Field,
+  HideField,
   IntersectionType,
   registerEnumType,
 } from '@nestjs/graphql';
@@ -19,12 +20,22 @@ export class TutorApplyForClassArgs extends IntersectionType(
   PaginationArgs,
   SortingDirectionArgs,
 ) {
+  @HideField()
+  tutorId: string;
+
+  @IsOptional()
+  @Field({
+    nullable: true,
+    description: 'Class of applications',
+  })
+  classId: string;
+
   @IsOptional()
   @Field(() => TutorApplyForClassOrderBy, {
     nullable: true,
     description: 'The sorting attribute',
   })
-  readonly order?: TutorApplyForClassOrderBy;
+  readonly order: TutorApplyForClassOrderBy;
 
   @IsOptional()
   @Transform(({ value }) => (Array.isArray(value) ? value : Array(value)))
@@ -32,7 +43,7 @@ export class TutorApplyForClassArgs extends IntersectionType(
     nullable: true,
     description: 'Statuses of Class that the result is desired to narrow to',
   })
-  readonly applicationStatuses?: ApplicationStatus[];
+  readonly applicationStatuses: ApplicationStatus[];
 
   @IsOptional()
   @IsBoolean()
@@ -42,5 +53,5 @@ export class TutorApplyForClassArgs extends IntersectionType(
     description:
       'Retrieve classes that one either applies for or is designated to',
   })
-  readonly isDesignated?: boolean;
+  readonly isDesignated: boolean;
 }

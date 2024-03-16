@@ -2,7 +2,6 @@ import { ForbiddenException, Inject, Injectable } from '@nestjs/common';
 import {
   ClassCreateDto,
   ClassDto,
-  ClassQueryDto,
   ClassUpdateDto,
 } from './dtos';
 import { ClientProxy } from '@nestjs/microservices';
@@ -16,7 +15,7 @@ import { ClassQueryArgs } from './args';
 export class ClassService {
   constructor(
     @Inject(QueueNames.CLASS_AND_CATEGORY) private readonly client: ClientProxy,
-  ) {}
+  ) { }
 
   async addClass(
     studentId: string,
@@ -66,60 +65,11 @@ export class ClassService {
     return firstValueFrom(this.client.send({ cmd: 'getClassById' }, id));
   }
 
-  async getClasses(filters: ClassQueryDto): Promise<Class[]> {
-    return firstValueFrom(this.client.send({ cmd: 'getClasses' }, filters));
-  }
-
   async getClassesAndTotalCount(filters: ClassQueryArgs): Promise<{
     results: Class[],
     totalCount: number,
   }> {
     return firstValueFrom(this.client.send({ cmd: 'getClassesAndTotalCount' }, filters));
-  }
-
-  async getClassesByStudentId(
-    studentId: string,
-    filters: ClassQueryDto,
-  ): Promise<ClassDto[]> {
-    return firstValueFrom(
-      this.client.send(
-        { cmd: 'getClassesByStudentId' },
-        {
-          studentId,
-          filters,
-        },
-      ),
-    );
-  }
-
-  async getClassesByTutorId(
-    tutorId: string,
-    filters: ClassQueryDto,
-  ): Promise<ClassDto[]> {
-    return firstValueFrom(
-      this.client.send(
-        { cmd: 'getClassesByTutorId' },
-        {
-          tutorId,
-          filters,
-        },
-      ),
-    );
-  }
-
-  async getClassesByUserId(
-    userId: string,
-    filters: ClassQueryDto,
-  ): Promise<ClassDto[]> {
-    return firstValueFrom(
-      this.client.send(
-        { cmd: 'getClassesByUserId' },
-        {
-          userId,
-          filters,
-        },
-      ),
-    );
   }
 
   // Return class data in case of success, throw error if failed

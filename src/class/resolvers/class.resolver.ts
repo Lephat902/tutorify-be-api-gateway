@@ -1,7 +1,7 @@
 import { Resolver, Query, Args, Parent, ResolveField } from '@nestjs/graphql';
 import { ClassService } from '../class.service';
 import { Class } from '../models';
-import { UseGuards } from '@nestjs/common';
+import { ForbiddenException, UseGuards } from '@nestjs/common';
 import { TokenGuard } from 'src/auth/guards';
 import { TutorApplyForClass } from 'src/tutor-apply-for-class/models';
 import { TutorApplyForClassService } from 'src/tutor-apply-for-class/tutor-apply-for-class.service';
@@ -23,7 +23,7 @@ export class ClassResolver {
     private readonly classService: ClassService,
     private readonly tutorApplyForClassService: TutorApplyForClassService,
     private readonly authService: AuthService,
-  ) {}
+  ) { }
 
   @Query(() => Class, { name: 'class', nullable: true })
   async getClassById(@Args('id') id: string) {
@@ -43,15 +43,22 @@ export class ClassResolver {
     @Args() filters: TutorApplyForClassArgs,
     @Token() token: IAccessToken,
   ): Promise<TutorApplyForClass[]> {
-    const userRole = token.roles[0];
-    const { id } = cl;
-    if (userRole === UserRole.STUDENT) {
-      this.classService.assertClassOwnership(token, id);
-    }
-    return this.tutorApplyForClassService.getTutorApplicationsByClassId(
-      id,
-      filters,
-    );
+    this.checkTutorViewPermission(cl, token);
+    filters.classId = cl.id;
+    return this.tutorApplyForClassService.getAllApplications(filters);
+  }
+
+  @ResolveField('tutorId', () => String, {
+    nullable: true,
+    description: 'Only authorized user can see tutor of the class',
+  })
+  @TokenRequirements(TokenType.CLIENT, [])
+  async showTutorId(
+    @Parent() cl: Class,
+    @Token() token: IAccessToken,
+  ): Promise<string> {
+    this.checkTutorViewPermission(cl, token);
+    return cl.tutorId;
   }
 
   @ResolveField('tutor', () => Tutor, {
@@ -67,12 +74,8 @@ export class ClassResolver {
     @Parent() cl: Class,
     @Token() token: IAccessToken,
   ): Promise<Tutor> {
-    const { id, tutorId } = cl;
-    const userRole = token.roles[0];
-    if (userRole === UserRole.STUDENT) {
-      this.classService.assertClassOwnership(token, id);
-    }
-    return this.authService.getUserById(tutorId);
+    this.checkTutorViewPermission(cl, token);
+    return this.authService.getUserById(cl.tutorId);
   }
 
   @ResolveField('lastApplication', () => TutorApplyForClass, {
@@ -84,19 +87,31 @@ export class ClassResolver {
     @Parent() cl: Class,
     @Token() token: IAccessToken,
   ): Promise<TutorApplyForClass> {
-    const { id } = cl;
-    const userId = token.id;
+    const classId = cl.id;
+    const tutorId = token.id;
     const applicationsToClass =
-      await this.tutorApplyForClassService.getMyApplicationsToClass(
-        id,
-        userId,
+      await this.tutorApplyForClassService.getAllApplications(
         {
+          classId,
+          tutorId,
           page: 1,
           limit: 1,
           order: TutorApplyForClassOrderBy.APPLY_DAY,
           dir: SortingDirection.DESC,
-        },
+        } as TutorApplyForClassArgs,
       );
     return applicationsToClass[0];
+  }
+
+  private checkTutorViewPermission(cl: Class, token: IAccessToken) {
+    const userRole = token.roles[0];
+    const userId = token.id;
+    const { studentId, tutorId } = cl;
+    if (
+      (userRole === UserRole.STUDENT && studentId !== userId) ||
+      (userRole === UserRole.TUTOR && tutorId !== userId)
+    ) {
+      throw new ForbiddenException("None of your business");
+    }
   }
 }

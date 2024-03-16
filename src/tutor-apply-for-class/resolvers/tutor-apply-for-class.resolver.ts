@@ -1,6 +1,6 @@
 import { Resolver, Query, Args, ResolveField, Parent } from '@nestjs/graphql';
 import { TutorApplyForClassArgs } from '../args';
-import { UseGuards } from '@nestjs/common';
+import { ForbiddenException, UseGuards } from '@nestjs/common';
 import { TokenGuard } from 'src/auth/guards';
 import { TutorApplyForClassService } from '../tutor-apply-for-class.service';
 import { TutorApplyForClass } from '../models';
@@ -16,7 +16,7 @@ export class TutorApplyForClassResolver {
   constructor(
     private readonly tutorApplyForClassService: TutorApplyForClassService,
     private readonly classService: ClassService,
-  ) {}
+  ) { }
 
   @Query(() => TutorApplyForClass, { name: 'classApplication' })
   @TokenRequirements(TokenType.CLIENT, [])
@@ -27,11 +27,9 @@ export class TutorApplyForClassResolver {
     const userRole = token.roles[0];
     const application =
       await this.tutorApplyForClassService.getApplicationById(applicationId);
-    if (userRole === UserRole.TUTOR) {
-      await this.tutorApplyForClassService.validateApplicationOwnership(
-        token,
-        applicationId,
-      );
+
+    if (userRole === UserRole.TUTOR && application.tutorId !== token.id) {
+      throw new ForbiddenException("None of your business");
     } else if (userRole === UserRole.STUDENT) {
       await this.classService.assertClassOwnership(token, application.classId);
     }
@@ -39,14 +37,17 @@ export class TutorApplyForClassResolver {
     return application;
   }
 
-  @Query(() => [TutorApplyForClass], { name: 'myClassApplications' })
-  @TokenRequirements(TokenType.CLIENT, [UserRole.TUTOR])
-  async getMyApplicationsByTutor(
+  @Query(() => [TutorApplyForClass], { name: 'classApplications' })
+  @TokenRequirements(TokenType.CLIENT, [UserRole.TUTOR, UserRole.MANAGER, UserRole.ADMIN])
+  async getAllApplications(
     @Args() filters: TutorApplyForClassArgs,
     @Token() token: IAccessToken,
   ) {
-    const tutorId = token.id;
-    return this.tutorApplyForClassService.getMyApplications(tutorId, filters);
+    const userRole = token.roles[0];
+    if (userRole === UserRole.TUTOR) {
+      filters.tutorId = token.id;
+    }
+    return this.tutorApplyForClassService.getAllApplications(filters);
   }
 
   @ResolveField('class', () => Class, {
