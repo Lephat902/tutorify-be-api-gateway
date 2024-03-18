@@ -1,4 +1,5 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Province } from './province.model';
 
 @ObjectType()
 export class District {
@@ -7,4 +8,7 @@ export class District {
 
   @Field()
   readonly name: string;
+
+  @Field(() => Province)
+  readonly province: Province;
 }
