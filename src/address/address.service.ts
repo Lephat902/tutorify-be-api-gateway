@@ -53,6 +53,12 @@ export class AddressService {
     return firstValueFrom(this.client.send({ cmd: 'getWardByCode' }, wardId));
   }
 
+  async getWardHierarchyById(wardId: string) {
+    return firstValueFrom(
+      this.client.send({ cmd: 'getFullAddressByWardCode' }, wardId)
+    );
+  }
+
   async getGeoLocation(address: string, wardId: string) {
     return firstValueFrom(
       this.client.send({ cmd: 'getGeoLocation' }, {

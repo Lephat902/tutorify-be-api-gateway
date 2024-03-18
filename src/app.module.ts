@@ -15,6 +15,7 @@ import { ClassSessionModule } from './class-session/class-session.module';
 import { DateScalar } from './common/graphql';
 import { TutorProficientInClassCategoryModule } from './tutor-proficient-in-class-category/tutor-proficient-in-class-category.module';
 import { ReportModule } from './report/report.module';
+import { GraphQLError, GraphQLFormattedError } from 'graphql';
 
 @Module({
   imports: [
@@ -40,6 +41,12 @@ import { ReportModule } from './report/report.module';
       plugins: [ApolloServerPluginLandingPageLocalDefault()],
       fieldResolverEnhancers: ['guards'], // Enable Guard for Field Resolver
       introspection: true,
+      formatError: (error: GraphQLError) => {
+        const graphQLFormattedError: GraphQLFormattedError = {
+          message: (error.extensions?.exception as any)?.response?.message || error.message,
+        };
+        return graphQLFormattedError;
+      }
     }),
   ],
   providers: [DateScalar],

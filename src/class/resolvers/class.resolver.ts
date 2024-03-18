@@ -15,6 +15,8 @@ import {
 } from '@tutorify/shared';
 import { AuthService } from 'src/auth/auth.service';
 import { Tutor } from 'src/tutor-query/models';
+import { Ward } from 'src/address/models';
+import { AddressService } from 'src/address/address.service';
 
 @Resolver(() => Class)
 @UseGuards(TokenGuard)
@@ -23,6 +25,7 @@ export class ClassResolver {
     private readonly classService: ClassService,
     private readonly tutorApplyForClassService: TutorApplyForClassService,
     private readonly authService: AuthService,
+    private readonly addressService: AddressService,
   ) { }
 
   @Query(() => Class, { name: 'class', nullable: true })
@@ -101,6 +104,18 @@ export class ClassResolver {
         } as TutorApplyForClassArgs,
       );
     return applicationsToClass[0];
+  }
+
+  @ResolveField('ward', () => Ward, {
+    nullable: true,
+    description: 'Full ward information, based on wardId',
+  })
+  async getWardHierarchy(
+    @Parent() cl: Class,
+  ) {
+    const { wardId } = cl;
+    const wardHierarchy = this.addressService.getWardHierarchyById(wardId);
+    return wardHierarchy;
   }
 
   private checkTutorViewPermission(cl: Class, token: IAccessToken) {
