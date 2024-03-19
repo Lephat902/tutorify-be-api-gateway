@@ -34,4 +34,10 @@ export class Tutor extends User {
 
   @Field(() => [ClassCategory])
   proficiencies: ClassCategory[];
+
+  @Field()
+  feedbackCount: number;
+
+  @Field()
+  totalFeedbackRating : number;
 }
