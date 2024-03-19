@@ -6,7 +6,7 @@ import { IAccessToken, TokenType } from './auth.interfaces';
 import { firstValueFrom } from 'rxjs';
 import { LoginDto, SignUpDto } from './dtos';
 import { QueueNames } from '@tutorify/shared';
-import { UserArgs } from './args';
+import { UserQueryArgs } from './args';
 import { UpdateDto } from './dtos/update';
 
 @Injectable()
@@ -21,8 +21,8 @@ export class AuthService {
     return firstValueFrom(this.client.send({ cmd: 'getUserById' }, id));
   }
 
-  public async getUsers(filters: UserArgs) {
-    return firstValueFrom(this.client.send({ cmd: 'getUsers' }, filters));
+  public async getUsersAndTotalCount(filters: UserQueryArgs) {
+    return firstValueFrom(this.client.send({ cmd: 'getUsersAndTotalCount' }, filters));
   }
 
   public async verifyEmail(token: string) {

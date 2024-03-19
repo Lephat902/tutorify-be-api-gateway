@@ -1,14 +1,12 @@
 import { Resolver, Query, Args, ResolveField, Parent } from '@nestjs/graphql';
-import { User } from '../models';
+import { Admin, Manager, Student, Tutor, User } from '../models';
 import { AuthService } from '../auth.service';
-import { UserArgs } from '../args';
 import { Ward } from 'src/address/models';
 import { AddressService } from 'src/address/address.service';
 import { IAccessToken, TokenType } from '../auth.interfaces';
 import { UseGuards } from '@nestjs/common';
 import { TokenGuard } from '../guards';
 import { Token, TokenRequirements } from '../decorators';
-
 
 @Resolver(() => User)
 export class UserResolver {
@@ -27,13 +25,8 @@ export class UserResolver {
   }
 
   @Query(() => User, { name: 'user' })
-  async getUser(@Args('id') id: string): Promise<User> {
+  async getUser(@Args('id') id: string): Promise<(Admin | Manager | Student | Tutor)> {
     return this.authService.getUserById(id);
-  }
-
-  @Query(() => [User], { name: 'users' })
-  async getUsers(@Args() filters: UserArgs): Promise<User[]> {
-    return this.authService.getUsers(filters);
   }
 
   @ResolveField('ward', () => Ward, {

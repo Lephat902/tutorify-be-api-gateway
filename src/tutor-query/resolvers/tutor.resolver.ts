@@ -1,15 +1,15 @@
 import { Resolver, Query, Args } from '@nestjs/graphql';
 import { TutorQueryService } from '../tutor-query.service';
-import { Tutor } from '../models';
+import { TutorQuery } from '../models';
 
-@Resolver(() => Tutor)
+@Resolver(() => TutorQuery)
 export class TutorResolver {
   constructor(
-    private readonly tutorService: TutorQueryService,
+    private readonly tutorQueryService: TutorQueryService,
   ) {}
 
-  @Query(() => Tutor, { name: 'tutor', nullable: true })
+  @Query(() => TutorQuery, { name: 'tutor', nullable: true })
   async getTutorsAndTotalCount(@Args('id') id: string) {
-    return this.tutorService.getTutorById(id);
+    return this.tutorQueryService.getTutorById(id);
   }
 }

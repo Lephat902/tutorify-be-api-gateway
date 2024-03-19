@@ -1,2 +1,2 @@
-export * from './tutor.model';
+export * from './tutor-query.model';
 export * from './tutor-paginated-results.model';

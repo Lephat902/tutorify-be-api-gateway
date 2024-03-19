@@ -1,16 +1,16 @@
 import { Resolver, Query, Args } from '@nestjs/graphql';
 import { TutorQueryService } from '../tutor-query.service';
-import { TutorArgs } from '../args';
-import { TutorPaginatedResults } from '../models/tutor-paginated-results.model';
+import { TutorQueryArgs } from '../args';
+import { TutorQueryPaginatedResults } from '../models/tutor-paginated-results.model';
 
-@Resolver(() => TutorPaginatedResults)
+@Resolver(() => TutorQueryPaginatedResults)
 export class TutorPaginatedResultsResolver {
   constructor(
     private readonly tutorService: TutorQueryService,
   ) {}
 
-  @Query(() => TutorPaginatedResults, { name: 'tutors' })
-  async getTutorsAndTotalCount(@Args() filters: TutorArgs) {
+  @Query(() => TutorQueryPaginatedResults, { name: 'tutors' })
+  async getTutorsAndTotalCount(@Args() filters: TutorQueryArgs) {
     return this.tutorService.getTutorsAndTotalCount(filters);
   }
 }

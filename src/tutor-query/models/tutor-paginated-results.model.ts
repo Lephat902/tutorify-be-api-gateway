@@ -1,11 +1,11 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { Tutor } from './tutor.model';
+import { TutorQuery } from './tutor-query.model';
 
 @ObjectType()
-export class TutorPaginatedResults {
+export class TutorQueryPaginatedResults {
   @Field()
   totalCount: number;
 
-  @Field(() => [Tutor])
-  results: Tutor[];
+  @Field(() => [TutorQuery])
+  results: TutorQuery[];
 }

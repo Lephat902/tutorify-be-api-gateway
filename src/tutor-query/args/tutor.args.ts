@@ -2,7 +2,7 @@ import { ArgsType, Field, OmitType, registerEnumType } from '@nestjs/graphql';
 import { TutorOrderBy } from '@tutorify/shared';
 import { Transform } from 'class-transformer';
 import { IsBoolean, IsNumber, IsOptional, Min } from 'class-validator';
-import { UserArgs } from 'src/auth/args';
+import { UserQueryArgs } from 'src/auth/args';
 import { ToBoolean } from 'src/common/decorators';
 
 registerEnumType(TutorOrderBy, {
@@ -10,7 +10,7 @@ registerEnumType(TutorOrderBy, {
 });
 
 @ArgsType()
-export class TutorArgs extends OmitType(UserArgs, ['role'] as const) {
+export class TutorQueryArgs extends OmitType(UserQueryArgs, ['role'] as const) {
   @IsOptional()
   @IsBoolean()
   @ToBoolean()

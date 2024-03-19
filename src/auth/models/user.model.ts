@@ -1,6 +1,7 @@
-import { Field, ID, ObjectType, registerEnumType } from '@nestjs/graphql';
+import { Field, ID, InterfaceType, registerEnumType } from '@nestjs/graphql';
 import { Gender, UserRole } from '@tutorify/shared';
 import { FileObject } from 'src/common/graphql';
+import { Student, Admin, Manager, Tutor } from '.';
 
 registerEnumType(Gender, {
   name: 'Gender',
@@ -10,8 +11,24 @@ registerEnumType(UserRole, {
   name: 'UserRole',
 });
 
-@ObjectType()
-export class User {
+@InterfaceType({
+  isAbstract: true,
+  resolveType(user: User) {
+    switch (user.role) {
+      case UserRole.STUDENT:
+        return Student;
+      case UserRole.TUTOR:
+        return Tutor;
+      case UserRole.ADMIN:
+        return Admin;
+      case UserRole.MANAGER:
+        return Manager;
+      default:
+        return Admin;
+    }
+  },
+})
+export abstract class User {
   @Field(() => ID)
   id: string;
 
