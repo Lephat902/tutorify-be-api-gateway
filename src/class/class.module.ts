@@ -6,6 +6,7 @@ import { ClassService } from './class.service';
 import { QueueNames } from '@tutorify/shared';
 import { ClassPaginatedResultsResolver, ClassResolver } from './resolvers';
 import { TutorApplyForClassModule } from 'src/tutor-apply-for-class/tutor-apply-for-class.module';
+import { TutorQueryModule } from 'src/tutor-query/tutor-query.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { TutorApplyForClassModule } from 'src/tutor-apply-for-class/tutor-apply-
       },
     ]),
     forwardRef(() => TutorApplyForClassModule),
+    TutorQueryModule,
   ],
   controllers: [ClassController],
   providers: [ClassService, ClassResolver, ClassPaginatedResultsResolver],

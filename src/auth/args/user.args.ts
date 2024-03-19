@@ -14,7 +14,7 @@ registerEnumType(TutorOrderBy, {
 });
 
 @ArgsType()
-export class UserArgs extends IntersectionType(
+export class UserQueryArgs extends IntersectionType(
   PaginationArgs,
   SortingDirectionArgs,
 ) {

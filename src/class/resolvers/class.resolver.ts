@@ -13,10 +13,10 @@ import {
   TutorApplyForClassOrderBy,
   UserRole,
 } from '@tutorify/shared';
-import { AuthService } from 'src/auth/auth.service';
-import { Tutor } from 'src/tutor-query/models';
+import { TutorQuery } from 'src/tutor-query/models';
 import { Ward } from 'src/address/models';
 import { AddressService } from 'src/address/address.service';
+import { TutorQueryService } from 'src/tutor-query/tutor-query.service';
 
 @Resolver(() => Class)
 @UseGuards(TokenGuard)
@@ -24,7 +24,7 @@ export class ClassResolver {
   constructor(
     private readonly classService: ClassService,
     private readonly tutorApplyForClassService: TutorApplyForClassService,
-    private readonly authService: AuthService,
+    private readonly tutorQueryService: TutorQueryService,
     private readonly addressService: AddressService,
   ) { }
 
@@ -64,7 +64,7 @@ export class ClassResolver {
     return cl.tutorId;
   }
 
-  @ResolveField('tutor', () => Tutor, {
+  @ResolveField('tutor', () => TutorQuery, {
     nullable: true,
     description: 'Whenever tutorId is not enough, use this field',
   })
@@ -76,9 +76,9 @@ export class ClassResolver {
   async getTutorOfClass(
     @Parent() cl: Class,
     @Token() token: IAccessToken,
-  ): Promise<Tutor> {
+  ): Promise<TutorQuery> {
     this.checkTutorViewPermission(cl, token);
-    return this.authService.getUserById(cl.tutorId);
+    return this.tutorQueryService.getTutorById(cl.tutorId);
   }
 
   @ResolveField('lastApplication', () => TutorApplyForClass, {

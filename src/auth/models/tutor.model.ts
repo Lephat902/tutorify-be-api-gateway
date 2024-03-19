@@ -1,19 +1,10 @@
-import { Field, ObjectType, OmitType, registerEnumType } from '@nestjs/graphql';
-import { Gender, UserRole } from '@tutorify/shared';
-import { User } from 'src/auth/models';
+import { Field, ObjectType } from '@nestjs/graphql';
+import { User } from './user.model';
 import { ClassCategory } from 'src/class-category/models';
 import { FileObject } from 'src/common/graphql';
 
-registerEnumType(Gender, {
-  name: 'Gender',
-});
-
-registerEnumType(UserRole, {
-  name: 'UserRole',
-});
-
-@ObjectType()
-export class Tutor extends OmitType(User, ['phoneNumber', 'role'] as const) {
+@ObjectType({ implements: User })
+export class Tutor extends User {
   @Field()
   biography: string;
 
