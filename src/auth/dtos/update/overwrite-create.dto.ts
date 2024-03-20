@@ -38,7 +38,7 @@ export class OverwriteCreate {
   @Length(5, 20, {
     message: 'Username must be between 5 and 20 characters long',
   })
-  @Matches(/^[a-zA-Z0-9_]+$/, {
+  @Matches(/^\w+$/, {
     message: 'Username can only contain letters, numbers, and underscores',
   })
   public readonly username: string;
