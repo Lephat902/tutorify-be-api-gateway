@@ -44,6 +44,15 @@ export class AuthService {
     );
   }
 
+  public async deleteSingleTutorPortfolio(tutorId: string, portfolioId: string) {
+    return firstValueFrom(
+      this.client.send({ cmd: 'deleteSingleTutorPortfolio' }, {
+        id: tutorId, 
+        portfolioId,
+      }),
+    );
+  }
+
   public async login(loginDto: LoginDto) {
     return firstValueFrom(this.client.send({ cmd: 'login' }, loginDto));
   }
