@@ -11,6 +11,7 @@ import {
   Param,
   Patch,
   BadRequestException,
+  Delete,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -184,6 +185,18 @@ export class AuthController {
     return this.handleUpdate(token, updateDto, {
       avatar
     });
+  }
+
+  @Delete('tutors/profile/portfolios/:portfolioId')
+  @ApiOperation({ summary: 'Tutor updates profile.' })
+  @TokenRequirements(TokenType.CLIENT, [UserRole.TUTOR])
+  @ApiBearerAuth()
+  public async deleteSingleTutorPortfolio(
+    @Param('portfolioId') portfolioId: string,
+    @Token() token: IAccessToken,
+  ) {
+    const tutorId = token.id;
+    return this.authService.deleteSingleTutorPortfolio(tutorId, portfolioId);
   }
 
   @Patch('tutors/:tutorId/approve')
