@@ -10,7 +10,7 @@ import { ClassSession } from './models';
 export class ClassSessionService {
   constructor(
     @Inject(QueueNames.CLASS_SESSION) private readonly client: ClientProxy,
-  ) {}
+  ) { }
 
   async createClassSessions(
     tutorId: string,
@@ -41,6 +41,23 @@ export class ClassSessionService {
           classSessionId,
           tutorId,
           ...classSessionUpdateDto,
+        },
+      ),
+    );
+  }
+
+  async deleteSingleMaterial(
+    tutorId: string,
+    classSessionId: string,
+    materialId: string,
+  ) {
+    return firstValueFrom(
+      this.client.send(
+        { cmd: 'deleteSingleMaterial' },
+        {
+          tutorId,
+          classSessionId,
+          materialId,
         },
       ),
     );

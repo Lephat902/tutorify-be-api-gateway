@@ -7,6 +7,7 @@ import {
   Param,
   Body,
   Patch,
+  Delete,
 } from '@nestjs/common';
 import { ClassSessionCreateDto, ClassSessionUpdateDto } from './dtos';
 import { Token, TokenRequirements } from 'src/auth/decorators';
@@ -89,6 +90,25 @@ export class ClassSessionController {
       tutorId,
       sessionId,
       fullClassSessionUpdateDto,
+    );
+  }
+
+  @ApiOperation({
+    summary: 'Tutor deleted a class session material.',
+  })
+  @Delete('/classess/sessions/:classSessionId/materials/:materialId')
+  @TokenRequirements(TokenType.CLIENT, [UserRole.TUTOR])
+  async deleteSingleMaterial(
+    @Token() token: IAccessToken,
+    @Param('classSessionId') classSessionId: string,
+    @Param('materialId') materialId: string,
+  ) {
+    const tutorId = token.id;
+
+    return this.classSessionService.deleteSingleMaterial(
+      tutorId,
+      classSessionId,
+      materialId,
     );
   }
 }
