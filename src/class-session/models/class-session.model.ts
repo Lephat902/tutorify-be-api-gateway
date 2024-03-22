@@ -1,5 +1,10 @@
-import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Field, ID, ObjectType, registerEnumType } from '@nestjs/graphql';
+import { ClassSessionStatus } from '@tutorify/shared';
 import { FileObject } from 'src/common/graphql';
+
+registerEnumType(ClassSessionStatus, {
+  name: 'ClassSessionStatus',
+});
 
 @ObjectType()
 export class ClassSession {
@@ -41,4 +46,7 @@ export class ClassSession {
 
   @Field()
   tutorFeedback: string;
+
+  @Field(() => ClassSessionStatus)
+  status: ClassSessionStatus;
 }

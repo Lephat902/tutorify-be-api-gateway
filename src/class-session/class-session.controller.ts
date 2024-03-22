@@ -29,7 +29,7 @@ import { ClassSessionService } from './class-session.service';
 @UseGuards(TokenGuard)
 @ApiBearerAuth()
 export class ClassSessionController {
-  constructor(private readonly classSessionService: ClassSessionService) {}
+  constructor(private readonly classSessionService: ClassSessionService) { }
 
   @UseInterceptors(FilesInterceptor('files'))
   @ApiConsumes('multipart/form-data')
@@ -94,7 +94,27 @@ export class ClassSessionController {
   }
 
   @ApiOperation({
-    summary: 'Tutor deleted a class session material.',
+    summary: 'Tutor cancels a class session.',
+  })
+  @Patch('/classess/sessions/:classSessionId/cancel')
+  @TokenRequirements(TokenType.CLIENT, [UserRole.TUTOR])
+  async cancelClassSession(
+    @Token() token: IAccessToken,
+    @Param('classSessionId') classSessionId: string,
+  ) {
+    const tutorId = token.id;
+
+    return this.classSessionService.updateClassSession(
+      tutorId,
+      classSessionId,
+      {
+        isCancelled: true,
+      } as ClassSessionUpdateDto,
+    );
+  }
+
+  @ApiOperation({
+    summary: 'Tutor deletes a class session material.',
   })
   @Delete('/classess/sessions/:classSessionId/materials/:materialId')
   @TokenRequirements(TokenType.CLIENT, [UserRole.TUTOR])

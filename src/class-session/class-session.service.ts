@@ -4,7 +4,7 @@ import { ClientProxy } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
 import { QueueNames } from '@tutorify/shared';
 import { ClassSessionQueryArgs } from './args';
-import { ClassSession } from './models';
+import { ClassSession, ClassSessionPaginatedResults } from './models';
 
 @Injectable()
 export class ClassSessionService {
@@ -63,17 +63,29 @@ export class ClassSessionService {
     );
   }
 
-  async getAllClassSessions(
+  async getClassSessionsAndTotalCount(
     filters: ClassSessionQueryArgs,
-  ): Promise<ClassSession[]> {
+  ): Promise<ClassSessionPaginatedResults> {
     return firstValueFrom(
-      this.client.send({ cmd: 'getAllClassSessions' }, filters),
+      this.client.send({ cmd: 'getClassSessionsAndTotalCount' }, filters),
     );
   }
 
   async getClassSessionById(classSessionId: string): Promise<ClassSession> {
     return firstValueFrom(
       this.client.send({ cmd: 'getClassSessionById' }, classSessionId),
+    );
+  }
+
+  async getNonCancelledClassSessionsCount(classId: string): Promise<number> {
+    return firstValueFrom(
+      this.client.send({ cmd: 'getNonCancelledClassSessionsCount' }, classId),
+    );
+  }
+
+  async getScheduledClassSessionsCount(classId: string): Promise<number> {
+    return firstValueFrom(
+      this.client.send({ cmd: 'getScheduledClassSessionsCount' }, classId),
     );
   }
 }

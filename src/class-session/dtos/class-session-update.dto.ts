@@ -3,7 +3,7 @@ import {
   IsOptional,
   IsBoolean,
 } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
   IsDateGreaterThanToday,
@@ -105,4 +105,7 @@ export class ClassSessionUpdateDto {
   @IsOptional()
   @IsString()
   tutorFeedback?: string;
+
+  @ApiHideProperty()
+  isCancelled?: boolean;
 }
