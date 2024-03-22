@@ -38,12 +38,12 @@ export class Tutor extends User {
   @Field(() => [String])
   socialProfiles: string[];
 
-  @Field()
+  @Field({ nullable: true })
   numOfClasses: number;
 
-  @Field()
+  @Field({ nullable: true })
   feedbackCount: number;
 
-  @Field()
+  @Field({ nullable: true })
   totalFeedbackRating: number;
 }
