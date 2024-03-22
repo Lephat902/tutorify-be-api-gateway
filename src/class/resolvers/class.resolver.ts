@@ -17,6 +17,8 @@ import { TutorQuery } from 'src/tutor-query/models';
 import { Ward } from 'src/address/models';
 import { AddressService } from 'src/address/address.service';
 import { TutorQueryService } from 'src/tutor-query/tutor-query.service';
+import { Student } from 'src/auth/models';
+import { AuthService } from 'src/auth/auth.service';
 
 @Resolver(() => Class)
 @UseGuards(TokenGuard)
@@ -26,6 +28,7 @@ export class ClassResolver {
     private readonly tutorApplyForClassService: TutorApplyForClassService,
     private readonly tutorQueryService: TutorQueryService,
     private readonly addressService: AddressService,
+    private readonly authService: AuthService,
   ) { }
 
   @Query(() => Class, { name: 'class', nullable: true })
@@ -79,6 +82,16 @@ export class ClassResolver {
   ): Promise<TutorQuery> {
     this.checkTutorViewPermission(cl, token);
     return this.tutorQueryService.getTutorById(cl.tutorId);
+  }
+
+  @ResolveField('student', () => Student, {
+    nullable: true,
+    description: 'Whenever studentId is not enough, use this field',
+  })
+  async getStudentOfClass(
+    @Parent() cl: Class,
+  ): Promise<Student> {
+    return this.authService.getUserById(cl.studentId);
   }
 
   @ResolveField('lastApplication', () => TutorApplyForClass, {

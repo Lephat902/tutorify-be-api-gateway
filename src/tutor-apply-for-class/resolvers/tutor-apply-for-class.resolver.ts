@@ -1,6 +1,6 @@
 import { Resolver, Query, Args, ResolveField, Parent } from '@nestjs/graphql';
 import { TutorApplyForClassArgs } from '../args';
-import { ForbiddenException, UseGuards } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, UseGuards } from '@nestjs/common';
 import { TokenGuard } from 'src/auth/guards';
 import { TutorApplyForClassService } from '../tutor-apply-for-class.service';
 import { TutorApplyForClass } from '../models';
@@ -9,6 +9,8 @@ import { Token, TokenRequirements } from 'src/auth/decorators';
 import { UserRole } from '@tutorify/shared';
 import { ClassService } from 'src/class/class.service';
 import { Class } from 'src/class/models';
+import { TutorQuery } from 'src/tutor-query/models';
+import { TutorQueryService } from 'src/tutor-query/tutor-query.service';
 
 @Resolver(() => TutorApplyForClass)
 @UseGuards(TokenGuard)
@@ -16,6 +18,7 @@ export class TutorApplyForClassResolver {
   constructor(
     private readonly tutorApplyForClassService: TutorApplyForClassService,
     private readonly classService: ClassService,
+    private readonly tutorQueryService: TutorQueryService,
   ) { }
 
   @Query(() => TutorApplyForClass, { name: 'classApplication' })
@@ -38,7 +41,7 @@ export class TutorApplyForClassResolver {
   }
 
   @Query(() => [TutorApplyForClass], { name: 'classApplications' })
-  @TokenRequirements(TokenType.CLIENT, [UserRole.TUTOR, UserRole.MANAGER, UserRole.ADMIN])
+  @TokenRequirements(TokenType.CLIENT, [])
   async getAllApplications(
     @Args() filters: TutorApplyForClassArgs,
     @Token() token: IAccessToken,
@@ -46,6 +49,10 @@ export class TutorApplyForClassResolver {
     const userRole = token.roles[0];
     if (userRole === UserRole.TUTOR) {
       filters.tutorId = token.id;
+    } else if (userRole === UserRole.STUDENT) {
+      if (!filters.classId)
+        throw new BadRequestException("ClassId is required for requests made by user with STUDENT role");
+      await this.classService.assertClassOwnership(token, filters.classId);
     }
     return this.tutorApplyForClassService.getAllApplications(filters);
   }
@@ -60,5 +67,17 @@ export class TutorApplyForClassResolver {
   ): Promise<Class> {
     const { classId } = classApplication;
     return this.classService.getClassById(classId);
+  }
+
+  @ResolveField('tutor', () => TutorQuery, {
+    nullable: true,
+    description:
+      'If the tutorId alone does not provide sufficient information, consider using this additional field.',
+  })
+  async getTutorOfApplication(
+    @Parent() classApplication: TutorApplyForClass,
+  ): Promise<TutorQuery> {
+    const { tutorId } = classApplication;
+    return this.tutorQueryService.getTutorById(tutorId);
   }
 }
