@@ -77,6 +77,15 @@ export class ClassQueryArgs extends IntersectionType(
   })
   includeHidden: boolean;
 
+  @IsOptional()
+  @IsBoolean()
+  @ToBoolean()
+  @Field({
+    nullable: true,
+    description: 'Return only assigned/unassigned classes',
+  })
+  isAssigned: boolean;
+
   @HideField()
   userId: string;
 }
