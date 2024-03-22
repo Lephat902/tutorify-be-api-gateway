@@ -1,29 +1,26 @@
 import { ForbiddenException, Inject, Injectable } from '@nestjs/common';
-import {
-  TutorApplyForClassDto,
-  TutorApplyForClassCreateDto,
-} from './dtos';
+import { TutorApplyForClassCreateDto } from './dtos';
 import { ClientProxy } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
 import { IAccessToken } from 'src/auth/auth.interfaces';
 import { QueueNames } from '@tutorify/shared';
 import { TutorApplyForClassArgs } from './args';
+import { TutorApplyForClass } from './models';
 
 @Injectable()
 export class TutorApplyForClassService {
   constructor(
     @Inject(QueueNames.TUTOR_APPLY_FOR_CLASS)
     private readonly client: ClientProxy,
-  ) {}
+  ) { }
 
   async applyForClass(
     tutorId: string,
     classId: string,
-  ): Promise<TutorApplyForClassDto> {
+  ): Promise<TutorApplyForClass> {
     const createDto: TutorApplyForClassCreateDto = {
       tutorId,
       classId,
-      appliedAt: new Date(),
       isDesignated: false,
     };
 
@@ -32,13 +29,13 @@ export class TutorApplyForClassService {
     );
   }
 
-  async getApplicationById(id: string): Promise<TutorApplyForClassDto> {
+  async getApplicationById(id: string): Promise<TutorApplyForClass> {
     return firstValueFrom(this.client.send({ cmd: 'getApplicationById' }, id));
   }
 
   async getAllApplications(
     filters: TutorApplyForClassArgs,
-  ): Promise<TutorApplyForClassDto[]> {
+  ): Promise<TutorApplyForClass[]> {
     return firstValueFrom(
       this.client.send({ cmd: 'getAllApplications' }, filters),
     );

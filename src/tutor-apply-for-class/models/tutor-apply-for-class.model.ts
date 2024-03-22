@@ -26,5 +26,5 @@ export class TutorApplyForClass {
   appliedAt: Date;
 
   @Field({ nullable: true })
-  approvedAt: Date;
+  statusChangedAt: Date;
 }
