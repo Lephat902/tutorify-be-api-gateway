@@ -6,13 +6,13 @@ import {
   Patch,
 } from '@nestjs/common';
 import { TutorApplyForClassService } from './tutor-apply-for-class.service';
-import { TutorApplyForClassDto } from './dtos';
 import { TokenRequirements, Token } from 'src/auth/decorators';
 import { IAccessToken, TokenType } from 'src/auth/auth.interfaces';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { TokenGuard } from 'src/auth/guards';
 import { ClassService } from 'src/class/class.service';
 import { UserRole } from '@tutorify/shared';
+import { TutorApplyForClass } from './models';
 
 @Controller('classes')
 @ApiTags('Class Application')
@@ -30,7 +30,7 @@ export class TutorApplyForClassController {
   async applyForClass(
     @Token() token: IAccessToken,
     @Param('classId') classId: string,
-  ): Promise<TutorApplyForClassDto> {
+  ): Promise<TutorApplyForClass> {
     const tutorId = token.id;
     return this.tutorApplyForClassService.applyForClass(tutorId, classId);
   }
