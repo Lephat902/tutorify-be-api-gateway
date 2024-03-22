@@ -1,11 +1,11 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { ClassSessionController } from './class-session.controller';
 import { ClassSessionService } from './class-session.service';
 import { QueueNames } from '@tutorify/shared';
 import { ClassModule } from 'src/class/class.module';
-import { ClassSessionResolver } from './resolvers';
+import { Resolvers } from './resolvers';
 
 @Module({
   imports: [
@@ -25,10 +25,10 @@ import { ClassSessionResolver } from './resolvers';
         }),
       },
     ]),
-    ClassModule,
+    forwardRef(() => ClassModule),
   ],
   controllers: [ClassSessionController],
-  providers: [ClassSessionService, ClassSessionResolver],
+  providers: [ClassSessionService, ...Resolvers],
   exports: [ClassSessionService],
 })
 export class ClassSessionModule {}

@@ -19,6 +19,7 @@ import { AddressService } from 'src/address/address.service';
 import { TutorQueryService } from 'src/tutor-query/tutor-query.service';
 import { Student } from 'src/auth/models';
 import { AuthService } from 'src/auth/auth.service';
+import { ClassSessionService } from 'src/class-session/class-session.service';
 
 @Resolver(() => Class)
 @UseGuards(TokenGuard)
@@ -29,6 +30,7 @@ export class ClassResolver {
     private readonly tutorQueryService: TutorQueryService,
     private readonly addressService: AddressService,
     private readonly authService: AuthService,
+    private readonly classSessionService: ClassSessionService,
   ) { }
 
   @Query(() => Class, { name: 'class', nullable: true })
@@ -129,6 +131,28 @@ export class ClassResolver {
     const { wardId } = cl;
     const wardHierarchy = this.addressService.getWardHierarchyById(wardId);
     return wardHierarchy;
+  }
+
+  @ResolveField('nonCancelledClassSessionsCount', () => Number, {
+    nullable: true,
+    description: 'Total number of class sessions of this class, excluding cancelled sessions',
+  })
+  async getNonCancelledClassSessionsCount(
+    @Parent() cl: Class,
+  ) {
+    const { id } = cl;
+    return this.classSessionService.getNonCancelledClassSessionsCount(id);
+  }
+
+  @ResolveField('scheduledClassSessionsCount', () => Number, {
+    nullable: true,
+    description: 'Total number of upcoming class sessions of this class, excluding cancelled sessions',
+  })
+  async getScheduledClassSessionsCount(
+    @Parent() cl: Class,
+  ) {
+    const { id } = cl;
+    return this.classSessionService.getScheduledClassSessionsCount(id);
   }
 
   private checkTutorViewPermission(cl: Class, token: IAccessToken) {
