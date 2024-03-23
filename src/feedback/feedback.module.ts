@@ -4,6 +4,7 @@ import { FeedbackService } from './feedback.service';
 import { ConfigService } from '@nestjs/config';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { QueueNames } from '@tutorify/shared';
+import { Resolvers } from './resolvers';
 
 @Module({
   imports: [
@@ -25,7 +26,7 @@ import { QueueNames } from '@tutorify/shared';
     ]),
   ],
   controllers: [FeedbackController],
-  providers: [FeedbackService],
+  providers: [FeedbackService, ...Resolvers],
   exports: [FeedbackService],
 })
 export class FeedbackModule {}

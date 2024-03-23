@@ -3,6 +3,7 @@ import { ClientProxy } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
 import { FeedbackDto, FeedbackReplyDto } from './dtos';
 import { QueueNames } from '@tutorify/shared';
+import { FeedbackQueryArg } from './args';
 
 @Injectable()
 export class FeedbackService {
@@ -10,8 +11,10 @@ export class FeedbackService {
     @Inject(QueueNames.FEEDBACK) private readonly client: ClientProxy,
   ) {}
 
-  async getAllFeedbacks() {
-    return firstValueFrom(this.client.send({ cmd: 'getAllFeedbacks' }, {}));
+  async getAllFeedbacks(filters: FeedbackQueryArg) {
+    const res =  await firstValueFrom(this.client.send({ cmd: 'getAllFeedbacks' }, filters));
+    console.log(res);
+    return res;
   }
 
   async getFeedbacksByTutorId(tutorId: string) {
