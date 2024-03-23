@@ -48,12 +48,12 @@ export class ClassResolver {
   ])
   async getTutorApplicationsByClassId(
     @Parent() cl: Class,
-    @Args() filters: TutorApplyForClassArgs,
     @Token() token: IAccessToken,
   ): Promise<TutorApplyForClass[]> {
     this.checkTutorViewPermission(cl, token);
-    filters.classId = cl.id;
-    return this.tutorApplyForClassService.getAllApplications(filters);
+    return this.tutorApplyForClassService.getAllApplications({
+      classId: cl.id
+    } as TutorApplyForClassArgs);
   }
 
   @ResolveField('tutorId', () => String, {

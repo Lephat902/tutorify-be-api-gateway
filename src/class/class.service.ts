@@ -10,6 +10,7 @@ import { IAccessToken } from 'src/auth/auth.interfaces';
 import { QueueNames, UserRole } from '@tutorify/shared';
 import { Class } from './models';
 import { ClassQueryArgs } from './args';
+import { ClassPaginatedResults } from './models/class-paginated-results.model';
 
 @Injectable()
 export class ClassService {
@@ -65,10 +66,7 @@ export class ClassService {
     return firstValueFrom(this.client.send({ cmd: 'getClassById' }, id));
   }
 
-  async getClassesAndTotalCount(filters: ClassQueryArgs): Promise<{
-    results: Class[],
-    totalCount: number,
-  }> {
+  async getClassesAndTotalCount(filters: ClassQueryArgs): Promise<ClassPaginatedResults> {
     return firstValueFrom(this.client.send({ cmd: 'getClassesAndTotalCount' }, filters));
   }
 
