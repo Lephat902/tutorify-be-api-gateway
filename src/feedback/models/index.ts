@@ -1,0 +1,1 @@
+export * from './feedback-query-paginated-results.model';

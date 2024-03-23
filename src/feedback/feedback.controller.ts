@@ -15,7 +15,7 @@ export class FeedbackController {
   @Get('feedbacks')
   @ApiOperation({ summary: 'Get all feedbacks.' })
   async getFeedbacks() {
-    return this.feedbackService.getAllFeedbacks();
+    return this.feedbackService.getAllFeedbacks({});
   }
 
   @Get('tutors/:id/feedbacks')
