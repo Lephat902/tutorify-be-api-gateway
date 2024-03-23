@@ -18,9 +18,11 @@ export class ClassPaginatedResultsResolver {
   async getClassesAndTotalCount(
     @Args() filters: ClassQueryArgs,
     @Token() token: IAccessToken,
-  ) {
+  ): Promise<ClassPaginatedResults> {
     if (filters?.me) {
-      filters.userId = token?.id;
+      if (!token?.id)
+        return { results: [], totalCount: 0 };
+      filters.userId = token.id;
       delete filters.me;
     }
     return this.classService.getClassesAndTotalCount(filters);

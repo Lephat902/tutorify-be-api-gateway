@@ -29,6 +29,9 @@ export class Class {
   description: string;
 
   @Field()
+  createdAt: Date;
+
+  @Field()
   requirement: string;
 
   @Field({ nullable: true })

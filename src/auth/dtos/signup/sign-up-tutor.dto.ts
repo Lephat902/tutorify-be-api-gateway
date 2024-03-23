@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsInt, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsArray, IsInt, IsOptional, IsString } from 'class-validator';
 import { SignUpDto } from './sign-up-base-user.dto';
 import { Transform, Type } from 'class-transformer';
 
@@ -18,7 +18,6 @@ export class SignUpTutorDto extends SignUpDto {
     example: '3000000',
     required: false,
   })
-  @IsNumber()
   @IsOptional()
   public readonly minimumWage: string;
 
