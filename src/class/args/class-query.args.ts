@@ -76,4 +76,7 @@ export class ClassQueryArgs extends IntersectionType(
 
   @HideField()
   userId: string;
+
+  @HideField()
+  isTutor: boolean;
 }
