@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsInt, IsOptional, IsString } from 'class-validator';
+import { IsInt, IsOptional, IsString } from 'class-validator';
 import { SignUpDto } from './sign-up-base-user.dto';
 import { Transform, Type } from 'class-transformer';
 
@@ -69,9 +69,6 @@ export class SignUpTutorDto extends SignUpDto {
       '83bdcea4-c6bf-4e7a-a9e0-d0894f5841bb',
     ],
   })
-  @IsArray()
-  @IsString({ each: true })
-  @Type(() => String)
   @Transform(({ value }) => value.split(','))
   public readonly proficienciesIds: string[];
 
@@ -94,9 +91,6 @@ export class SignUpTutorDto extends SignUpDto {
       'https://www.facebook.com/groups/elonmusk1',
     ],
   })
-  @IsArray()
-  @IsString({ each: true })
-  @Type(() => String)
   @Transform(({ value }) => value.split(','))
   @IsOptional()
   public readonly socialProfiles: string[];
