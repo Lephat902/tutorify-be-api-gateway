@@ -54,4 +54,15 @@ export class TutorApplyForClassArgs extends IntersectionType(
       'Retrieve classes that one either applies for or is designated to',
   })
   readonly isDesignated: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  @ToBoolean()
+  @Field({
+    nullable: true,
+    description:
+      'Include applications that class was deleted, default is not',
+    defaultValue: false,
+  })
+  readonly includeDeletedClass: boolean;
 }
