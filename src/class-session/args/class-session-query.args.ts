@@ -5,8 +5,7 @@ import {
   registerEnumType,
 } from '@nestjs/graphql';
 import { ClassSessionOrderBy } from '@tutorify/shared';
-import { IsBoolean, IsOptional } from 'class-validator';
-import { ToBoolean } from 'src/common/decorators';
+import { IsOptional } from 'class-validator';
 import { PaginationArgs, SortingDirectionArgs } from 'src/common/graphql';
 
 registerEnumType(ClassSessionOrderBy, {
@@ -34,8 +33,6 @@ export class ClassSessionQueryArgs extends IntersectionType(
   classId?: string;
 
   @IsOptional()
-  @IsBoolean()
-  @ToBoolean()
   @Field({
     nullable: true,
     description: 'Display cancelled class session or not (both by default)',

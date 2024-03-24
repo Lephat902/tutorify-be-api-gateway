@@ -5,8 +5,7 @@ import {
   registerEnumType,
 } from '@nestjs/graphql';
 import { Gender, TutorOrderBy, UserRole } from '@tutorify/shared';
-import { IsBoolean, IsOptional } from 'class-validator';
-import { ToBoolean } from 'src/common/decorators';
+import { IsOptional } from 'class-validator';
 import { PaginationArgs, SortingDirectionArgs } from 'src/common/graphql';
 
 registerEnumType(TutorOrderBy, {
@@ -33,8 +32,6 @@ export class UserQueryArgs extends IntersectionType(
   gender?: Gender;
 
   @IsOptional()
-  @IsBoolean()
-  @ToBoolean()
   @Field({
     nullable: true,
     description: 'Whether or not include email-not-verified users',
@@ -43,8 +40,6 @@ export class UserQueryArgs extends IntersectionType(
   includeEmailNotVerified?: boolean;
 
   @IsOptional()
-  @IsBoolean()
-  @ToBoolean()
   @Field({
     nullable: true,
     description: 'Whether or not include blocked users',

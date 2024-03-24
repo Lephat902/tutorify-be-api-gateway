@@ -1,9 +1,7 @@
 import { ArgsType, Field, OmitType, registerEnumType } from '@nestjs/graphql';
 import { TutorOrderBy } from '@tutorify/shared';
-import { Transform } from 'class-transformer';
-import { IsBoolean, IsNumber, IsOptional, Min } from 'class-validator';
+import { IsOptional, Min } from 'class-validator';
 import { UserQueryArgs } from 'src/auth/args';
-import { ToBoolean } from 'src/common/decorators';
 
 registerEnumType(TutorOrderBy, {
   name: 'TutorOrderBy',
@@ -12,8 +10,6 @@ registerEnumType(TutorOrderBy, {
 @ArgsType()
 export class TutorQueryArgs extends OmitType(UserQueryArgs, ['role'] as const) {
   @IsOptional()
-  @IsBoolean()
-  @ToBoolean()
   @Field({
     nullable: true,
     description: 'Whether or not include not approved tutors',
@@ -29,7 +25,6 @@ export class TutorQueryArgs extends OmitType(UserQueryArgs, ['role'] as const) {
   order?: TutorOrderBy;
 
   @IsOptional()
-  @Transform(({ value }) => (Array.isArray(value) ? value : Array(value)))
   @Field(() => [String], {
     nullable: true,
     description: "Classes' ids Categories classes categorized to",
@@ -37,7 +32,6 @@ export class TutorQueryArgs extends OmitType(UserQueryArgs, ['role'] as const) {
   classCategoryIds?: string[];
 
   @IsOptional()
-  @Transform(({ value }) => (Array.isArray(value) ? value : Array(value)))
   @Field(() => [String], {
     nullable: true,
     description: "Subjects' ids classes categorized to",
@@ -45,7 +39,6 @@ export class TutorQueryArgs extends OmitType(UserQueryArgs, ['role'] as const) {
   subjectIds?: string[];
 
   @IsOptional()
-  @Transform(({ value }) => (Array.isArray(value) ? value : Array(value)))
   @Field(() => [String], {
     nullable: true,
     description: "Levels' ids classes categorized to",
@@ -53,7 +46,6 @@ export class TutorQueryArgs extends OmitType(UserQueryArgs, ['role'] as const) {
   levelIds?: string[];
 
   @IsOptional()
-  @IsNumber()
   @Min(0)
   @Field({
     nullable: true,
@@ -63,7 +55,6 @@ export class TutorQueryArgs extends OmitType(UserQueryArgs, ['role'] as const) {
   minWage?: number;
 
   @IsOptional()
-  @IsNumber()
   @Min(0)
   @Field({
     nullable: true,
