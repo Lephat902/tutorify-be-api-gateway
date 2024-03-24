@@ -6,9 +6,7 @@ import {
   registerEnumType,
 } from '@nestjs/graphql';
 import { ClassOrderBy } from '@tutorify/shared';
-import { Transform } from 'class-transformer';
-import { IsBoolean, IsOptional, IsString } from 'class-validator';
-import { ToBoolean } from 'src/common/decorators';
+import { IsOptional } from 'class-validator';
 import { PaginationArgs, SortingDirectionArgs } from 'src/common/graphql';
 
 registerEnumType(ClassOrderBy, {
@@ -21,8 +19,6 @@ export class ClassQueryArgs extends IntersectionType(
   SortingDirectionArgs,
 ) {
   @IsOptional()
-  @IsBoolean()
-  @ToBoolean()
   @Field({
     nullable: true,
     description: 'Only include my result',
@@ -30,10 +26,9 @@ export class ClassQueryArgs extends IntersectionType(
   me: boolean;
 
   @IsOptional()
-  @IsString()
-  @Field({
+  @Field(() => String, {
     nullable: true,
-    description: 'Query string',
+    description: 'A query string used to narrow down results based on a case-insensitive match within the class\'s title or description.',
   })
   q: string;
 
@@ -45,7 +40,6 @@ export class ClassQueryArgs extends IntersectionType(
   order: ClassOrderBy;
 
   @IsOptional()
-  @Transform(({ value }) => (Array.isArray(value) ? value : Array(value)))
   @Field(() => [String], {
     nullable: true,
     description: "Classes' ids Categories classes categorized to",
@@ -53,7 +47,6 @@ export class ClassQueryArgs extends IntersectionType(
   classCategoryIds: string[];
 
   @IsOptional()
-  @Transform(({ value }) => (Array.isArray(value) ? value : Array(value)))
   @Field(() => [String], {
     nullable: true,
     description: "Subjects' ids classes categorized to",
@@ -61,7 +54,6 @@ export class ClassQueryArgs extends IntersectionType(
   subjectIds: string[];
 
   @IsOptional()
-  @Transform(({ value }) => (Array.isArray(value) ? value : Array(value)))
   @Field(() => [String], {
     nullable: true,
     description: "Levels' ids classes categorized to",
@@ -69,8 +61,6 @@ export class ClassQueryArgs extends IntersectionType(
   levelIds: string[];
 
   @IsOptional()
-  @IsBoolean()
-  @ToBoolean()
   @Field({
     nullable: true,
     description: 'Include hidden classes',
@@ -78,8 +68,6 @@ export class ClassQueryArgs extends IntersectionType(
   includeHidden: boolean;
 
   @IsOptional()
-  @IsBoolean()
-  @ToBoolean()
   @Field({
     nullable: true,
     description: 'Return only assigned/unassigned classes',
