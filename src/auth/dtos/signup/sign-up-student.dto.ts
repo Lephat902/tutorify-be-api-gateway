@@ -40,6 +40,7 @@ export class SignUpStudentDto extends SignUpDto {
   @IsString()
   public readonly parentLastName: string;
 
+  @IsOptional()
   @ApiProperty({
     description: "Class Categories' ids that user is interested in",
     type: 'array',

@@ -59,6 +59,7 @@ export class SignUpTutorDto extends SignUpDto {
   @Type(() => Number)
   public readonly graduationYear: number;
 
+  @IsOptional()
   @ApiProperty({
     description: "Class Categories' ids that tutor claim to be able to teach",
     type: 'array',
