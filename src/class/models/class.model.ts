@@ -26,6 +26,9 @@ export class Class {
   classCategories: ClassCategory[];
 
   @Field()
+  title: string;
+
+  @Field()
   description: string;
 
   @Field()
