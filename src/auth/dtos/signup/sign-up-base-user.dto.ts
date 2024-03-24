@@ -75,7 +75,7 @@ export class SignUpDto {
 
   @ApiProperty({
     description: 'Ward ID',
-    example: '1',
+    example: '00001',
     required: false,
   })
   @IsOptional()

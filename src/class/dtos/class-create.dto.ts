@@ -96,7 +96,7 @@ export class ClassCreateDto {
   @ApiProperty({
     description: 'The ID of the ward where the class will be held',
     required: false,
-    example: 'Ward001',
+    example: '00001',
   })
   @IsOptional()
   @IsString()
