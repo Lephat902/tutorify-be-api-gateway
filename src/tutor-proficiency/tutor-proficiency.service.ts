@@ -4,18 +4,18 @@ import { firstValueFrom } from 'rxjs';
 import { QueueNames } from '@tutorify/shared';
 
 @Injectable()
-export class TutorProficientInClassCategoryService {
+export class TutorProficiencyService {
   constructor(
-    @Inject(QueueNames.TUTOR_PROFICIENT_IN_CLASS_CATEGORY)
+    @Inject(QueueNames.USER_PREFERENCES)
     private readonly client: ClientProxy,
-  ) {}
+  ) { }
 
   addOneToProficienciesList(tutorId: string, classCategoryId: string) {
     return firstValueFrom(
       this.client.send(
-        { cmd: 'addOneToProficienciesList' },
+        { cmd: 'addOneClassCategory' },
         {
-          tutorId,
+          userId: tutorId,
           classCategoryId,
         },
       ),
@@ -25,9 +25,9 @@ export class TutorProficientInClassCategoryService {
   removeFromProficienciesList(tutorId: string, classCategoryId: string) {
     return firstValueFrom(
       this.client.send(
-        { cmd: 'removeFromProficienciesList' },
+        { cmd: 'removeClassCategory' },
         {
-          tutorId,
+          userId: tutorId,
           classCategoryId,
         },
       ),
@@ -36,7 +36,7 @@ export class TutorProficientInClassCategoryService {
 
   getProficienciesListByTutorId(tutorId: string) {
     return firstValueFrom(
-      this.client.send({ cmd: 'getProficienciesListByTutorId' }, tutorId),
+      this.client.send({ cmd: 'getClassCategoryPreferencesByUserId' }, tutorId),
     );
   }
 }

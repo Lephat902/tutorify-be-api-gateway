@@ -6,7 +6,7 @@ import {
   Get,
   UseGuards,
 } from '@nestjs/common';
-import { TutorProficientInClassCategoryService } from './tutor-proficient-in-class-category.service';
+import { TutorProficiencyService } from './tutor-proficiency.service';
 import { UserRole } from '@tutorify/shared';
 import { TokenRequirements, Token } from 'src/auth/decorators';
 import { IAccessToken, TokenType } from 'src/auth/auth.interfaces';
@@ -16,9 +16,9 @@ import { TokenGuard } from 'src/auth/guards';
 @Controller('tutors')
 @ApiTags('Tutor Proficiencies')
 @UseGuards(TokenGuard)
-export class TutorProficientInClassCategoryController {
+export class TutorProficiencyController {
   constructor(
-    private readonly tutorProficientInClassCategoryService: TutorProficientInClassCategoryService,
+    private readonly tutorProficiencyService: TutorProficiencyService,
   ) {}
 
   @ApiOperation({
@@ -32,7 +32,7 @@ export class TutorProficientInClassCategoryController {
     @Param('classCategoryId') classCategoryId: string,
   ) {
     const tutorId = token.id;
-    return this.tutorProficientInClassCategoryService.addOneToProficienciesList(
+    return this.tutorProficiencyService.addOneToProficienciesList(
       tutorId,
       classCategoryId,
     );
@@ -49,7 +49,7 @@ export class TutorProficientInClassCategoryController {
     @Param('classCategoryId') classCategoryId: string,
   ) {
     const tutorId = token.id;
-    return this.tutorProficientInClassCategoryService.removeFromProficienciesList(
+    return this.tutorProficiencyService.removeFromProficienciesList(
       tutorId,
       classCategoryId,
     );
@@ -61,7 +61,7 @@ export class TutorProficientInClassCategoryController {
   @ApiBearerAuth()
   getMyProficienciesList(@Token() token: IAccessToken) {
     const tutorId = token.id;
-    return this.tutorProficientInClassCategoryService.getProficienciesListByTutorId(
+    return this.tutorProficiencyService.getProficienciesListByTutorId(
       tutorId,
     );
   }
@@ -69,7 +69,7 @@ export class TutorProficientInClassCategoryController {
   @ApiOperation({ summary: 'Retrieve proficiencies list of a specific tutor.' })
   @Get('/:tutorId/proficiencies')
   getProficienciesListByTutorId(@Param('tutorId') tutorId: string) {
-    return this.tutorProficientInClassCategoryService.getProficienciesListByTutorId(
+    return this.tutorProficiencyService.getProficienciesListByTutorId(
       tutorId,
     );
   }
