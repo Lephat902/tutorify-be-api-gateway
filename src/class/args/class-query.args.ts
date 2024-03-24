@@ -79,4 +79,7 @@ export class ClassQueryArgs extends IntersectionType(
 
   @HideField()
   isTutor: boolean;
+
+  @HideField()
+  isStudent: boolean;
 }

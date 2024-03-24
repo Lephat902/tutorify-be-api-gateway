@@ -26,6 +26,7 @@ export class ClassPaginatedResultsResolver {
     }
     filters.userId = token?.id;
     filters.isTutor = token?.roles[0] === UserRole.TUTOR;
+    filters.isStudent = token?.roles[0] === UserRole.STUDENT;
     return this.classService.getClassesAndTotalCount(filters);
   }
 }
