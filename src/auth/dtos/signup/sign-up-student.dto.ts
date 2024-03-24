@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { SignUpDto } from './sign-up-base-user.dto';
 import { IsString, IsOptional, IsEmail } from 'class-validator';
+import { Transform } from 'class-transformer';
 
 export class SignUpStudentDto extends SignUpDto {
   @ApiProperty({
@@ -38,4 +39,17 @@ export class SignUpStudentDto extends SignUpDto {
   @IsOptional()
   @IsString()
   public readonly parentLastName: string;
+
+  @ApiProperty({
+    description: "Class Categories' ids that user is interested in",
+    type: 'array',
+    items: { type: 'string' },
+    required: false,
+    example: [
+      '3b5e5abb-f7ca-4503-bf8d-8e02dbc249e2',
+      '83bdcea4-c6bf-4e7a-a9e0-d0894f5841bb',
+    ],
+  })
+  @Transform(({ value }) => value.split(','))
+  public readonly interestedClassCategoryIds: string[];
 }
