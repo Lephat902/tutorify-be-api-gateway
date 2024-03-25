@@ -1,5 +1,5 @@
 import { Field, HideField, ID, ObjectType, registerEnumType } from '@nestjs/graphql';
-import { GenderPref, TutorPositionPref } from '@tutorify/shared';
+import { ClassStatus, GenderPref, TutorPositionPref } from '@tutorify/shared';
 import { ClassTimeSlot } from './class-timeslot.model';
 import { ClassCategory } from 'src/class-category/models';
 
@@ -9,6 +9,10 @@ registerEnumType(GenderPref, {
 
 registerEnumType(TutorPositionPref, {
   name: 'TutorPositionPref',
+});
+
+registerEnumType(ClassStatus, {
+  name: 'ClassStatus',
 });
 
 @ObjectType()
@@ -22,19 +26,22 @@ export class Class {
   @HideField()
   tutorId: string;
 
+  @Field(() => ClassStatus)
+  status: ClassStatus;
+
   @Field(() => [ClassCategory])
   classCategories: ClassCategory[];
 
-  @Field()
+  @Field({ nullable: true })
   title: string;
 
-  @Field()
+  @Field({ nullable: true })
   description: string;
 
   @Field()
   createdAt: Date;
 
-  @Field()
+  @Field({ nullable: true })
   requirement: string;
 
   @Field({ nullable: true })
@@ -58,7 +65,7 @@ export class Class {
   @Field()
   studentQty: number;
 
-  @Field(() => TutorPositionPref, { nullable: true })
+  @Field(() => TutorPositionPref)
   tutorPositionPref: TutorPositionPref;
 
   @Field(() => GenderPref)

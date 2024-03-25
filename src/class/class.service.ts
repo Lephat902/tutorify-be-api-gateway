@@ -1,16 +1,15 @@
 import { ForbiddenException, Inject, Injectable } from '@nestjs/common';
 import {
   ClassCreateDto,
-  ClassDto,
   ClassUpdateDto,
 } from './dtos';
 import { ClientProxy } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
 import { IAccessToken } from 'src/auth/auth.interfaces';
 import { QueueNames, UserRole } from '@tutorify/shared';
-import { Class } from './models';
 import { ClassQueryArgs } from './args';
 import { ClassPaginatedResults } from './models/class-paginated-results.model';
+import { isAdmin } from 'src/common/helpers';
 
 @Injectable()
 export class ClassService {
@@ -21,7 +20,7 @@ export class ClassService {
   async addClass(
     studentId: string,
     classData: ClassCreateDto,
-  ): Promise<ClassDto> {
+  ) {
     return firstValueFrom(
       this.client.send(
         { cmd: 'addClass' },
@@ -33,24 +32,43 @@ export class ClassService {
     );
   }
 
-  async deleteClassById(id: string): Promise<void> {
-    return firstValueFrom(this.client.send({ cmd: 'deleteClassById' }, id));
+  async deleteClassById(id: string, token: IAccessToken): Promise<boolean> {
+    return firstValueFrom(this.client.send({ cmd: 'deleteClassById' }, {
+      id,
+      userMakeRequest: token.id,
+    }));
   }
 
-  async hideClass(id: string): Promise<ClassDto> {
-    const updateDto = { isHidden: true };
+  async hideClass(id: string, token: IAccessToken) {
+    const classData: Partial<ClassUpdateDto> = {
+      isHidden: true,
+      isAdmin: isAdmin(token),
+      userMakeRequest: token.id,
+    };
     return firstValueFrom(
       this.client.send(
         { cmd: 'updateClass' },
         {
           id,
-          updateDto,
+          classData,
         },
       ),
     );
   }
 
-  async updateClass(id: string, classData: ClassUpdateDto): Promise<ClassDto> {
+  async cancelClass(id: string): Promise<boolean> {
+    return firstValueFrom(
+      this.client.send({ cmd: 'cancelClass' }, id),
+    );
+  }
+
+  async updateClass(
+    id: string,
+    classData: ClassUpdateDto,
+    token: IAccessToken,
+  ) {
+    classData.isAdmin = isAdmin(token);
+    classData.userMakeRequest = token.id;
     return firstValueFrom(
       this.client.send(
         { cmd: 'updateClass' },
