@@ -42,7 +42,7 @@ export class SignUpStudentDto extends SignUpDto {
 
   @IsOptional()
   @ApiProperty({
-    description: "Class Categories' ids that user is interested in",
+    description: "Class Categories' ids that student is interested in",
     type: 'array',
     items: { type: 'string' },
     required: false,

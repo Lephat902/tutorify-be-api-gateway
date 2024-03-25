@@ -1,10 +1,9 @@
 import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import { TutorProficiencyService } from './tutor-proficiency.service';
+import { UserPreferencesService } from './user-preferences.service';
 import { ClassModule } from 'src/class/class.module';
 import { QueueNames } from '@tutorify/shared';
-import { TutorProficiencyController } from './tutor-proficiency.controller';
 
 @Module({
   imports: [
@@ -26,7 +25,7 @@ import { TutorProficiencyController } from './tutor-proficiency.controller';
     ]),
     ClassModule,
   ],
-  controllers: [TutorProficiencyController],
-  providers: [TutorProficiencyService],
+  providers: [UserPreferencesService],
+  exports: [UserPreferencesService],
 })
-export class TutorProficiencyModule {}
+export class UserPreferencesModule {}
