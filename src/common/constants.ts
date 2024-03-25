@@ -1,0 +1,1 @@
+export const QUERY_TIMEOUT = 10000

@@ -13,7 +13,7 @@ import { TutorQueryModule } from './tutor-query/tutor-query.module';
 import { AddressModule } from './address/address.module';
 import { ClassSessionModule } from './class-session/class-session.module';
 import { DateScalar } from './common/graphql';
-import { TutorProficiencyModule } from './tutor-proficiency/tutor-proficiency.module';
+import { UserPreferencesModule } from './user-preferences/user-preferences.module';
 import { ReportModule } from './report/report.module';
 import { GraphQLError, GraphQLFormattedError } from 'graphql';
 
@@ -25,7 +25,7 @@ import { GraphQLError, GraphQLFormattedError } from 'graphql';
     ClassModule,
     TutorApplyForClassModule,
     StudentFavoriteTutorModule,
-    TutorProficiencyModule,
+    UserPreferencesModule,
     TutorQueryModule,
     AddressModule,
     ClassSessionModule,
