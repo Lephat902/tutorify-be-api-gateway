@@ -8,7 +8,7 @@ import {
   Patch,
 } from '@nestjs/common';
 import { ClassService } from './class.service';
-import { ClassCreateDto, ClassDto } from './dtos';
+import { ClassCreateDto } from './dtos';
 import { TokenRequirements, Token } from 'src/auth/decorators';
 import { IAccessToken, TokenType } from 'src/auth/auth.interfaces';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
@@ -29,7 +29,7 @@ export class ClassController {
   async addClass(
     @Token() token: IAccessToken,
     @Body() classData: ClassCreateDto,
-  ): Promise<ClassDto> {
+  ) {
     const studentId = token.id;
     return this.classService.addClass(studentId, classData);
   }
@@ -41,9 +41,8 @@ export class ClassController {
   async deleteClass(
     @Token() token: IAccessToken,
     @Param('id') classId: string,
-  ): Promise<void> {
-    await this.classService.assertClassOwnership(token, classId);
-    this.classService.deleteClassById(classId);
+  ): Promise<boolean> {
+    return this.classService.deleteClassById(classId, token);
   }
 
   @ApiOperation({ summary: 'Student updates a class requirement.' })
@@ -54,9 +53,8 @@ export class ClassController {
     @Token() token: IAccessToken,
     @Param('id') classId: string,
     @Body() classData: ClassUpdateDto,
-  ): Promise<ClassDto> {
-    await this.classService.assertClassOwnership(token, classId);
-    return this.classService.updateClass(classId, classData);
+  ) {
+    return this.classService.updateClass(classId, classData, token);
   }
 
   @ApiOperation({ summary: 'Student/admin/manager hides a class requirement.' })
@@ -70,8 +68,20 @@ export class ClassController {
   async hideClass(
     @Token() token: IAccessToken,
     @Param('id') classId: string,
-  ): Promise<ClassDto> {
-    await this.classService.assertClassOwnership(token, classId);
-    return this.classService.hideClass(classId);
+  ) {
+    return this.classService.hideClass(classId, token);
+  }
+
+  @ApiOperation({ summary: 'Admin/manager cancels an assigned class due to some external problems.' })
+  @Patch('classes/:id/cancel')
+  @TokenRequirements(TokenType.CLIENT, [
+    UserRole.ADMIN,
+    UserRole.MANAGER,
+  ])
+  @ApiBearerAuth()
+  async cancelClass(
+    @Param('id') classId: string,
+  ): Promise<boolean> {
+    return this.classService.cancelClass(classId);
   }
 }

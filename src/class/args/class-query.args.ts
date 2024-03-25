@@ -5,7 +5,7 @@ import {
   IntersectionType,
   registerEnumType,
 } from '@nestjs/graphql';
-import { ClassOrderBy } from '@tutorify/shared';
+import { ClassOrderBy, ClassStatus } from '@tutorify/shared';
 import { IsOptional } from 'class-validator';
 import { PaginationArgs, SortingDirectionArgs } from 'src/common/graphql';
 
@@ -68,11 +68,11 @@ export class ClassQueryArgs extends IntersectionType(
   includeHidden: boolean;
 
   @IsOptional()
-  @Field({
+  @Field(() => [ClassStatus], {
     nullable: true,
-    description: 'Return only assigned/unassigned classes',
+    description: 'Statuses of classes in the results',
   })
-  isAssigned: boolean;
+  statuses: ClassStatus[];
 
   @HideField()
   userId: string;
