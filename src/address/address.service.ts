@@ -54,6 +54,7 @@ export class AddressService {
   }
 
   async getWardHierarchyById(wardId: string) {
+    if (!wardId) return null;
     return firstValueFrom(
       this.client.send({ cmd: 'getFullAddressByWardCode' }, wardId)
     );

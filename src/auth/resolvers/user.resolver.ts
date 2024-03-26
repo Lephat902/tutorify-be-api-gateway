@@ -40,8 +40,7 @@ export class UserResolver {
     @Parent() user: User,
   ) {
     const { wardId } = user;
-    const wardHierarchy = this.addressService.getWardHierarchyById(wardId);
-    return wardHierarchy;
+    return this.addressService.getWardHierarchyById(wardId);
   }
 
   @ResolveField('interestedClassCategoryIds', () => [String], {
