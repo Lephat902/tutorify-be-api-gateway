@@ -13,4 +13,11 @@ export class FeedbackQueryArg extends IntersectionType(
     description: "Feedbacks' tutor's id",
   })
   tutorId?: string;
+
+  @IsOptional()
+  @Field( {
+    nullable: true,
+    description: "A query string used to narrow down results based on a case-insensitive match within the feedback\'s text",
+  })
+  q?: string;
 } 

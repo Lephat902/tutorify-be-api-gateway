@@ -1,5 +1,5 @@
 import { Field, ObjectType, ID } from '@nestjs/graphql';
-import { Student, Tutor } from '../../auth/models';
+import { Tutor, User } from '../../auth/models';
 
 @ObjectType()
 export class Feedback {
@@ -15,11 +15,11 @@ export class Feedback {
   @Field(() => Tutor)
   tutor: Tutor;
 
-  @Field(() => Student)
-  student: Student;
+  @Field(() => User)
+  user: User;
 
   @Field()
-  studentId: string;
+  userId: string;
 
   @Field()
   tutorId: string;

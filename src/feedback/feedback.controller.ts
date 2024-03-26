@@ -34,14 +34,14 @@ export class FeedbackController {
   @ApiOperation({ summary: 'Student creates a feedback for a tutor.' })
   @ApiBearerAuth()
   @UseGuards(TokenGuard)
-  @TokenRequirements(TokenType.CLIENT, [UserRole.STUDENT])
+  @TokenRequirements(TokenType.CLIENT, [])
   async createFeedback(
     @Param('id') tutorId: string,
     @Body() feedback: FeedbackDto,
     @Token() token: IAccessToken,
   ) {
-    const studentId = token.id;
-    return this.feedbackService.createFeedback(tutorId, studentId, feedback);
+    const userId = token.id;
+    return this.feedbackService.createFeedback(tutorId, userId, feedback);
   }
 
   @Post('feedbacks/:feedbackId/feedback-replies')

@@ -24,13 +24,13 @@ export class FeedbackService {
   }
   async createFeedback(
     tutorId: string,
-    studentId: string,
+    userId: string,
     feedback: FeedbackDto,
   ) {
     return firstValueFrom(
       this.client.send(
         { cmd: 'createFeedback' },
-        { tutorId, studentId, ...feedback },
+        { tutorId, userId, ...feedback },
       ),
     );
   }
