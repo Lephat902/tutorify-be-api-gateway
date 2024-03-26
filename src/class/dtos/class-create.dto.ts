@@ -8,7 +8,6 @@ import {
   IsEnum,
   ArrayNotEmpty,
   IsArray,
-  ArrayMaxSize,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { GenderPref, TutorPositionPref } from '@tutorify/shared';
@@ -39,7 +38,7 @@ export class ClassCreateDto {
     description: 'Description of the class',
     example: 'Math tutoring for high school students',
   })
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   description: string;
 
@@ -154,11 +153,6 @@ export class ClassCreateDto {
       'd48f22f9-72db-4109-a7e6-3e32c2751a88',
       'd48f22f9-72db-4109-a7e6-3e32c2751a88',
     ],
-  })
-  @IsArray()
-  @ArrayNotEmpty()
-  @ArrayMaxSize(5, {
-    message: 'Desired tutors list length must be shorter than or equal 5',
   })
   desiredTutorIds?: string[];
 
