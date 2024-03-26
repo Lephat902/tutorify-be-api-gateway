@@ -22,14 +22,14 @@ export class UserQueryArgs extends IntersectionType(
     nullable: true,
     description: 'Query string for first name, last name, username',
   })
-  q?: string;
+  q: string;
 
   @IsOptional()
   @Field(() => Gender, {
     nullable: true,
     description: 'Gender of user',
   })
-  gender?: Gender;
+  gender: Gender;
 
   @IsOptional()
   @Field({
@@ -37,7 +37,7 @@ export class UserQueryArgs extends IntersectionType(
     description: 'Whether or not include email-not-verified users',
     defaultValue: false,
   })
-  includeEmailNotVerified?: boolean;
+  includeEmailNotVerified: boolean;
 
   @IsOptional()
   @Field({
@@ -45,12 +45,12 @@ export class UserQueryArgs extends IntersectionType(
     description: 'Whether or not include blocked users',
     defaultValue: false,
   })
-  includeBlocked?: boolean;
+  includeBlocked: boolean;
 
   @IsOptional()
   @Field(() => UserRole, {
     nullable: true,
     description: 'Role of user',
   })
-  role?: UserRole;
+  role: UserRole;
 }
