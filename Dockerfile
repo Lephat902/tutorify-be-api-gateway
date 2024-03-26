@@ -48,7 +48,7 @@ COPY --chown=node:node ./shared /usr/src/shared
 COPY --chown=node:node . .
 
 # the 'npm ci' cmd requires root access
-USER root
+# USER root
 
 # Switch to shared dir
 WORKDIR /usr/src/shared
