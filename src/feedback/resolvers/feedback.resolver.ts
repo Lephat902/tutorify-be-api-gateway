@@ -1,7 +1,7 @@
 import { Resolver, ResolveField, Parent } from '@nestjs/graphql';
 import { Feedback } from '../models/feedback.model';
 import { AuthService } from '../../auth/auth.service';
-import { Student, Tutor } from '../../auth/models';
+import { Tutor, User } from '../../auth/models';
 
 @Resolver(() => Feedback)
 export class FeedbackResolver {
@@ -9,20 +9,19 @@ export class FeedbackResolver {
     private readonly authService: AuthService,
   ) {}
 
-  @ResolveField('student', () => Student, {
-    description: 'Full Student  information, based on studentId',
+  @ResolveField('user', () => User, {
+    description: 'Full User information, based on userId',
   })
   async getStudent(
     @Parent() feedback: Feedback,
   ) {
-    const { studentId } = feedback;
-    console.log("student Id ", studentId);
-    const student = this.authService.getUserById(studentId);
-    return student;
+    const { userId } = feedback;
+    const user = this.authService.getUserById(userId);
+    return user;
   } 
 
   @ResolveField('tutor', () => Tutor, {
-    description: 'Full Student  information, based on studentId',
+    description: 'Full Tutor information, based on tutorId',
   })
   async getTutor(
     @Parent() feedback: Feedback,
