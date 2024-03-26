@@ -1,7 +1,6 @@
 import { Controller, Get, Post, Body, Param } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
 import {
-  ClassCategoryDto,
   ClassCategoryInsertDto,
   LevelDto,
   SubjectDto,
@@ -16,21 +15,21 @@ export class ClassCategoryController {
   @Get()
   @ApiOperation({ summary: 'Get all class categories' })
   @ApiResponse({ status: 200, description: 'Returns all class categories' })
-  getAll(): Promise<ClassCategoryDto[]> {
+  getAll() {
     return this.classCategoryService.findAll();
   }
 
   @Get('subjects')
   @ApiOperation({ summary: 'Get all subjects' })
   @ApiResponse({ status: 200, description: 'Returns all subjects' })
-  getAllSubjects(): Promise<SubjectDto[]> {
+  getAllSubjects() {
     return this.classCategoryService.findAllSubjects();
   }
 
   @Get('levels')
   @ApiOperation({ summary: 'Get all levels' })
   @ApiResponse({ status: 200, description: 'Returns all levels' })
-  getAllLevels(): Promise<LevelDto[]> {
+  getAllLevels() {
     return this.classCategoryService.findAllLevels();
   }
 
@@ -72,7 +71,7 @@ export class ClassCategoryController {
     status: 201,
     description: 'Returns the created class category',
   })
-  insert(@Body() dto: ClassCategoryInsertDto): Promise<ClassCategoryDto> {
+  insert(@Body() dto: ClassCategoryInsertDto) {
     return this.classCategoryService.insert(dto.level, dto.subject);
   }
 }

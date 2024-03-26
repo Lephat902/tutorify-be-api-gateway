@@ -7,6 +7,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
 import { QueueNames } from '@tutorify/shared';
 import { Resolvers } from './resolvers';
 import { UserPreferencesModule } from 'src/user-preferences/user-preferences.module';
+import { ClassCategoryModule } from 'src/class-category/class-category.module';
 
 @Global()
 @Module({
@@ -36,6 +37,7 @@ import { UserPreferencesModule } from 'src/user-preferences/user-preferences.mod
       },
     ]),
     UserPreferencesModule,
+    ClassCategoryModule,
   ],
   controllers: [AuthController],
   providers: [AuthService, ...Resolvers],
