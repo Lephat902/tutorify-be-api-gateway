@@ -10,9 +10,10 @@ import { TokenRequirements, Token } from 'src/auth/decorators';
 import { IAccessToken, TokenType } from 'src/auth/auth.interfaces';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { TokenGuard } from 'src/auth/guards';
-import { ClassService } from 'src/class/class.service';
-import { UserRole } from '@tutorify/shared';
+import { ApplicationStatus, UserRole } from '@tutorify/shared';
 import { TutorApplyForClass } from './models';
+import { ProcessApplicationDto } from './dtos';
+import { Builder } from 'builder-pattern';
 
 @Controller('classes')
 @ApiTags('Class Application')
@@ -21,8 +22,7 @@ import { TutorApplyForClass } from './models';
 export class TutorApplyForClassController {
   constructor(
     private readonly tutorApplyForClassService: TutorApplyForClassService,
-    private readonly classService: ClassService,
-  ) {}
+  ) { }
 
   @ApiOperation({ summary: 'Tutor applies for a class by its id.' })
   @Post('/:classId/apply')
@@ -36,66 +36,53 @@ export class TutorApplyForClassController {
   }
 
   @ApiOperation({ summary: 'Tutor cancels an application by its id.' })
-  @Patch('/my/applications/:applicationId/cancel')
+  @Patch('/applications/:applicationId/cancel')
   @TokenRequirements(TokenType.CLIENT, [UserRole.TUTOR])
   async cancelApplication(
     @Token() token: IAccessToken,
     @Param('applicationId') applicationId: string,
   ) {
-    await this.tutorApplyForClassService.validateApplicationOwnership(
-      token,
-      applicationId,
-    );
-    await this.tutorApplyForClassService.cancelApplication(applicationId);
+    return this.processApplication(applicationId, ApplicationStatus.CANCELLED, token);
   }
 
   @ApiOperation({
     summary:
-      "Tutor accept an invite to teach a class, set all other pending applications' status to FILLED",
+      `Tutor accepts an invite to teach a class OR
+      Student approves an tutor application to his class,
+      set all other PENDING applications' status to FILLED`,
   })
-  @Patch('/my/applications/:applicationId/approve')
-  @TokenRequirements(TokenType.CLIENT, [UserRole.TUTOR])
+  @Patch('/applications/:applicationId/approve')
+  @TokenRequirements(TokenType.CLIENT, [UserRole.TUTOR, UserRole.STUDENT])
   async approveTutoringInvite(
     @Token() token: IAccessToken,
     @Param('applicationId') applicationId: string,
   ) {
-    await this.tutorApplyForClassService.validateApplicationOwnership(
-      token,
-      applicationId,
-    );
-    await this.tutorApplyForClassService.approveApplication(applicationId);
-  }
-
-  @ApiOperation({
-    summary: 'Student rejects an tutor application to his class.',
-  })
-  @Patch('/applications/:applicationId/reject')
-  @TokenRequirements(TokenType.CLIENT, [UserRole.STUDENT])
-  async rejectApplication(
-    @Token() token: IAccessToken,
-    @Param('applicationId') applicationId: string,
-  ) {
-    const applicationToReject =
-      await this.tutorApplyForClassService.getApplicationById(applicationId);
-    const classId = applicationToReject.classId;
-    await this.classService.assertClassOwnership(token, classId);
-    await this.tutorApplyForClassService.rejectApplication(applicationId);
+    return this.processApplication(applicationId, ApplicationStatus.APPROVED, token);
   }
 
   @ApiOperation({
     summary:
-      "Student approves an tutor application to his class, set all other pending applications' status to FILLED",
+      `Tutor rejects an tutoring invite OR
+      Student rejects an tutor application to his class.`,
   })
-  @Patch('/applications/:applicationId/approve')
-  @TokenRequirements(TokenType.CLIENT, [UserRole.STUDENT])
-  async approveApplication(
+  @Patch('/applications/:applicationId/reject')
+  @TokenRequirements(TokenType.CLIENT, [UserRole.TUTOR, UserRole.STUDENT])
+  async rejectApplication(
     @Token() token: IAccessToken,
     @Param('applicationId') applicationId: string,
   ) {
-    const applicationToApprove =
-      await this.tutorApplyForClassService.getApplicationById(applicationId);
-    const classId = applicationToApprove.classId;
-    await this.classService.assertClassOwnership(token, classId);
-    await this.tutorApplyForClassService.approveApplication(applicationId);
+    return this.processApplication(applicationId, ApplicationStatus.REJECTED, token);
+  }
+
+  private processApplication(applicationId: string, newStatus: ApplicationStatus, token: IAccessToken) {
+    const userRole = token.roles[0];
+    const processApplicationDto = Builder<ProcessApplicationDto>()
+      .applicationId(applicationId)
+      .newStatus(newStatus)
+      .userId(token.id)
+      .isStudent(userRole === UserRole.STUDENT)
+      .isTutor(userRole === UserRole.TUTOR)
+      .build();
+    return this.tutorApplyForClassService.processApplication(processApplicationDto);
   }
 }
