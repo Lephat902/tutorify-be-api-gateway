@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
-import { ClassCategoryDto, LevelDto, SubjectDto } from './dtos';
 import { QueueNames } from '@tutorify/shared';
+import { ClassCategory, Level, Subject } from './models';
 
 @Injectable()
 export class ClassCategoryService {
@@ -10,39 +10,45 @@ export class ClassCategoryService {
     @Inject(QueueNames.CLASS_AND_CATEGORY) private readonly client: ClientProxy,
   ) {}
 
-  findAll(): Promise<ClassCategoryDto[]> {
+  findAll(): Promise<ClassCategory[]> {
     return firstValueFrom(
-      this.client.send<ClassCategoryDto[]>({ cmd: 'get_all_categories' }, {}),
+      this.client.send<ClassCategory[]>({ cmd: 'get_all_categories' }, {}),
     );
   }
 
-  findAllSubjects(): Promise<SubjectDto[]> {
+  findWholeCategoryHierarchyByIds(ids: string[]): Promise<ClassCategory[]> {
     return firstValueFrom(
-      this.client.send<SubjectDto[]>({ cmd: 'get_all_subjects' }, {}),
+      this.client.send<ClassCategory[]>({ cmd: 'get_whole_category_hierarchy_by_ids' }, ids),
     );
   }
 
-  findAllLevels(): Promise<LevelDto[]> {
+  findAllSubjects(): Promise<Subject[]> {
     return firstValueFrom(
-      this.client.send<LevelDto[]>({ cmd: 'get_all_levels' }, {}),
+      this.client.send<Subject[]>({ cmd: 'get_all_subjects' }, {}),
     );
   }
 
-  findSubjectsByLevel(levelId: string): Promise<SubjectDto[]> {
+  findAllLevels(): Promise<Level[]> {
     return firstValueFrom(
-      this.client.send<SubjectDto[]>({ cmd: 'get_subjects_by_level' }, levelId),
+      this.client.send<Level[]>({ cmd: 'get_all_levels' }, {}),
     );
   }
 
-  findLevelsBySubject(subjectId: string): Promise<LevelDto[]> {
+  findSubjectsByLevel(levelId: string): Promise<Subject[]> {
     return firstValueFrom(
-      this.client.send<LevelDto[]>({ cmd: 'get_levels_by_subject' }, subjectId),
+      this.client.send<Subject[]>({ cmd: 'get_subjects_by_level' }, levelId),
     );
   }
 
-  insert(level: LevelDto, subject: SubjectDto): Promise<ClassCategoryDto> {
+  findLevelsBySubject(subjectId: string): Promise<Level[]> {
     return firstValueFrom(
-      this.client.send<ClassCategoryDto>(
+      this.client.send<Level[]>({ cmd: 'get_levels_by_subject' }, subjectId),
+    );
+  }
+
+  insert(level: Level, subject: Subject): Promise<ClassCategory> {
+    return firstValueFrom(
+      this.client.send<ClassCategory>(
         { cmd: 'insert_category' },
         { level, subject },
       ),
