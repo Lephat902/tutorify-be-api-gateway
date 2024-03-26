@@ -129,8 +129,7 @@ export class ClassResolver {
     @Parent() cl: Class,
   ) {
     const { wardId } = cl;
-    const wardHierarchy = this.addressService.getWardHierarchyById(wardId);
-    return wardHierarchy;
+    return this.addressService.getWardHierarchyById(wardId);
   }
 
   @ResolveField('nonCancelledClassSessionsCount', () => Number, {
