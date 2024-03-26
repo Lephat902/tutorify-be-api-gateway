@@ -9,6 +9,7 @@ import { TutorApplyForClassArgs } from 'src/tutor-apply-for-class/args';
 import { Token, TokenRequirements } from 'src/auth/decorators';
 import { IAccessToken, TokenType } from 'src/auth/auth.interfaces';
 import {
+  ClassStatus,
   SortingDirection,
   TutorApplyForClassOrderBy,
   UserRole,
@@ -35,7 +36,10 @@ export class ClassResolver {
 
   @Query(() => Class, { name: 'class', nullable: true })
   async getClassById(@Args('id') id: string) {
-    return this.classService.getClassById(id);
+    const cl = await this.classService.getClassById(id);
+    if (cl.status === ClassStatus.CANCELLED)
+      return null;
+    return cl;
   }
 
   @ResolveField('tutorApplications', () => [TutorApplyForClass], {
