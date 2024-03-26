@@ -100,16 +100,4 @@ export class ClassService {
 
     return cl;
   }
-
-  async assertTutorOfTheClass(token: IAccessToken, classId: string) {
-    const userId = token.id;
-    const userRole = token.roles[0];
-    const cl = await this.getClassById(classId);
-
-    if (userRole === UserRole.TUTOR && cl.tutorId !== userId) {
-      throw new ForbiddenException('You are not the tutor of this class');
-    }
-
-    return cl;
-  }
 }

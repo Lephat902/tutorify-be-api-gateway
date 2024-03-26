@@ -1,8 +1,7 @@
-import { ForbiddenException, Inject, Injectable } from '@nestjs/common';
-import { TutorApplyForClassCreateDto } from './dtos';
+import { Inject, Injectable } from '@nestjs/common';
+import { ProcessApplicationDto, TutorApplyForClassCreateDto } from './dtos';
 import { ClientProxy } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
-import { IAccessToken } from 'src/auth/auth.interfaces';
 import { QueueNames } from '@tutorify/shared';
 import { TutorApplyForClassArgs } from './args';
 import { TutorApplyForClass } from './models';
@@ -41,36 +40,9 @@ export class TutorApplyForClassService {
     );
   }
 
-  async cancelApplication(applicationId: string) {
+  async processApplication(processApplicationDto: ProcessApplicationDto) {
     return firstValueFrom(
-      this.client.send({ cmd: 'cancelTutorApplyForClass' }, applicationId),
+      this.client.send({ cmd: 'processApplication' }, processApplicationDto),
     );
-  }
-
-  async rejectApplication(applicationId: string) {
-    return firstValueFrom(
-      this.client.send({ cmd: 'rejectTutorApplyForClass' }, applicationId),
-    );
-  }
-
-  async approveApplication(applicationId: string) {
-    return firstValueFrom(
-      this.client.send({ cmd: 'approveTutorApplyForClass' }, applicationId),
-    );
-  }
-
-  async validateApplicationOwnership(
-    token: IAccessToken,
-    applicationId: string,
-  ) {
-    const userId = token.id;
-    const application = await this.getApplicationById(applicationId);
-    if (application.tutorId !== userId) {
-      throw new ForbiddenException(
-        'You are not the owner of this application.',
-      );
-    }
-
-    return application;
   }
 }
