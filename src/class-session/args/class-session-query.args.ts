@@ -34,13 +34,6 @@ export class ClassSessionQueryArgs extends IntersectionType(
   classId: string;
 
   @IsOptional()
-  @Field({
-    nullable: true,
-    description: 'Display cancelled class session or not (both by default)',
-  })
-  isCancelled: boolean;
-
-  @IsOptional()
   @Field(() => ClassSessionOrderBy, {
     nullable: true,
     description: 'The sorting attribute',
