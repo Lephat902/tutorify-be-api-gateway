@@ -16,7 +16,10 @@ export class ClassSessionResolver {
     private readonly addressService: AddressService,
   ) { }
 
-  @Query(() => ClassSession, { name: 'classSession' })
+  @Query(() => ClassSession, { 
+    name: 'classSession',
+    nullable: true,
+  })
   @TokenRequirements(TokenType.CLIENT, [])
   async getClassSessionById(
     @Args('id') id: string,
