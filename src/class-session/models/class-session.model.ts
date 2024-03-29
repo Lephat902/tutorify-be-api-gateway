@@ -59,6 +59,9 @@ export class ClassSession {
   @Field()
   tutorFeedback: string;
 
+  @Field({ nullable: true })
+  feedbackUpdatedAt: Date;
+
   @Field(() => ClassSessionStatus)
   status: ClassSessionStatus;
 }
