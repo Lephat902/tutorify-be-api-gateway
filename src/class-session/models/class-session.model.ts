@@ -7,12 +7,24 @@ registerEnumType(ClassSessionStatus, {
 });
 
 @ObjectType()
+export class ShortClass {
+  @Field(() => ID)
+  classId: string;
+
+  @Field()
+  studentId: string;
+
+  @Field()
+  tutorId: string;
+}
+
+@ObjectType()
 export class ClassSession {
   @Field(() => ID)
   id: string;
 
   @Field()
-  classId: string;
+  class: ShortClass;
 
   @Field({ nullable: true })
   description: string;

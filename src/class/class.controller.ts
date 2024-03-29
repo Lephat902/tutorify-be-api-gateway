@@ -31,7 +31,8 @@ export class ClassController {
     @Body() classData: ClassCreateDto,
   ) {
     const studentId = token.id;
-    return this.classService.addClass(studentId, classData);
+    classData.studentId = studentId;
+    return this.classService.addClass(classData);
   }
 
   @ApiOperation({ summary: 'Student removes a class requirement.' })

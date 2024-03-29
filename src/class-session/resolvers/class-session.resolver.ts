@@ -5,6 +5,8 @@ import { ClassSessionService } from '../class-session.service';
 import { ClassSession } from '../models';
 import { AddressService } from 'src/address/address.service';
 import { Ward } from 'src/address/models';
+import { IAccessToken, TokenType } from 'src/auth/auth.interfaces';
+import { Token, TokenRequirements } from 'src/auth/decorators';
 
 @Resolver(() => ClassSession)
 @UseGuards(TokenGuard)
@@ -15,8 +17,15 @@ export class ClassSessionResolver {
   ) { }
 
   @Query(() => ClassSession, { name: 'classSession' })
-  async getClassSessionById(@Args('id') id: string) {
-    return this.classSessionService.getClassSessionById(id);
+  @TokenRequirements(TokenType.CLIENT, [])
+  async getClassSessionById(
+    @Args('id') id: string,
+    @Token() token: IAccessToken,
+  ) {
+    return this.classSessionService.getClassSessionById(id, {
+      userId: token.id,
+      userRole: token.roles[0],
+    });
   }
 
   @ResolveField('ward', () => Ward, {
