@@ -140,22 +140,32 @@ export class ClassResolver {
     nullable: true,
     description: 'Total number of class sessions of this class, excluding cancelled sessions',
   })
+  @TokenRequirements(TokenType.CLIENT, [])
   async getNonCancelledClassSessionsCount(
     @Parent() cl: Class,
+    @Token() token: IAccessToken,
   ) {
     const { id } = cl;
-    return this.classSessionService.getNonCancelledClassSessionsCount(id);
+    return this.classSessionService.getNonCancelledClassSessionsCount(id, {
+      userId: token.id,
+      userRole: token.roles[0]
+    });
   }
 
   @ResolveField('scheduledClassSessionsCount', () => Number, {
     nullable: true,
     description: 'Total number of upcoming class sessions of this class, excluding cancelled sessions',
   })
+  @TokenRequirements(TokenType.CLIENT, [])
   async getScheduledClassSessionsCount(
     @Parent() cl: Class,
+    @Token() token: IAccessToken,
   ) {
     const { id } = cl;
-    return this.classSessionService.getScheduledClassSessionsCount(id);
+    return this.classSessionService.getScheduledClassSessionsCount(id, {
+      userId: token.id,
+      userRole: token.roles[0]
+    });
   }
 
   private checkTutorViewPermission(cl: Class, token: IAccessToken) {

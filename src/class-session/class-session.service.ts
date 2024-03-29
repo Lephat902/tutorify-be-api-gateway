@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { ClassSessionCreateDto, ClassSessionUpdateDto } from './dtos';
 import { ClientProxy } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
-import { QueueNames } from '@tutorify/shared';
+import { QueueNames, UserMakeRequest } from '@tutorify/shared';
 import { ClassSessionQueryArgs } from './args';
 import { ClassSession, ClassSessionPaginatedResults } from './models';
 
@@ -71,21 +71,39 @@ export class ClassSessionService {
     );
   }
 
-  async getClassSessionById(classSessionId: string): Promise<ClassSession> {
+  async getClassSessionById(
+    classSessionId: string,
+    userMakeRequest: UserMakeRequest,
+  ): Promise<ClassSession> {
     return firstValueFrom(
-      this.client.send({ cmd: 'getClassSessionById' }, classSessionId),
+      this.client.send({ cmd: 'getClassSessionById' }, {
+        classSessionId,
+        userMakeRequest,
+      }),
     );
   }
 
-  async getNonCancelledClassSessionsCount(classId: string): Promise<number> {
+  async getNonCancelledClassSessionsCount(
+    classId: string,
+    userMakeRequest: UserMakeRequest,
+  ): Promise<number> {
     return firstValueFrom(
-      this.client.send({ cmd: 'getNonCancelledClassSessionsCount' }, classId),
+      this.client.send({ cmd: 'getNonCancelledClassSessionsCount' }, {
+        classId,
+        userMakeRequest,
+      }),
     );
   }
 
-  async getScheduledClassSessionsCount(classId: string): Promise<number> {
+  async getScheduledClassSessionsCount(
+    classId: string,
+    userMakeRequest: UserMakeRequest,
+  ): Promise<number> {
     return firstValueFrom(
-      this.client.send({ cmd: 'getScheduledClassSessionsCount' }, classId),
+      this.client.send({ cmd: 'getScheduledClassSessionsCount' }, {
+        classId,
+        userMakeRequest,
+      }),
     );
   }
 }

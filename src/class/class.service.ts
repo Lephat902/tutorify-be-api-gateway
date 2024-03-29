@@ -18,17 +18,10 @@ export class ClassService {
   ) { }
 
   async addClass(
-    studentId: string,
     classData: ClassCreateDto,
   ) {
     return firstValueFrom(
-      this.client.send(
-        { cmd: 'addClass' },
-        {
-          studentId,
-          classData,
-        },
-      ),
+      this.client.send({ cmd: 'addClass' }, classData),
     );
   }
 

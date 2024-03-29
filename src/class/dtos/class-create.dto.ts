@@ -9,7 +9,7 @@ import {
   ArrayNotEmpty,
   IsArray,
 } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 import { GenderPref, TutorPositionPref } from '@tutorify/shared';
 import { ClassTimeSlotDto } from './class-timeslot.dto';
 import { Type } from 'class-transformer';
@@ -22,6 +22,9 @@ exampleStartDate.setHours(0, 0, 0, 0);
 exampleEndDate.setHours(0, 0, 0, 0);
 
 export class ClassCreateDto {
+  @ApiHideProperty()
+  studentId: string;
+
   @ApiProperty({
     description: 'The categories associated with the class',
     type: () => [String],
