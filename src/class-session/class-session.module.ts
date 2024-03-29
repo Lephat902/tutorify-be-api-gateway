@@ -6,6 +6,7 @@ import { ClassSessionService } from './class-session.service';
 import { QueueNames } from '@tutorify/shared';
 import { ClassModule } from 'src/class/class.module';
 import { Resolvers } from './resolvers';
+import { AddressModule } from 'src/address/address.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { Resolvers } from './resolvers';
       },
     ]),
     forwardRef(() => ClassModule),
+    AddressModule,
   ],
   controllers: [ClassSessionController],
   providers: [ClassSessionService, ...Resolvers],
