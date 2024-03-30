@@ -1,11 +1,6 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { ObjectType } from '@nestjs/graphql';
 import { Class } from './class.model';
+import { PaginatedResults } from 'src/common/graphql';
 
 @ObjectType()
-export class ClassPaginatedResults {
-  @Field()
-  totalCount: number;
-
-  @Field(() => [Class])
-  results: Class[];
-}
+export class ClassPaginatedResults extends PaginatedResults(Class) { }
