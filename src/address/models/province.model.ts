@@ -1,4 +1,4 @@
-import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Field, HideField, ID, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
 export class Province {
@@ -7,4 +7,7 @@ export class Province {
 
   @Field()
   readonly name: string;
+
+  @HideField()
+  readonly administrativeUnitId: number;
 }

@@ -1,6 +1,7 @@
-import { Resolver, Query, Args } from '@nestjs/graphql';
+import { Resolver, Query, Args, ResolveField, Parent } from '@nestjs/graphql';
 import { District } from '../models';
 import { AddressService } from '../address.service';
+import { administrativeUnitsMap } from '../constants';
 
 @Resolver(() => District)
 export class DistrictResolver {
@@ -9,7 +10,31 @@ export class DistrictResolver {
   ) {}
 
   @Query(() => [District], { name: 'districts' })
-  async getAllDistricts(@Args('provinceCode') provinceCode: string) {
-    return this.addressService.getAllDistricts(provinceCode);
+  async getAllDistricts(@Args('districtCode') districtCode: string) {
+    return this.addressService.getAllDistricts(districtCode);
+  }
+
+  @ResolveField('nameWithShortAdministrativeUnitVi', () => String, {
+    nullable: true,
+    description: 'Get district name with short Vietnamese adminstrative unit, such as Quận 01',
+  })
+  async getDistrictWithAdministrativeUnitShortNameVi(
+    @Parent() district: District,
+  ) {
+    const { administrativeUnitId, name } = district;
+    const administrativeUnitShortNameVi = administrativeUnitsMap.get(administrativeUnitId).shortName;
+    return `${administrativeUnitShortNameVi} ${name}`;
+  }
+
+  @ResolveField('nameWithShortAdministrativeUnitEn', () => String, {
+    nullable: true,
+    description: 'Get district name with short English adminstrative unit, such as District 01',
+  })
+  async getDistrictWithAdministrativeUnitShortNameEn(
+    @Parent() district: District,
+  ) {
+    const { administrativeUnitId, name } = district;
+    const administrativeUnitShortNameEn = administrativeUnitsMap.get(administrativeUnitId).shortNameEn;
+    return `${administrativeUnitShortNameEn} ${name}`;
   }
 }
