@@ -3,8 +3,8 @@ import { ClassSessionCreateDto, ClassSessionUpdateDto } from './dtos';
 import { ClientProxy } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
 import { QueueNames, UserMakeRequest } from '@tutorify/shared';
-import { ClassSessionQueryArgs } from './args';
-import { ClassSession, ClassSessionPaginatedResults } from './models';
+import { ClassQueryArgs, ClassSessionQueryArgs } from './args';
+import { ClassSession, ClassSessionPaginatedResults, ShortClass } from './models';
 
 @Injectable()
 export class ClassSessionService {
@@ -68,6 +68,17 @@ export class ClassSessionService {
   ): Promise<ClassSessionPaginatedResults> {
     return firstValueFrom(
       this.client.send({ cmd: 'getClassSessionsAndTotalCount' }, filters),
+    );
+  }
+
+  async getUpcomingClasses(
+    filters: ClassQueryArgs,
+  ): Promise<{
+    results: ShortClass[],
+    totalCount: number,
+  }> {
+    return firstValueFrom(
+      this.client.send({ cmd: 'getUpcomingClasses' }, filters),
     );
   }
 
