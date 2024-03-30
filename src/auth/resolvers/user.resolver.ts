@@ -26,7 +26,9 @@ export class UserResolver {
 
   @Query(() => User, { name: 'user' })
   async getUser(@Args('id') id: string): Promise<(Admin | Manager | Student | Tutor)> {
-    return this.authService.getUserById(id);
+    const user = await this.authService.getUserById(id);
+
+    return user;
   }
 
   @ResolveField('ward', () => Ward, {

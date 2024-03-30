@@ -1,6 +1,7 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { User } from './user.model';
 import { FileObject } from 'src/common/graphql';
+import { SocialProfile } from './social-profile.model';
 
 @ObjectType({ implements: User })
 export class Tutor extends User {
@@ -31,8 +32,8 @@ export class Tutor extends User {
   @Field(() => [FileObject])
   tutorPortfolios: FileObject[];
 
-  @Field(() => [String])
-  socialProfiles: string[];
+  @Field(() => [SocialProfile], {nullable: true})
+  socialProfiles: SocialProfile[];
 
   @Field({ nullable: true })
   numOfClasses: number;
