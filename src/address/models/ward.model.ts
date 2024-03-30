@@ -1,4 +1,4 @@
-import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Field, HideField, ID, ObjectType } from '@nestjs/graphql';
 import { District } from './district.model';
 
 @ObjectType()
@@ -8,6 +8,9 @@ export class Ward {
 
   @Field()
   readonly name: string;
+
+  @HideField()
+  readonly administrativeUnitId: number;
 
   @Field(() => District)
   readonly district: District;
