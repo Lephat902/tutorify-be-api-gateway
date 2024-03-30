@@ -1,7 +1,7 @@
 import { Resolver, ResolveField, Parent } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { TokenGuard } from 'src/auth/guards';
-import { ClassSession } from '../models';
+import { ClassSession, ShortClass } from '../models';
 import { ClassService } from 'src/class/class.service';
 import { AuthService } from 'src/auth/auth.service';
 import { Class } from 'src/class/models';
@@ -9,7 +9,7 @@ import { Student } from 'src/auth/models';
 import { TutorQueryService } from 'src/tutor-query/tutor-query.service';
 import { TutorQuery } from 'src/tutor-query/models';
 
-@Resolver(() => ClassSession)
+@Resolver(() => ShortClass)
 @UseGuards(TokenGuard)
 export class ShortClassResolver {
   constructor(
