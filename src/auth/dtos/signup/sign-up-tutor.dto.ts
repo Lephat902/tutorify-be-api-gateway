@@ -1,7 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsInt, IsOptional, IsString } from 'class-validator';
+import { IsInt, IsOptional, IsString, IsArray, ValidateNested } from 'class-validator';
 import { SignUpDto } from './sign-up-base-user.dto';
 import { Transform, Type } from 'class-transformer';
+import { SocialProfile } from './social-profile.dto';
 
 export class SignUpTutorDto extends SignUpDto {
   @ApiProperty({
@@ -84,15 +85,12 @@ export class SignUpTutorDto extends SignUpDto {
 
   @ApiProperty({
     description: 'Social Media Profiles of the tutor',
-    type: 'array',
-    items: { type: 'string' },
+    type: [SocialProfile],
     required: false,
     example: [
-      'https://www.facebook.com/tran.thanh.ne',
-      'https://www.facebook.com/groups/elonmusk1',
+      new SocialProfile('facebook', 'https://www.facebook.com/groups/elonmusk1')
     ],
   })
-  @Transform(({ value }) => value.split(','))
   @IsOptional()
-  public readonly socialProfiles: string[];
+  public readonly socialProfiles: SocialProfile[];
 }

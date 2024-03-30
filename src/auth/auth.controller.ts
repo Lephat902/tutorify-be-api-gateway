@@ -37,6 +37,7 @@ import {
 import { UserRole } from '@tutorify/shared';
 import { validateAvatar, validatePortfolios } from './helpers';
 import { UpdateDto, UpdateStudentDto, UpdateTutorDto } from './dtos/update';
+import { ParseSocialProfilesInTutorSignUpDtoPipe } from '../pipes';
 
 @Controller()
 @ApiTags('authentication')
@@ -79,7 +80,7 @@ export class AuthController {
   @ApiConsumes('multipart/form-data')
   @ApiOperation({ summary: 'Sign up a new tutor.' })
   public async signUpTutor(
-    @Body() signupTutorDto: SignUpTutorDto,
+    @Body(new ParseSocialProfilesInTutorSignUpDtoPipe()) signupTutorDto: SignUpTutorDto,
     @UploadedFiles()
     files?: {
       avatar?: Express.Multer.File[];
@@ -140,7 +141,7 @@ export class AuthController {
   @TokenRequirements(TokenType.CLIENT, [UserRole.TUTOR])
   @ApiBearerAuth()
   public async updateTutor(
-    @Body() updateTutorDto: UpdateTutorDto,
+    @Body(new ParseSocialProfilesInTutorSignUpDtoPipe()) updateTutorDto: UpdateTutorDto,
     @Token() token: IAccessToken,
     @UploadedFiles()
     files?: {
