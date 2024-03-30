@@ -1,11 +1,6 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { ObjectType } from '@nestjs/graphql';
 import { Feedback } from './feedback.model';
+import { PaginatedResults } from 'src/common/graphql';
 
 @ObjectType()
-export class FeedbackQueryPaginatedResults {
-  @Field()
-  totalCount: number;
-
-  @Field(() => [Feedback])
-  results: Feedback[];
-}
+export class FeedbackQueryPaginatedResults extends PaginatedResults(Feedback) { }

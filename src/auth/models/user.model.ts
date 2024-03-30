@@ -28,7 +28,7 @@ registerEnumType(UserRole, {
     }
   },
 })
-export abstract class User {
+export class User {
   @Field(() => ID)
   id: string;
 

@@ -1,7 +1,7 @@
 import { Resolver, ResolveField, Parent } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { TokenGuard } from 'src/auth/guards';
-import { ClassSession, ShortClass } from '../models';
+import { ShortClass } from '../models';
 import { ClassService } from 'src/class/class.service';
 import { AuthService } from 'src/auth/auth.service';
 import { Class } from 'src/class/models';
@@ -23,9 +23,9 @@ export class ShortClassResolver {
     description: 'Full class information, based on classId',
   })
   async getClass(
-    @Parent() classSession: ClassSession,
+    @Parent() shortClass: ShortClass,
   ) {
-    const classId = classSession.class.classId;
+    const classId = shortClass.classId;
     return this.classService.getClassById(classId);
   }
 
@@ -34,9 +34,9 @@ export class ShortClassResolver {
     description: 'Full student information, based on studentId',
   })
   async getStudent(
-    @Parent() classSession: ClassSession,
+    @Parent() shortClass: ShortClass,
   ) {
-    const studentId = classSession.class.studentId;
+    const studentId = shortClass.studentId;
     return this.authService.getUserById(studentId);
   }
 
@@ -45,9 +45,9 @@ export class ShortClassResolver {
     description: 'Full tutor information, based on tutorId',
   })
   async getTutor(
-    @Parent() classSession: ClassSession,
+    @Parent() shortClass: ShortClass,
   ) {
-    const tutorId = classSession.class.tutorId;
+    const tutorId = shortClass.tutorId;
     return this.tutorQueryService.getTutorById(tutorId);
   }
 }
