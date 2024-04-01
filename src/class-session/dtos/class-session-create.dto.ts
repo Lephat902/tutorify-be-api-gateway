@@ -19,6 +19,7 @@ import {
   ToStartOfDay,
 } from 'src/common/decorators';
 import { ClassTimeSlotDto } from 'src/class/dtos/class-timeslot.dto';
+import { FileObject } from 'src/common/dtos';
 
 const today = new Date();
 const dayAfterToday14Days = new Date();
@@ -127,14 +128,15 @@ export class ClassSessionCreateDto {
   @ToBoolean()
   isOnline: boolean;
 
-  // Any validation here has no effect for File type, this line just facilitates uploading file in swagger-ui
+  @IsOptional()
   @ApiProperty({
-    description:
-      'Array of files associated with the FIRST class session, if any.',
-    type: 'array',
-    items: { type: 'string', format: 'binary' },
+    description: 'Array of files associated with the FIRST class session, if any.',
+    type: [FileObject],
     required: false,
   })
-  @IsOptional()
-  files?: Array<Express.Multer.File>;
+  @IsArray()
+  @IsNotEmpty({ each: true })
+  @ValidateNested({ each: true })
+  @Type(() => FileObject)
+  materials: FileObject[];
 }

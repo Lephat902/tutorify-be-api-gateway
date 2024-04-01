@@ -2,6 +2,9 @@ import {
   IsString,
   IsOptional,
   IsBoolean,
+  ValidateNested,
+  IsArray,
+  IsNotEmpty,
 } from 'class-validator';
 import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
@@ -9,6 +12,7 @@ import {
   IsDateGreaterThanToday,
   ToBoolean,
 } from 'src/common/decorators';
+import { FileObject } from 'src/common/dtos';
 
 const today = new Date();
 const dateTimeAfter1Hour = new Date();
@@ -86,16 +90,17 @@ export class ClassSessionUpdateDto {
   @ToBoolean()
   isOnline: boolean;
 
-  // Any validation here has no effect for File type, this line just facilitates uploading file in swagger-ui
+  @IsOptional()
   @ApiProperty({
-    description:
-      'Array of files associated with the FIRST class session, if any.',
-    type: 'array',
-    items: { type: 'string', format: 'binary' },
+    description: 'Array of files associated with the FIRST class session, if any.',
+    type: [FileObject],
     required: false,
   })
-  @IsOptional()
-  files?: Array<Express.Multer.File>;
+  @IsArray()
+  @IsNotEmpty({ each: true })
+  @ValidateNested({ each: true })
+  @Type(() => FileObject)
+  materials: FileObject[];
 
   @ApiProperty({
     description: 'The summary feedback of the tutor to the session',

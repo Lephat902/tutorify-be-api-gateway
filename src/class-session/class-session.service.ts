@@ -46,23 +46,6 @@ export class ClassSessionService {
     );
   }
 
-  async deleteSingleMaterial(
-    tutorId: string,
-    classSessionId: string,
-    materialId: string,
-  ) {
-    return firstValueFrom(
-      this.client.send(
-        { cmd: 'deleteSingleMaterial' },
-        {
-          tutorId,
-          classSessionId,
-          materialId,
-        },
-      ),
-    );
-  }
-
   async getClassSessionsAndTotalCount(
     filters: ClassSessionQueryArgs,
   ): Promise<ClassSessionPaginatedResults> {

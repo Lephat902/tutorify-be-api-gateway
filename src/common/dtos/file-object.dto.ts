@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty, IsNumber, IsString, IsUrl } from "class-validator";
+import { IsNotEmpty, IsNumber, IsString } from "class-validator";
 
 export class FileObject {
     @ApiProperty({
@@ -18,7 +18,6 @@ export class FileObject {
     })
     @IsNotEmpty()
     @IsString()
-    @IsUrl()
     readonly url: string;
 
     @ApiProperty({
