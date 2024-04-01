@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 import {
   IsEmail,
   IsEnum,
@@ -9,10 +9,18 @@ import {
   ValidateIf,
   Matches, 
   Length,
+  ValidateNested,
+  IsObject,
+  IsNotEmptyObject,
 } from 'class-validator';
-import { Gender } from '@tutorify/shared';
+import { Gender, UserRole } from '@tutorify/shared';
+import { FileObject } from 'src/common/dtos';
+import { Type } from 'class-transformer';
 
 export class SignUpDto {
+  @ApiHideProperty()
+  public role: UserRole;
+
   @ApiProperty({
     description: 'User email',
     example: 'test@test.com',
@@ -109,8 +117,15 @@ export class SignUpDto {
   @IsString()
   public readonly lastName: string;
 
-  // Any validation here has no effect for File type, this line just facilitates uploading file in swagger-ui
-  @ApiProperty({ type: 'string', format: 'binary', required: false })
   @IsOptional()
-  public readonly avatar?: Express.Multer.File;
+  @ApiProperty({
+    description: 'Avatar of the user',
+    type: FileObject,
+    required: false,
+  })
+  @IsNotEmptyObject()
+  @IsObject()
+  @ValidateNested()
+  @Type(() => FileObject)
+  public readonly avatar: FileObject;
 }
