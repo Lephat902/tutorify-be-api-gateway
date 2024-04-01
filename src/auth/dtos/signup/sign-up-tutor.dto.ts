@@ -1,8 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsInt, IsOptional, IsString, IsArray, ValidateNested } from 'class-validator';
+import { IsInt, IsOptional, IsString, IsArray, ValidateNested, IsNotEmpty } from 'class-validator';
 import { SignUpDto } from './sign-up-base-user.dto';
-import { Transform, Type } from 'class-transformer';
+import { Type } from 'class-transformer';
 import { SocialProfile } from './social-profile.dto';
+import { FileObject } from 'src/common/dtos';
 
 export class SignUpTutorDto extends SignUpDto {
   @ApiProperty({
@@ -57,7 +58,6 @@ export class SignUpTutorDto extends SignUpDto {
   })
   @IsOptional()
   @IsInt()
-  @Type(() => Number)
   public readonly graduationYear: number;
 
   @IsOptional()
@@ -71,26 +71,29 @@ export class SignUpTutorDto extends SignUpDto {
       '83bdcea4-c6bf-4e7a-a9e0-d0894f5841bb',
     ],
   })
-  @Transform(({ value }) => value.split(','))
   public readonly proficienciesIds: string[];
 
-  // Any validation here has no effect for File type, this line just facilitates uploading file in swagger-ui
+  @IsOptional()
   @ApiProperty({
-    type: 'array',
-    items: { type: 'string', format: 'binary' },
+    description: 'List of File Object of portfolios',
+    type: [FileObject],
     required: false,
   })
-  @IsOptional()
-  public readonly portfolios?: Array<Express.Multer.File>;
+  @IsArray()
+  @IsNotEmpty({ each: true })
+  @ValidateNested({ each: true })
+  @Type(() => FileObject)
+  public readonly portfolios?: FileObject[];
 
+  @IsOptional()
   @ApiProperty({
     description: 'Social Media Profiles of the tutor',
     type: [SocialProfile],
     required: false,
-    example: [
-      new SocialProfile('facebook', 'https://www.facebook.com/groups/elonmusk1')
-    ],
   })
-  @IsOptional()
+  @IsArray()
+  @IsNotEmpty({ each: true })
+  @ValidateNested({ each: true })
+  @Type(() => SocialProfile)
   public readonly socialProfiles: SocialProfile[];
 }
