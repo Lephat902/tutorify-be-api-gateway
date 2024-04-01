@@ -16,6 +16,7 @@ import { DateScalar } from './common/graphql';
 import { UserPreferencesModule } from './user-preferences/user-preferences.module';
 import { ReportModule } from './report/report.module';
 import { GraphQLError, GraphQLFormattedError } from 'graphql';
+import { FileModule } from './file/file.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { GraphQLError, GraphQLFormattedError } from 'graphql';
     AddressModule,
     ClassSessionModule,
     ReportModule,
+    FileModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: ['.env', '.env.example'],
