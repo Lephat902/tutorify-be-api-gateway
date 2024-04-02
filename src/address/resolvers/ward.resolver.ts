@@ -17,6 +17,7 @@ export class WardResolver {
   @ResolveField('nameWithShortAdministrativeUnitVi', () => String, {
     nullable: true,
     description: 'Get ward name with short Vietnamese adminstrative unit, such as Phường 02',
+    deprecationReason: "fullName available"
   })
   async getWardWithAdministrativeUnitShortNameVi(
     @Parent() ward: Ward,
@@ -29,6 +30,7 @@ export class WardResolver {
   @ResolveField('nameWithShortAdministrativeUnitEn', () => String, {
     nullable: true,
     description: 'Get ward name with short English adminstrative unit, such as Ward 02',
+    deprecationReason: "fullName available"
   })
   async getWardWithAdministrativeUnitShortNameEn(
     @Parent() ward: Ward,
