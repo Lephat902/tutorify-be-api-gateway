@@ -136,6 +136,25 @@ export class ClassResolver {
     return this.addressService.getWardHierarchyById(wardId);
   }
 
+  @ResolveField('googleMapAddress', () => String, {
+    nullable: true,
+    description: 'Google Maps URL',
+  })
+  async getGoogleMapAddress(
+    @Parent() cl: Class,
+  ) {
+    const { location } = cl;
+    console.log(location);
+    if (!location?.coordinates?.length) {
+      return null;
+    }
+    // Geometry: longitude first, then latitude
+    const lon = location.coordinates[0];
+    const lat = location.coordinates[1];
+    // Google Maps: latitude first, then longitude
+    return `https://www.google.com/maps?q=${lat},${lon}`;
+  }
+
   @ResolveField('nonCancelledClassSessionsCount', () => Number, {
     nullable: true,
     description: 'Total number of class sessions of this class, excluding cancelled sessions',
