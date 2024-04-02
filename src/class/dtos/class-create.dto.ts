@@ -8,6 +8,8 @@ import {
   IsEnum,
   ArrayNotEmpty,
   IsArray,
+  ValidateIf,
+  ValidateNested,
 } from 'class-validator';
 import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 import { GenderPref, TutorPositionPref } from '@tutorify/shared';
@@ -35,6 +37,7 @@ export class ClassCreateDto {
   })
   @IsArray()
   @ArrayNotEmpty()
+  @IsNotEmpty({ each: true })
   classCategoryIds: string[];
 
   @ApiProperty({
@@ -146,6 +149,8 @@ export class ClassCreateDto {
   @IsArray()
   @ArrayNotEmpty()
   @IsNotEmpty({ each: true })
+  @ValidateNested({ each: true })
+  @Type(() => ClassTimeSlotDto)
   timeSlots: ClassTimeSlotDto[];
 
   @IsOptional()
@@ -157,6 +162,10 @@ export class ClassCreateDto {
       'd48f22f9-72db-4109-a7e6-3e32c2751a88',
     ],
   })
+  @ValidateIf((_object, value) => value !== undefined)
+  @IsArray()
+  @ArrayNotEmpty()
+  @IsNotEmpty({ each: true })
   desiredTutorIds?: string[];
 
   @ApiProperty({
