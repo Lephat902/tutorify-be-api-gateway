@@ -2,6 +2,7 @@ import { Field, HideField, ID, ObjectType, registerEnumType } from '@nestjs/grap
 import { ClassStatus, GenderPref, TutorPositionPref } from '@tutorify/shared';
 import { ClassTimeSlot } from './class-timeslot.model';
 import { ClassCategory } from 'src/class-category/models';
+import { StoredLocation } from 'src/common/dtos';
 
 registerEnumType(GenderPref, {
   name: 'GenderPref',
@@ -76,4 +77,7 @@ export class Class {
 
   @Field({ nullable: true })
   imgUrl: string;
+
+  @HideField()
+  location: StoredLocation;
 }
