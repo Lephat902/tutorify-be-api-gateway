@@ -8,10 +8,9 @@ import {
   IsInt,
   Max,
   ValidateNested,
-  isString,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { Transform, Type } from 'class-transformer';
+import { Type } from 'class-transformer';
 import {
   IsDateGreaterThanToday,
   IsDateWithinNDaysFromToday,
@@ -63,13 +62,7 @@ export class ClassSessionCreateDto {
   @ArrayNotEmpty()
   @IsNotEmpty({ each: true })
   @ValidateNested({ each: true })
-  @Transform(({ value }) => {
-    if (isString(value)) {
-      value = `[${value}]`;
-      const parsed = JSON.parse(value);
-      return parsed.map((item) => Object.assign(new ClassTimeSlotDto(), item));
-    }
-  })
+  @Type(() => ClassTimeSlotDto)
   timeSlots: ClassTimeSlotDto[];
 
   @ApiProperty({
