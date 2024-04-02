@@ -34,13 +34,4 @@ export class Tutor extends User {
 
   @Field(() => [SocialProfile], {nullable: true})
   socialProfiles: SocialProfile[];
-
-  @Field({ nullable: true })
-  numOfClasses: number;
-
-  @Field({ nullable: true })
-  feedbackCount: number;
-
-  @Field({ nullable: true })
-  totalFeedbackRating: number;
 }
