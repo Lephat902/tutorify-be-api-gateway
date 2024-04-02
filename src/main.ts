@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
-import { GlobalExceptionsFilter } from './global-exception-handler';
+import { GlobalExceptionFilter } from './global-exception-filter';
 
 async function bootstrap() {
   // Create Nest application instance
@@ -51,7 +51,7 @@ async function bootstrap() {
   });
 
   // Apply the custom exception filter globally
-  app.useGlobalFilters(new GlobalExceptionsFilter());
+  app.useGlobalFilters(new GlobalExceptionFilter());
 
   // Use helmet middleware for security headers
   app.use(
