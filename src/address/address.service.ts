@@ -60,11 +60,11 @@ export class AddressService {
     );
   }
 
-  async getGeoLocation(address: string, wardId: string) {
+  async getGeocodeFromAddressAndWardId(address: string, wardId: string) {
     return firstValueFrom(
-      this.client.send({ cmd: 'getGeoLocation' }, {
+      this.client.send({ cmd: 'getGeocodeFromAddressAndWardId' }, {
         address,
-        wardCode: wardId
+        wardId,
       }),
     );
   }

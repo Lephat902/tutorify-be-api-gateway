@@ -9,6 +9,15 @@ export class District {
   @Field()
   readonly name: string;
 
+  @Field()
+  readonly nameEn: string;
+
+  @Field()
+  readonly fullName: string;
+
+  @Field()
+  readonly fullNameEn: string;
+
   @HideField()
   readonly administrativeUnitId: number;
 

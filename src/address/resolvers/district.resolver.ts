@@ -17,6 +17,7 @@ export class DistrictResolver {
   @ResolveField('nameWithShortAdministrativeUnitVi', () => String, {
     nullable: true,
     description: 'Get district name with short Vietnamese adminstrative unit, such as Quận 01',
+    deprecationReason: "fullName available"
   })
   async getDistrictWithAdministrativeUnitShortNameVi(
     @Parent() district: District,
@@ -29,6 +30,7 @@ export class DistrictResolver {
   @ResolveField('nameWithShortAdministrativeUnitEn', () => String, {
     nullable: true,
     description: 'Get district name with short English adminstrative unit, such as District 01',
+    deprecationReason: "fullName available"
   })
   async getDistrictWithAdministrativeUnitShortNameEn(
     @Parent() district: District,

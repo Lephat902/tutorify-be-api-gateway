@@ -63,10 +63,10 @@ export class AddressController {
 
   @ApiOperation({ summary: 'Get geo-coded location of an address.' })
   @Get('geolocation')
-  async getGeoLocation(
+  async getGeocodeFromAddressAndWardId(
     @Query('address') address: string,
     @Query('wardId') wardId: string,
   ) {
-    return this.addressService.getGeoLocation(address, wardId);
+    return this.addressService.getGeocodeFromAddressAndWardId(address, wardId);
   }
 }

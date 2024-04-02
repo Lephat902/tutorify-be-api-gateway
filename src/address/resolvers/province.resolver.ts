@@ -17,6 +17,7 @@ export class ProvinceResolver {
   @ResolveField('nameWithShortAdministrativeUnitVi', () => String, {
     nullable: true,
     description: 'Get province name with short Vietnamese adminstrative unit, such as Thành phố Thủ Đức',
+    deprecationReason: "fullName available"
   })
   async getProvinceWithAdministrativeUnitShortNameVi(
     @Parent() province: Province,
@@ -29,6 +30,7 @@ export class ProvinceResolver {
   @ResolveField('nameWithShortAdministrativeUnitEn', () => String, {
     nullable: true,
     description: 'Get province name with short English adminstrative unit, such as Thủ Đức City',
+    deprecationReason: "fullName available"
   })
   async getProvinceWithAdministrativeUnitShortNameEn(
     @Parent() province: Province,
