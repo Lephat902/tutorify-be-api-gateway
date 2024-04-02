@@ -1,8 +1,7 @@
 import { Field, HideField, ID, ObjectType, registerEnumType } from '@nestjs/graphql';
-import { ClassStatus, GenderPref, TutorPositionPref } from '@tutorify/shared';
+import { ClassStatus, GenderPref, StoredLocation, TutorPositionPref } from '@tutorify/shared';
 import { ClassTimeSlot } from './class-timeslot.model';
 import { ClassCategory } from 'src/class-category/models';
-import { StoredLocation } from 'src/common/dtos';
 
 registerEnumType(GenderPref, {
   name: 'GenderPref',

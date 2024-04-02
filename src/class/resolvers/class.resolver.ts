@@ -144,7 +144,6 @@ export class ClassResolver {
     @Parent() cl: Class,
   ) {
     const { location } = cl;
-    console.log(location);
     if (!location?.coordinates?.length) {
       return null;
     }
