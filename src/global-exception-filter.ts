@@ -9,7 +9,7 @@ import { Response } from 'express';
 
 type HttpExceptionObjectResponse = {
   statusCode: number;
-  message: string;
+  message: string | string[];
   error: string;
 }
 
@@ -40,7 +40,16 @@ export class GlobalExceptionFilter implements ExceptionFilter {
 
   private handleHttpException(exception: HttpException, response: Response, status: number) {
     const errorResponse = exception.getResponse() as HttpExceptionObjectResponse | string;
-    const message = errorResponse instanceof Object ? errorResponse.message : [errorResponse];
+    let message: string[];
+    if (typeof errorResponse === 'string') {
+      message = [errorResponse];
+    } else {
+      // In this case, errorResponse is HttpExceptionObjectResponse
+      const messageInErrorResponseObj = errorResponse.message;
+      message = typeof messageInErrorResponseObj === 'string'
+        ? [messageInErrorResponseObj]
+        : messageInErrorResponseObj;
+    }
     response.status(status).json(message);
   }
 }
