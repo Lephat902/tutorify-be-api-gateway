@@ -74,6 +74,13 @@ export class ClassQueryArgs extends IntersectionType(
   })
   statuses: ClassStatus[];
 
+  @IsOptional()
+  @Field({
+    nullable: true,
+    description: 'Set to true if you want to narrow results to online classes, false for in-person classes',
+  })
+  isOnline: boolean;
+
   @HideField()
   userId: string;
 
