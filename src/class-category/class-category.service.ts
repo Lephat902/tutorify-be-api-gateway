@@ -3,6 +3,7 @@ import { ClientProxy } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
 import { QueueNames } from '@tutorify/shared';
 import { ClassCategory, Level, Subject } from './models';
+import { ClassCategoryQueryArgs } from './args';
 
 @Injectable()
 export class ClassCategoryService {
@@ -10,9 +11,10 @@ export class ClassCategoryService {
     @Inject(QueueNames.CLASS_AND_CATEGORY) private readonly client: ClientProxy,
   ) {}
 
-  findAll(): Promise<ClassCategory[]> {
+  findAll(classCategoryQueryArgs: ClassCategoryQueryArgs): Promise<ClassCategory[]> {
+    console.log(classCategoryQueryArgs);
     return firstValueFrom(
-      this.client.send<ClassCategory[]>({ cmd: 'get_all_categories' }, {}),
+      this.client.send<ClassCategory[]>({ cmd: 'get_all_categories' }, classCategoryQueryArgs),
     );
   }
 

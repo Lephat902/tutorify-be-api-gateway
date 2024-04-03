@@ -1,65 +1,12 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
-import {
-  ClassCategoryInsertDto,
-  LevelDto,
-  SubjectDto,
-} from './dtos';
+import { Controller, Post, Body } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ClassCategoryInsertDto } from './dtos';
 import { ClassCategoryService } from './class-category.service';
 
 @Controller('class-category')
 @ApiTags('Class Category')
 export class ClassCategoryController {
-  constructor(private readonly classCategoryService: ClassCategoryService) {}
-
-  @Get()
-  @ApiOperation({ summary: 'Get all class categories' })
-  @ApiResponse({ status: 200, description: 'Returns all class categories' })
-  getAll() {
-    return this.classCategoryService.findAll();
-  }
-
-  @Get('subjects')
-  @ApiOperation({ summary: 'Get all subjects' })
-  @ApiResponse({ status: 200, description: 'Returns all subjects' })
-  getAllSubjects() {
-    return this.classCategoryService.findAllSubjects();
-  }
-
-  @Get('levels')
-  @ApiOperation({ summary: 'Get all levels' })
-  @ApiResponse({ status: 200, description: 'Returns all levels' })
-  getAllLevels() {
-    return this.classCategoryService.findAllLevels();
-  }
-
-  @Get('levels/:levelId/subjects')
-  @ApiOperation({ summary: 'Get subjects by level' })
-  @ApiParam({ name: 'levelId', description: 'ID of the level', type: 'string' })
-  @ApiResponse({
-    status: 200,
-    description: 'Returns subjects for the specified level',
-  })
-  getSubjectsByLevel(@Param('levelId') levelId: string): Promise<SubjectDto[]> {
-    return this.classCategoryService.findSubjectsByLevel(levelId);
-  }
-
-  @Get('subjects/:subjectId/levels')
-  @ApiOperation({ summary: 'Get levels by subject' })
-  @ApiParam({
-    name: 'subjectId',
-    description: 'ID of the subject',
-    type: 'string',
-  })
-  @ApiResponse({
-    status: 200,
-    description: 'Returns levels for the specified subject',
-  })
-  getLevelsBySubject(
-    @Param('subjectId') subjectId: string,
-  ): Promise<LevelDto[]> {
-    return this.classCategoryService.findLevelsBySubject(subjectId);
-  }
+  constructor(private readonly classCategoryService: ClassCategoryService) { }
 
   @Post()
   @ApiOperation({

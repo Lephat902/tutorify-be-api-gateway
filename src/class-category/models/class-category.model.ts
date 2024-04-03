@@ -11,4 +11,10 @@ export class ClassCategory {
 
   @Field()
   level: Level;
+
+  @Field({
+    description: 'Set `includeClassCount` arg to true to use this field',
+    nullable: true
+  })
+  classCount: number;
 }
