@@ -5,33 +5,33 @@ import { SocialProfile } from './social-profile.model';
 
 @ObjectType({ implements: User })
 export class Tutor extends User {
-  @Field()
+  @Field({ nullable: true })
   biography: string;
 
-  @Field()
+  @Field({ nullable: true })
   isApproved: boolean;
 
   @Field({ nullable: true })
   approvedAt: Date;
 
-  @Field()
+  @Field({ nullable: true })
   minimumWage: number;
 
-  @Field()
+  @Field({ nullable: true })
   currentWorkplace: string;
 
-  @Field()
+  @Field({ nullable: true })
   currentPosition: string;
 
-  @Field()
+  @Field({ nullable: true })
   major: string;
 
   @Field({ nullable: true })
   graduationYear: number;
 
-  @Field(() => [FileObject])
+  @Field(() => [FileObject], { nullable: true })
   tutorPortfolios: FileObject[];
 
-  @Field(() => [SocialProfile], {nullable: true})
+  @Field(() => [SocialProfile], { nullable: true })
   socialProfiles: SocialProfile[];
 }

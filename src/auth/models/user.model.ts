@@ -38,19 +38,19 @@ export class User {
   @Field()
   username: string;
 
-  @Field()
+  @Field({ nullable: true })
   firstName: string;
 
-  @Field()
+  @Field({ nullable: true })
   middleName: string;
 
-  @Field()
+  @Field({ nullable: true })
   lastName: string;
 
   @Field(() => Gender, { nullable: true })
   gender: Gender;
 
-  @Field()
+  @Field({ nullable: true })
   phoneNumber: string;
 
   @Field(() => FileObject, { nullable: true })
