@@ -116,10 +116,17 @@ export class ClassSessionCreateDto {
       'Indicates whether the class session will be conducted online (true) or in-person (false).',
     example: true,
   })
-  @IsNotEmpty()
+  @IsOptional()
   @IsBoolean()
-  @ToBoolean()
   isOnline: boolean;
+
+  @ApiProperty({
+    description: 'If this is set to true, use class address by default',
+    example: true,
+  })
+  @IsOptional()
+  @IsBoolean()
+  useDefaultAddress: boolean;
 
   @IsOptional()
   @ApiProperty({
