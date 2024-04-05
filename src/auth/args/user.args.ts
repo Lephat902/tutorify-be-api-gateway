@@ -20,7 +20,7 @@ export class UserQueryArgs extends IntersectionType(
   @IsOptional()
   @Field({
     nullable: true,
-    description: 'Query string for first name, last name, username',
+    description: 'Query string for first name, email, username, id',
   })
   q: string;
 
