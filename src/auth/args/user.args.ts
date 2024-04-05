@@ -34,18 +34,23 @@ export class UserQueryArgs extends IntersectionType(
   @IsOptional()
   @Field({
     nullable: true,
-    description: 'Whether or not include email-not-verified users',
-    defaultValue: false,
-  })
-  includeEmailNotVerified: boolean;
+    description: 'Filters users by block status. True for blocked, false for otherwise, null for both.',
+  })  
+  emailVerified: boolean;
 
   @IsOptional()
   @Field({
     nullable: true,
-    description: 'Whether or not include blocked users',
-    defaultValue: false,
+    description: 'Filters users by block status. True for blocked, false for otherwise, null for both.',
+  })  
+  isBlocked: boolean;
+
+  @IsOptional()
+  @Field({
+    nullable: true,
+    description: 'Filters tutors by approvement status. True for approved, false for pending, null for both.',
   })
-  includeBlocked: boolean;
+  isApproved: boolean;
 
   @IsOptional()
   @Field(() => UserRole, {
