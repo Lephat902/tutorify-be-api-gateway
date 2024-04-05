@@ -39,6 +39,12 @@ export class User {
   username: string;
 
   @Field({ nullable: true })
+  createdAt: Date;
+
+  @Field({ nullable: true })
+  updatedAt: Date;
+
+  @Field({ nullable: true })
   firstName: string;
 
   @Field({ nullable: true })
