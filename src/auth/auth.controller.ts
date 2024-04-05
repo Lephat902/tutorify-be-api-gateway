@@ -7,7 +7,6 @@ import {
   UseGuards,
   Param,
   Patch,
-  Delete,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -128,24 +127,20 @@ export class AuthController {
     return this.authService.updateUser(token.id, updateDto);
   }
 
-  @Delete('tutors/profile/portfolios/:portfolioId')
-  @ApiOperation({ summary: 'Tutor updates profile.' })
-  @TokenRequirements(TokenType.CLIENT, [UserRole.TUTOR])
-  @ApiBearerAuth()
-  public async deleteSingleTutorPortfolio(
-    @Param('portfolioId') portfolioId: string,
-    @Token() token: IAccessToken,
-  ) {
-    const tutorId = token.id;
-    return this.authService.deleteSingleTutorPortfolio(tutorId, portfolioId);
-  }
-
   @Patch('tutors/:tutorId/approve')
   @ApiOperation({ summary: 'Admin/Manager approves a tutor to the system' })
   @TokenRequirements(TokenType.CLIENT, [UserRole.ADMIN, UserRole.MANAGER])
   @ApiBearerAuth()
   public async approveTutor(@Param('tutorId') tutorId: string) {
     return this.authService.approveTutor(tutorId);
+  }
+
+  @Patch('tutors/:tutorId/reject')
+  @ApiOperation({ summary: 'Admin/Manager rejects a tutor' })
+  @TokenRequirements(TokenType.CLIENT, [UserRole.ADMIN, UserRole.MANAGER])
+  @ApiBearerAuth()
+  public async rejectTutor(@Param('tutorId') tutorId: string) {
+    return this.authService.rejectTutor(tutorId);
   }
 
   @Patch('users/:userId/block')
