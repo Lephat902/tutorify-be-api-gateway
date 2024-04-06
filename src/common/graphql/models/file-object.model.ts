@@ -2,15 +2,15 @@ import { Field, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
 export class FileObject {
-  @Field()
+  @Field({ nullable: true })
   id: string;
 
   @Field()
   url: string;
 
-  @Field()
+  @Field({ nullable: true })
   title: string;
 
-  @Field()
+  @Field({ nullable: true })
   size: number;
 }
