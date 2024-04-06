@@ -9,6 +9,7 @@ import { TutorApplyForClassArgs } from 'src/tutor-apply-for-class/args';
 import { Token, TokenRequirements } from 'src/auth/decorators';
 import { IAccessToken, TokenType } from 'src/auth/auth.interfaces';
 import {
+  AddressProxy,
   ClassStatus,
   SortingDirection,
   TutorApplyForClassOrderBy,
@@ -16,7 +17,6 @@ import {
 } from '@tutorify/shared';
 import { TutorQuery } from 'src/tutor-query/models';
 import { Ward } from 'src/address/models';
-import { AddressService } from 'src/address/address.service';
 import { TutorQueryService } from 'src/tutor-query/tutor-query.service';
 import { Student } from 'src/auth/models';
 import { AuthService } from 'src/auth/auth.service';
@@ -29,7 +29,7 @@ export class ClassResolver {
     private readonly classService: ClassService,
     private readonly tutorApplyForClassService: TutorApplyForClassService,
     private readonly tutorQueryService: TutorQueryService,
-    private readonly addressService: AddressService,
+    private readonly addressProxy: AddressProxy,
     private readonly authService: AuthService,
     private readonly classSessionService: ClassSessionService,
   ) { }
@@ -133,7 +133,7 @@ export class ClassResolver {
     @Parent() cl: Class,
   ) {
     const { wardId } = cl;
-    return this.addressService.getWardHierarchyById(wardId);
+    return this.addressProxy.getWardHierarchyById(wardId);
   }
 
   @ResolveField('googleMapAddress', () => String, {

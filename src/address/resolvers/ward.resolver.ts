@@ -1,15 +1,15 @@
 import { Resolver, Query, Args } from '@nestjs/graphql';
 import { Ward } from '../models';
-import { AddressService } from '../address.service';
+import { AddressProxy } from '@tutorify/shared';
 
 @Resolver(() => Ward)
 export class WardResolver {
   constructor(
-    private readonly addressService: AddressService,
+    private readonly addressProxy: AddressProxy,
   ) { }
 
   @Query(() => [Ward], { name: 'wards' })
   async getAllWards(@Args('districtCode') districtCode: string) {
-    return this.addressService.getAllWards(districtCode);
+    return this.addressProxy.getAllWards(districtCode);
   }
 }

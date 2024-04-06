@@ -3,17 +3,17 @@ import { UseGuards } from '@nestjs/common';
 import { TokenGuard } from 'src/auth/guards';
 import { ClassSessionService } from '../class-session.service';
 import { ClassSession } from '../models';
-import { AddressService } from 'src/address/address.service';
 import { Ward } from 'src/address/models';
 import { IAccessToken, TokenType } from 'src/auth/auth.interfaces';
 import { Token, TokenRequirements } from 'src/auth/decorators';
+import { AddressProxy } from '@tutorify/shared';
 
 @Resolver(() => ClassSession)
 @UseGuards(TokenGuard)
 export class ClassSessionResolver {
   constructor(
     private readonly classSessionService: ClassSessionService,
-    private readonly addressService: AddressService,
+    private readonly addressProxy: AddressProxy,
   ) { }
 
   @Query(() => ClassSession, { 
@@ -39,6 +39,6 @@ export class ClassSessionResolver {
     @Parent() classSession: ClassSession,
   ) {
     const { wardId } = classSession;
-    return this.addressService.getWardHierarchyById(wardId);
+    return this.addressProxy.getWardHierarchyById(wardId);
   }
 }
