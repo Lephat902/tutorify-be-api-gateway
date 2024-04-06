@@ -81,6 +81,27 @@ export class ClassQueryArgs extends IntersectionType(
   })
   isOnline: boolean;
 
+  @IsOptional()
+  @Field(() => String, {
+    nullable: true,
+    description: 'Prioritize classes that are nearest to this ward',
+  })
+  wardId: string;
+
+  @IsOptional()
+  @Field(() => String, {
+    nullable: true,
+    description: 'Prioritize classes that are nearest to this ward',
+  })
+  districtId: string;
+
+  @IsOptional()
+  @Field(() => String, {
+    nullable: true,
+    description: 'Prioritize classes that are nearest to this ward',
+  })
+  provinceId: string;
+
   @HideField()
   userId: string;
 
