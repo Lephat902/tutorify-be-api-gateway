@@ -2,13 +2,13 @@ import { Resolver, Query, Args, ResolveField, Parent } from '@nestjs/graphql';
 import { TutorQueryService } from '../tutor-query.service';
 import { TutorQuery } from '../models';
 import { Ward } from 'src/address/models';
-import { AddressService } from 'src/address/address.service';
+import { AddressProxy } from '@tutorify/shared';
 
 @Resolver(() => TutorQuery)
 export class TutorResolver {
   constructor(
     private readonly tutorQueryService: TutorQueryService,
-    private readonly addressService: AddressService,
+    private readonly addressProxy: AddressProxy,
   ) { }
 
   @Query(() => TutorQuery, { name: 'tutor', nullable: true })
@@ -24,6 +24,6 @@ export class TutorResolver {
     @Parent() tutor: TutorQuery,
   ) {
     const { wardId } = tutor;
-    return this.addressService.getWardHierarchyById(wardId);
+    return this.addressProxy.getWardHierarchyById(wardId);
   }
 }

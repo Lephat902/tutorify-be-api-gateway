@@ -2,17 +2,17 @@ import { Resolver, Query, Args, ResolveField, Parent } from '@nestjs/graphql';
 import { Admin, Manager, Student, Tutor, User } from '../models';
 import { AuthService } from '../auth.service';
 import { Ward } from 'src/address/models';
-import { AddressService } from 'src/address/address.service';
 import { IAccessToken, TokenType } from '../auth.interfaces';
 import { UseGuards } from '@nestjs/common';
 import { TokenGuard } from '../guards';
 import { Token, TokenRequirements } from '../decorators';
+import { AddressProxy } from '@tutorify/shared';
 
 @Resolver(() => User)
 export class UserResolver {
   constructor(
     private readonly authService: AuthService,
-    private readonly addressService: AddressService,
+    private readonly addressProxy: AddressProxy,
   ) { }
 
   @Query(() => User, { name: 'myProfile' })
@@ -39,6 +39,6 @@ export class UserResolver {
     @Parent() user: User,
   ) {
     const { wardId } = user;
-    return this.addressService.getWardHierarchyById(wardId);
+    return this.addressProxy.getWardHierarchyById(wardId);
   }
 }
