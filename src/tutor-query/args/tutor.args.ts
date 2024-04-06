@@ -62,6 +62,28 @@ export class TutorQueryArgs extends OmitType(UserQueryArgs, ['role'] as const) {
   })
   maxWage: number;
 
+
+  @IsOptional()
+  @Field(() => String, {
+    nullable: true,
+    description: 'Prioritize classes that are nearest to this ward',
+  })
+  wardId: string;
+
+  @IsOptional()
+  @Field(() => String, {
+    nullable: true,
+    description: 'Prioritize classes that are nearest to this district',
+  })
+  districtId: string;
+
+  @IsOptional()
+  @Field(() => String, {
+    nullable: true,
+    description: 'Prioritize classes that are nearest to this province',
+  })
+  provinceId: string;
+
   @HideField()
   userMakeRequest: UserMakeRequest;
 }

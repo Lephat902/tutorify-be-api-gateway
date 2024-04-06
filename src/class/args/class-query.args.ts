@@ -91,14 +91,14 @@ export class ClassQueryArgs extends IntersectionType(
   @IsOptional()
   @Field(() => String, {
     nullable: true,
-    description: 'Prioritize classes that are nearest to this ward',
+    description: 'Prioritize classes that are nearest to this district',
   })
   districtId: string;
 
   @IsOptional()
   @Field(() => String, {
     nullable: true,
-    description: 'Prioritize classes that are nearest to this ward',
+    description: 'Prioritize classes that are nearest to this province',
   })
   provinceId: string;
 
