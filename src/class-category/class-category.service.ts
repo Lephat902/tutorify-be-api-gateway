@@ -12,9 +12,14 @@ export class ClassCategoryService {
   ) {}
 
   findAll(classCategoryQueryArgs: ClassCategoryQueryArgs): Promise<ClassCategory[]> {
-    console.log(classCategoryQueryArgs);
     return firstValueFrom(
       this.client.send<ClassCategory[]>({ cmd: 'get_all_categories' }, classCategoryQueryArgs),
+    );
+  }
+
+  findById(id: string): Promise<ClassCategory> {
+    return firstValueFrom(
+      this.client.send<ClassCategory>({ cmd: 'get_category_by_id' }, id),
     );
   }
 
