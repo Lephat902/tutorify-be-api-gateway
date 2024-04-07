@@ -5,6 +5,7 @@ import { firstValueFrom } from 'rxjs';
 import { QueueNames, UserMakeRequest } from '@tutorify/shared';
 import { ClassQueryArgs, ClassSessionQueryArgs } from './args';
 import { ClassSession, ClassSessionPaginatedResults, ShortClass } from './models';
+import { SessionStatsPerClass } from 'src/class-session/models/session-stats-per-class.model';
 
 @Injectable()
 export class ClassSessionService {
@@ -95,6 +96,18 @@ export class ClassSessionService {
   ): Promise<number> {
     return firstValueFrom(
       this.client.send({ cmd: 'getScheduledClassSessionsCount' }, {
+        classId,
+        userMakeRequest,
+      }),
+    );
+  }
+
+  async getSessionsStatsPerClass(
+    classId: string,
+    userMakeRequest: UserMakeRequest,
+  ): Promise<SessionStatsPerClass> {
+    return firstValueFrom(
+      this.client.send({ cmd: 'getSessionsStatsPerClass' }, {
         classId,
         userMakeRequest,
       }),
