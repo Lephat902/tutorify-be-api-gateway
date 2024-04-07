@@ -21,6 +21,7 @@ import { TutorQueryService } from 'src/tutor-query/tutor-query.service';
 import { Student } from 'src/auth/models';
 import { AuthService } from 'src/auth/auth.service';
 import { ClassSessionService } from 'src/class-session/class-session.service';
+import { SessionStatsPerClass } from 'src/class-session/models';
 
 @Resolver(() => Class)
 @UseGuards(TokenGuard)
@@ -181,6 +182,22 @@ export class ClassResolver {
   ) {
     const { id } = cl;
     return this.classSessionService.getScheduledClassSessionsCount(id, {
+      userId: token.id,
+      userRole: token.roles[0]
+    });
+  }
+
+  @ResolveField('sessionsStats', () => SessionStatsPerClass, {
+    nullable: true,
+    description: 'Sessions stats of this class',
+  })
+  @TokenRequirements(TokenType.CLIENT, [])
+  async getSessionsStatsPerClass(
+    @Parent() cl: Class,
+    @Token() token: IAccessToken,
+  ) {
+    const { id } = cl;
+    return this.classSessionService.getSessionsStatsPerClass(id, {
       userId: token.id,
       userRole: token.roles[0]
     });
