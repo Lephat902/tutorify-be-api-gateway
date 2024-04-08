@@ -162,9 +162,7 @@ export class ClassCreateDto {
       'd48f22f9-72db-4109-a7e6-3e32c2751a88',
     ],
   })
-  @ValidateIf((_object, value) => value !== undefined)
   @IsArray()
-  @ArrayNotEmpty()
   @IsNotEmpty({ each: true })
   desiredTutorIds?: string[];
 

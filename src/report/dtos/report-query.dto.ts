@@ -16,7 +16,6 @@ export class ReportQueryDto extends IntersectionType(
   @IsString()
   readonly q?: string;
 
-  @IsOptional()
   @ApiProperty({
     description: 'The sorting attribute',
     enum: ReportOrderBy,

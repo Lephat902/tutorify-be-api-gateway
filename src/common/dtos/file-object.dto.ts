@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty, IsNumber, IsString } from "class-validator";
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
 
 export class FileObject {
     @ApiProperty({
@@ -7,7 +7,7 @@ export class FileObject {
         example: '123',
         required: true,
     })
-    @IsNotEmpty()
+    @IsOptional()
     @IsString()
     readonly id: string;
 
@@ -25,7 +25,7 @@ export class FileObject {
         example: 'Chop suey',
         required: true,
     })
-    @IsNotEmpty()
+    @IsOptional()
     @IsString()
     readonly title: string;
 
@@ -34,7 +34,7 @@ export class FileObject {
         example: '123456',
         required: true,
     })
-    @IsNotEmpty()
+    @IsOptional()
     @IsNumber()
     readonly size: number;
 };

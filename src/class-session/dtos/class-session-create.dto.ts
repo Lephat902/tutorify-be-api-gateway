@@ -14,7 +14,6 @@ import { Type } from 'class-transformer';
 import {
   IsDateGreaterThanToday,
   IsDateWithinNDaysFromToday,
-  ToBoolean,
   ToStartOfDay,
 } from 'src/common/decorators';
 import { ClassTimeSlotDto } from 'src/class/dtos/class-timeslot.dto';

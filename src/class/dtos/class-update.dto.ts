@@ -1,7 +1,8 @@
 import { ApiHideProperty, ApiProperty, OmitType } from '@nestjs/swagger';
 import { ClassCreateDto } from '.';
-import { ArrayNotEmpty, IsArray, IsBoolean, IsNotEmpty, IsNumber, IsOptional, ValidateIf } from 'class-validator';
+import { ArrayNotEmpty, IsArray, IsBoolean, IsNotEmpty, IsNumber, IsOptional, ValidateIf, ValidateNested } from 'class-validator';
 import { ClassTimeSlotDto } from './class-timeslot.dto';
+import { Type } from 'class-transformer';
 
 export class ClassUpdateDto extends OmitType(ClassCreateDto, [
   'desiredTutorIds',
@@ -14,7 +15,6 @@ export class ClassUpdateDto extends OmitType(ClassCreateDto, [
       'd48f22f9-72db-4109-a7e6-3e32c2751a88',
     ],
   })
-  @IsOptional()
   @ValidateIf((_object, value) => value !== undefined)
   @IsArray()
   @ArrayNotEmpty()
@@ -37,11 +37,12 @@ export class ClassUpdateDto extends OmitType(ClassCreateDto, [
   studentQty: number;
 
   @ApiProperty({ type: [ClassTimeSlotDto] })
-  @IsOptional()
   @ValidateIf((_object, value) => value !== undefined)
   @IsArray()
   @ArrayNotEmpty()
   @IsNotEmpty({ each: true })
+  @ValidateNested({ each: true })
+  @Type(() => ClassTimeSlotDto)
   timeSlots: ClassTimeSlotDto[];
 
   @ApiHideProperty()
