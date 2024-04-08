@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { UploadType } from "../enums";
-import { IsEnum, ValidateIf } from "class-validator";
+import { IsEnum, IsOptional } from "class-validator";
 
 export class UploadTypeDto {
     @ApiProperty({
@@ -9,7 +9,7 @@ export class UploadTypeDto {
         required: true,
         enum: Object.values(UploadType),
     })
-    @ValidateIf((_object, value) => value)
+    @IsOptional()
     @IsEnum(UploadType)
     uploadType: UploadType;
 }

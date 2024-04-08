@@ -5,12 +5,12 @@ import {
   ValidateNested,
   IsArray,
   IsNotEmpty,
+  ValidateIf,
 } from 'class-validator';
 import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
   IsDateGreaterThanToday,
-  ToBoolean,
 } from 'src/common/decorators';
 import { FileObject } from 'src/common/dtos';
 
@@ -97,12 +97,12 @@ export class ClassSessionUpdateDto {
   @IsBoolean()
   useDefaultAddress: boolean;
 
-  @IsOptional()
   @ApiProperty({
     description: 'Array of files associated with the FIRST class session, if any.',
     type: [FileObject],
     required: false,
   })
+  @ValidateIf((_object, value) => value !== undefined)
   @IsArray()
   @IsNotEmpty({ each: true })
   @ValidateNested({ each: true })

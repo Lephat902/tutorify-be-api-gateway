@@ -6,12 +6,9 @@ import {
   IsString,
   IsOptional,
   MinLength,
-  ValidateIf,
   Matches, 
   Length,
   ValidateNested,
-  IsObject,
-  IsNotEmptyObject,
 } from 'class-validator';
 import { Gender, UserRole } from '@tutorify/shared';
 import { FileObject } from 'src/common/dtos';
@@ -59,7 +56,7 @@ export class SignUpDto {
     required: false,
     enum: Object.values(Gender),
   })
-  @ValidateIf((_object, value) => value)
+  @IsOptional()
   @IsEnum(Gender)
   public readonly gender: Gender;
 
@@ -123,8 +120,6 @@ export class SignUpDto {
     type: FileObject,
     required: false,
   })
-  @IsNotEmptyObject()
-  @IsObject()
   @ValidateNested()
   @Type(() => FileObject)
   public readonly avatar: FileObject;
