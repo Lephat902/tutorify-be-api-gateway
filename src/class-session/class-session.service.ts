@@ -55,14 +55,14 @@ export class ClassSessionService {
     );
   }
 
-  async getUpcomingClasses(
+  async getClassesBySessionFilters(
     filters: ClassQueryArgs,
   ): Promise<{
     results: ShortClass[],
     totalCount: number,
   }> {
     return firstValueFrom(
-      this.client.send({ cmd: 'getUpcomingClasses' }, filters),
+      this.client.send({ cmd: 'getClasses' }, filters),
     );
   }
 

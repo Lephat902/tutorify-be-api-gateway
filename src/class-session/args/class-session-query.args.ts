@@ -59,7 +59,7 @@ export class ClassSessionQueryArgs extends IntersectionType(
     nullable: true,
     description: 'Statuses of class sessions in the results',
   })
-  statuses: ClassSessionStatus;
+  statuses: ClassSessionStatus[];
 
   @HideField()
   userMakeRequest: UserMakeRequest;

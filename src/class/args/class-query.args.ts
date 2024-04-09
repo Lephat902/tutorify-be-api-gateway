@@ -9,6 +9,7 @@ import { ClassOrderBy, ClassStatus, UserMakeRequest } from '@tutorify/shared';
 import { Expose } from 'class-transformer';
 import { IsOptional } from 'class-validator';
 import { PaginationArgs, SortingDirectionArgs } from 'src/common/graphql';
+import { ClassQueryInput } from 'src/class-session/inputs';
 
 registerEnumType(ClassOrderBy, {
   name: 'ClassOrderBy',
@@ -119,6 +120,13 @@ export class ClassQueryArgs extends IntersectionType(
   // If Expose not used, it will be whitelisted
   @Expose({ name: 'userId' })
   userIdToGetClasses: string;
+
+  @IsOptional()
+  @Field(() => ClassQueryInput, {
+    nullable: true,
+    description: `Sessions state that class satisfies`,
+  })
+  sessionsFilter: ClassQueryInput;
 
   @HideField()
   userMakeRequest: UserMakeRequest;

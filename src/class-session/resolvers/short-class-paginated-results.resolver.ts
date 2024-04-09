@@ -6,6 +6,7 @@ import { Token, TokenRequirements } from 'src/auth/decorators';
 import { IAccessToken, TokenType } from 'src/auth/auth.interfaces';
 import { ClassSessionService } from '../class-session.service';
 import { ShortClassPaginatedResults } from '../models';
+import { ClassSessionStatus } from '@tutorify/shared';
 
 @Resolver(() => ShortClassPaginatedResults)
 @UseGuards(TokenGuard)
@@ -24,6 +25,7 @@ export class ShortClassPaginatedResultsResolver {
       userId: token.id,
       userRole: token.roles[0],
     }
-    return this.classSessionService.getUpcomingClasses(filters);
+    filters.statuses = [ClassSessionStatus.SCHEDULED];
+    return this.classSessionService.getClassesBySessionFilters(filters);
   }
 }
