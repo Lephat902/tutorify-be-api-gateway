@@ -6,6 +6,7 @@ import {
   registerEnumType,
 } from '@nestjs/graphql';
 import { ClassOrderBy, ClassStatus, UserMakeRequest } from '@tutorify/shared';
+import { Expose } from 'class-transformer';
 import { IsOptional } from 'class-validator';
 import { PaginationArgs, SortingDirectionArgs } from 'src/common/graphql';
 
@@ -108,6 +109,8 @@ export class ClassQueryArgs extends IntersectionType(
     description: 'Return only classes that belongs to this user (whether he is tutor or student)',
     name: 'userId',
   })
+  // If Expose not used, it will be whitelisted
+  @Expose({ name: 'userId' })
   userIdToGetClasses: string;
 
   @HideField()
