@@ -25,6 +25,14 @@ export class TutorQueryArgs extends OmitType(UserQueryArgs, ['role'] as const) {
   order: TutorOrderBy;
 
   @IsOptional()
+  @Field({
+    nullable: true,
+    description: 'Whether or not include tutors with no feedbacks when sorting feedbacks',
+    defaultValue: false,
+  })
+  showZeroFeedbacksTutorsInRatingSorting: boolean;
+
+  @IsOptional()
   @Field(() => [String], {
     nullable: true,
     description: "Classes' ids Categories classes categorized to",
@@ -61,7 +69,6 @@ export class TutorQueryArgs extends OmitType(UserQueryArgs, ['role'] as const) {
     description: 'Maximum wage range for tutors',
   })
   maxWage: number;
-
 
   @IsOptional()
   @Field(() => String, {
