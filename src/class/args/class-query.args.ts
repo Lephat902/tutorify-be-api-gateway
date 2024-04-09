@@ -27,6 +27,13 @@ export class ClassQueryArgs extends IntersectionType(
   me: boolean;
 
   @IsOptional()
+  @Field(() => [String], {
+    nullable: true,
+    description: "Ids of classes",
+  })
+  ids: string[];
+
+  @IsOptional()
   @Field(() => String, {
     nullable: true,
     description: 'A query string used to narrow down results based on a case-insensitive match within the class\'s title or description.',
