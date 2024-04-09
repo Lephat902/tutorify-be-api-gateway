@@ -1,7 +1,7 @@
 import { Resolver, Query, Args } from '@nestjs/graphql';
 import { ClassService } from '../class.service';
 import { ClassQueryArgs } from '../args';
-import { UseGuards } from '@nestjs/common';
+import { ForbiddenException, UseGuards } from '@nestjs/common';
 import { TokenGuard } from 'src/auth/guards';
 import { ClassPaginatedResults } from '../models/class-paginated-results.model';
 import { Token } from 'src/auth/decorators';
@@ -20,13 +20,27 @@ export class ClassPaginatedResultsResolver {
     @Args() filters: ClassQueryArgs,
     @Token() token: IAccessToken,
   ): Promise<ClassPaginatedResults> {
-    if (filters?.me) {
-      if (!token?.id)
-        return { results: [], totalCount: 0 };
+    const userId = token?.id;
+    const userRole = token?.roles[0];
+    // If user wants to query classes of a specific user
+    // then he would be a manager/admin
+    if (filters.userIdToGetClasses) {
+      if (!(userRole === UserRole.MANAGER || userRole === UserRole.ADMIN)) {
+        throw new ForbiddenException();
+      }
     }
-    filters.userId = token?.id;
-    filters.isTutor = token?.roles[0] === UserRole.TUTOR;
-    filters.isStudent = token?.roles[0] === UserRole.STUDENT;
+    // If user want to query 'my' classes but not logged in yet 
+    // then return empty results immediately
+    if (filters.me) {
+      if (!userId)
+        return { results: [], totalCount: 0 };
+      filters.userIdToGetClasses = userId;
+    }
+    // Assigning user metadata
+    filters.userId = userId;
+    filters.isTutor = userRole === UserRole.TUTOR;
+    filters.isStudent = userRole === UserRole.STUDENT;
+
     return this.classService.getClassesAndTotalCount(filters);
   }
 }
