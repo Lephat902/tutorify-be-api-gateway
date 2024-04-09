@@ -33,13 +33,14 @@ export class ClassPaginatedResultsResolver {
     // then return empty results immediately
     if (filters.me) {
       if (!userId)
-        return { results: [], totalCount: 0 };
+        throw new ForbiddenException();
       filters.userIdToGetClasses = userId;
     }
     // Assigning user metadata
-    filters.userId = userId;
-    filters.isTutor = userRole === UserRole.TUTOR;
-    filters.isStudent = userRole === UserRole.STUDENT;
+    filters.userMakeRequest = {
+      userId,
+      userRole
+    };
 
     return this.classService.getClassesAndTotalCount(filters);
   }
