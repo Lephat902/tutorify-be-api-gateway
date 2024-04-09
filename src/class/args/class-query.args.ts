@@ -5,7 +5,7 @@ import {
   IntersectionType,
   registerEnumType,
 } from '@nestjs/graphql';
-import { ClassOrderBy, ClassStatus } from '@tutorify/shared';
+import { ClassOrderBy, ClassStatus, UserMakeRequest } from '@tutorify/shared';
 import { IsOptional } from 'class-validator';
 import { PaginationArgs, SortingDirectionArgs } from 'src/common/graphql';
 
@@ -106,16 +106,10 @@ export class ClassQueryArgs extends IntersectionType(
   @Field(() => String, {
     nullable: true,
     description: 'Return only classes that belongs to this user (whether he is tutor or student)',
+    name: 'userId',
   })
   userIdToGetClasses: string;
 
-  // User makes request metadata
   @HideField()
-  userId: string;
-
-  @HideField()
-  isTutor: boolean;
-
-  @HideField()
-  isStudent: boolean;
+  userMakeRequest: UserMakeRequest;
 }
