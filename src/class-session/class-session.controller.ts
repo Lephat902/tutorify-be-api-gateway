@@ -6,7 +6,7 @@ import {
   Body,
   Patch,
 } from '@nestjs/common';
-import { ClassSessionCreateDto, ClassSessionUpdateDto } from './dtos';
+import { ClassSessionCancelDto, ClassSessionCreateDto, ClassSessionUpdateDto } from './dtos';
 import { Token, TokenRequirements } from 'src/auth/decorators';
 import { IAccessToken, TokenType } from 'src/auth/auth.interfaces';
 import {
@@ -68,19 +68,21 @@ export class ClassSessionController {
   @ApiOperation({
     summary: 'Tutor cancels a class session.',
   })
-  @Patch('/classess/sessions/:classSessionId/cancel')
+  @Patch('/classess/sessions/:sessionId/cancel')
   @TokenRequirements(TokenType.CLIENT, [UserRole.TUTOR])
   async cancelClassSession(
     @Token() token: IAccessToken,
-    @Param('classSessionId') classSessionId: string,
+    @Param('sessionId') sessionId: string,
+    @Body() cancelReasonBody: ClassSessionCancelDto,
   ) {
     const tutorId = token.id;
 
     return this.classSessionService.updateClassSession(
       tutorId,
-      classSessionId,
+      sessionId,
       {
         isCancelled: true,
+        tutorFeedback: cancelReasonBody.cancelReason,
       } as ClassSessionUpdateDto,
     );
   }
