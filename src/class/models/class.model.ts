@@ -38,8 +38,11 @@ export class Class {
   @Field({ nullable: true })
   description: string;
 
-  @Field()
+  @Field({ nullable: true })
   createdAt: Date;
+
+  @Field({ nullable: true })
+  isHidden: boolean;
 
   @Field({ nullable: true })
   requirement: string;
@@ -59,10 +62,10 @@ export class Class {
   @Field({ nullable: true })
   wardId: string;
 
-  @Field()
+  @Field({ nullable: true })
   isOnline: boolean;
 
-  @Field()
+  @Field({ nullable: true })
   studentQty: number;
 
   @Field(() => TutorPositionPref)
