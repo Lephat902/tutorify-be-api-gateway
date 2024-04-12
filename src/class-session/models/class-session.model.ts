@@ -18,19 +18,19 @@ export class ClassSession {
   @Field({ nullable: true })
   description: string;
 
-  @Field()
+  @Field({ nullable: true })
   title: string;
 
-  @Field()
+  @Field({ nullable: true })
   isCancelled: boolean;
 
-  @Field()
+  @Field({ nullable: true })
   createdAt: Date;
 
-  @Field()
+  @Field({ nullable: true })
   startDatetime: Date;
 
-  @Field()
+  @Field({ nullable: true })
   endDatetime: Date;
 
   @Field({ nullable: true })
@@ -39,18 +39,18 @@ export class ClassSession {
   @Field({ nullable: true })
   wardId: string;
 
-  @Field()
+  @Field({ nullable: true })
   isOnline: boolean;
 
-  @Field(() => [FileObject])
+  @Field(() => [FileObject], { nullable: true })
   materials: FileObject[];
 
-  @Field()
+  @Field({ nullable: true })
   tutorFeedback: string;
 
   @Field({ nullable: true })
   feedbackUpdatedAt: Date;
 
-  @Field(() => ClassSessionStatus)
+  @Field(() => ClassSessionStatus, { nullable: true })
   status: ClassSessionStatus;
 }
