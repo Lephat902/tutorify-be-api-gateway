@@ -13,4 +13,18 @@ export class ClassCategoryQueryArgs {
     Note that it will automatically sort the results based on the classCount.`,
   })
   includeClassCount: boolean;
+
+  @IsOptional()
+  @Field(() => Date, {
+    nullable: true,
+    description: `Min creation date of class of this category`,
+  })
+  classCreatedAtMin: Date;
+
+  @IsOptional()
+  @Field(() => Date, {
+    nullable: true,
+    description: `Max creation date of class of this category`,
+  })
+  classCreatedAtMax: Date;
 }
