@@ -2,17 +2,17 @@ import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
 import { FeedbackDto, FeedbackReplyDto } from './dtos';
-import { QueueNames } from '@tutorify/shared';
+import { QueueNames, UserMakeRequest } from '@tutorify/shared';
 import { FeedbackQueryArg } from './args';
 
 @Injectable()
 export class FeedbackService {
   constructor(
     @Inject(QueueNames.FEEDBACK) private readonly client: ClientProxy,
-  ) {}
+  ) { }
 
   async getAllFeedbacks(filters: FeedbackQueryArg) {
-    const res =  await firstValueFrom(this.client.send({ cmd: 'getAllFeedbacks' }, filters));
+    const res = await firstValueFrom(this.client.send({ cmd: 'getAllFeedbacks' }, filters));
     console.log(res);
     return res;
   }
@@ -50,6 +50,18 @@ export class FeedbackService {
             ...feedbackReply,
           },
         },
+      ),
+    );
+  }
+
+  async deleteFeedback(
+    userMakeRequest: UserMakeRequest,
+    feedbackId: string,
+  ) {
+    return firstValueFrom(
+      this.client.send(
+        { cmd: 'deleteFeedback' },
+        { userMakeRequest, feedbackId },
       ),
     );
   }

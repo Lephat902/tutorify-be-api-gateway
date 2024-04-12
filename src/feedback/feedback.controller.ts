@@ -1,16 +1,16 @@
-import { Controller, Get, Post, Param, Body, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Param, Body, UseGuards, Delete } from '@nestjs/common';
 import { ApiOperation, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { FeedbackService } from './feedback.service';
 import { FeedbackDto, FeedbackReplyDto } from './dtos';
 import { TokenGuard } from 'src/auth/guards';
 import { TokenRequirements, Token } from 'src/auth/decorators';
 import { IAccessToken, TokenType } from '../auth/auth.interfaces';
-import { UserRole } from '@tutorify/shared';
+import { UserMakeRequest, UserRole } from '@tutorify/shared';
 
 @Controller()
 @ApiTags('feedback')
 export class FeedbackController {
-  constructor(private readonly feedbackService: FeedbackService) {}
+  constructor(private readonly feedbackService: FeedbackService) { }
 
   @Get('feedbacks')
   @ApiOperation({ summary: 'Get all feedbacks.' })
@@ -31,7 +31,7 @@ export class FeedbackController {
   }
 
   @Post('tutors/:id/feedbacks')
-  @ApiOperation({ summary: 'Student creates a feedback for a tutor.' })
+  @ApiOperation({ summary: 'User creates a feedback to a tutor.' })
   @ApiBearerAuth()
   @UseGuards(TokenGuard)
   @TokenRequirements(TokenType.CLIENT, [])
@@ -45,7 +45,7 @@ export class FeedbackController {
   }
 
   @Post('feedbacks/:feedbackId/feedback-replies')
-  @ApiOperation({ summary: 'Student creates a feedback reply.' })
+  @ApiOperation({ summary: 'User creates a feedback reply.' })
   @ApiBearerAuth()
   @UseGuards(TokenGuard)
   @TokenRequirements(TokenType.CLIENT, [])
@@ -60,5 +60,22 @@ export class FeedbackController {
       userId,
       feedbackReply,
     );
+  }
+
+  @Delete('tutors/feedbacks/:feedbackId')
+  @ApiOperation({ summary: 'User deletes a feedback for a tutor.' })
+  @ApiBearerAuth()
+  @UseGuards(TokenGuard)
+  @TokenRequirements(TokenType.CLIENT, [])
+  async deleteFeedback(
+    @Param('feedbackId') feedbackId: string,
+    @Token() token: IAccessToken,
+  ) {
+    const userId = token.id;
+    const userMakeRequest: UserMakeRequest = {
+      userId,
+      userRole: token.roles[0],
+    }
+    return this.feedbackService.deleteFeedback(userMakeRequest, feedbackId);
   }
 }
