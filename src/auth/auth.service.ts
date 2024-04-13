@@ -29,6 +29,10 @@ export class AuthService {
     return firstValueFrom(this.client.send({ cmd: 'verifyEmail' }, token));
   }
 
+  public async resetPasswordByAdmin(userId: string) {
+    return firstValueFrom(this.client.send({ cmd: 'resetPasswordByAdmin' }, userId));
+  }
+
   public async createUser(createUserDto: SignUpDto) {
     return firstValueFrom(
       this.client.send({ cmd: 'createUser' }, createUserDto),

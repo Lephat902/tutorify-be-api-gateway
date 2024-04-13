@@ -58,6 +58,16 @@ export class AuthController {
     return this.authService.verifyEmail(verifyEmailDto.token);
   }
 
+  @Patch('users/:userId/password/reset')
+  @TokenRequirements(TokenType.CLIENT, [UserRole.ADMIN])
+  @ApiOperation({
+    summary: "Admin reset user's password and send it to user's email",
+  })
+  @ApiBearerAuth()
+  public async resetPasswordByAdmin(@Param('userId') userId: string) {
+    return this.authService.resetPasswordByAdmin(userId);
+  }
+
   @Post('tutors/signup')
   @ApiOperation({ summary: 'Sign up a new tutor.' })
   public async signUpTutor(
