@@ -18,18 +18,17 @@ export class GlobalExceptionFilter implements ExceptionFilter {
   catch(exception: any, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
-    const status = exception.getStatus ? exception.getStatus() : 500;
 
     try {
       if (exception instanceof HttpException) {
         console.log("HTTP EXCEPTION", exception);
-        this.handleHttpException(exception, response, status);
+        this.handleHttpException(exception, response);
       } else if (exception.error?.statusCode) {
         console.log("CAN BE CATEGORIZED AS HTTP EXCEPTION", exception);
-        this.handleHttpException(new HttpException(exception.error.message, exception.error.statusCode), response, status);
+        this.handleHttpException(new HttpException(exception.error.message, exception.error.statusCode), response);
       } else {
         console.log("UNHANDLED EXCEPTION", exception);
-        this.handleHttpException(new InternalServerErrorException(exception), response, status);
+        this.handleHttpException(new InternalServerErrorException(exception), response);
       }
     } catch (e) {
       // It might be a GraphQL request
@@ -38,7 +37,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     }
   }
 
-  private handleHttpException(exception: HttpException, response: Response, status: number) {
+  private handleHttpException(exception: HttpException, response: Response) {
     const errorResponse = exception.getResponse() as HttpExceptionObjectResponse | string;
     let message: string[];
     if (typeof errorResponse === 'string') {
@@ -50,6 +49,6 @@ export class GlobalExceptionFilter implements ExceptionFilter {
         ? [messageInErrorResponseObj]
         : messageInErrorResponseObj;
     }
-    response.status(status).json(message);
+    response.status(exception.getStatus()).json(message);
   }
 }
