@@ -47,6 +47,21 @@ export class ClassSessionService {
     );
   }
 
+  async deleteClassSession(
+    userMakeRequest: UserMakeRequest,
+    classSessionId: string,
+  ) {
+    return firstValueFrom(
+      this.client.send(
+        { cmd: 'deleteClassSession' },
+        {
+          classSessionId,
+          userMakeRequest,
+        },
+      ),
+    );
+  }
+
   async getClassSessionsAndTotalCount(
     filters: ClassSessionQueryArgs,
   ): Promise<ClassSessionPaginatedResults> {

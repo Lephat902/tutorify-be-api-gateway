@@ -5,6 +5,7 @@ import {
   Param,
   Body,
   Patch,
+  Delete,
 } from '@nestjs/common';
 import { ClassSessionCancelDto, ClassSessionCreateDto, ClassSessionUpdateDto } from './dtos';
 import { Token, TokenRequirements } from 'src/auth/decorators';
@@ -84,6 +85,24 @@ export class ClassSessionController {
         isCancelled: true,
         tutorFeedback: cancelReasonBody.cancelReason,
       } as ClassSessionUpdateDto,
+    );
+  }
+
+  @ApiOperation({
+    summary: 'Tutor deletes a class session.',
+  })
+  @Delete('/classess/sessions/:sessionId')
+  @TokenRequirements(TokenType.CLIENT, [UserRole.TUTOR])
+  async deleteClassSession(
+    @Token() token: IAccessToken,
+    @Param('sessionId') sessionId: string,
+  ) {
+    return this.classSessionService.deleteClassSession(
+      {
+        userId: token.id,
+        userRole: token.roles[0],
+      },
+      sessionId
     );
   }
 }
