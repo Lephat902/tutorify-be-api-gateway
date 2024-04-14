@@ -7,6 +7,7 @@ import {
   UseGuards,
   Param,
   Patch,
+  BadRequestException,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -100,6 +101,8 @@ export class AuthController {
   @Post('login')
   @ApiOperation({ summary: 'Sign in user via email/username and password' })
   public async login(@Body() loginDto: LoginDto) {
+    if (!loginDto.username && !loginDto.email)
+      throw new BadRequestException("Provide either email or username to log in");
     const user = await this.authService.login(loginDto);
     return this.returnUserAndToken(user);
   }
