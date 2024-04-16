@@ -68,6 +68,10 @@ export class AuthService {
     return firstValueFrom(this.client.send({ cmd: 'unblockUser' }, userId));
   }
 
+  public async deleteUser(userId: string) {
+    return firstValueFrom(this.client.send({ cmd: 'deleteUser' }, userId));
+  }
+
   public validateAccessToken(token: string): IAccessToken {
     return this.jwtService.verify(token, {
       issuer: AuthConstants.access_token.options.issuer,
