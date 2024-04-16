@@ -177,8 +177,24 @@ export class AuthController {
   @ApiOperation({ summary: 'Admin deletes a user' })
   @TokenRequirements(TokenType.CLIENT, [UserRole.ADMIN])
   @ApiBearerAuth()
-  public async deleteUser(@Param('userId') userId: string) {
-    return this.authService.deleteUser(userId);
+  public async deleteUserById(@Param('userId') id: string) {
+    return this.authService.deleteUser({ id });
+  }
+
+  @Delete('users/username/:username')
+  @ApiOperation({ summary: 'Admin deletes a user by username' })
+  @TokenRequirements(TokenType.CLIENT, [UserRole.ADMIN])
+  @ApiBearerAuth()
+  public async deleteUserByUsername(@Param('username') username: string) {
+    return this.authService.deleteUser({ username });
+  }
+
+  @Delete('users/email/:email')
+  @ApiOperation({ summary: 'Admin deletes a user by email' })
+  @TokenRequirements(TokenType.CLIENT, [UserRole.ADMIN])
+  @ApiBearerAuth()
+  public async deleteUserByEmail(@Param('email') email: string) {
+    return this.authService.deleteUser({ email });
   }
 
   private returnUserAndToken(user: any) {
