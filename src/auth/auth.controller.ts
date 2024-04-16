@@ -8,6 +8,7 @@ import {
   Param,
   Patch,
   BadRequestException,
+  Delete,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -170,6 +171,14 @@ export class AuthController {
   @ApiBearerAuth()
   public async unblockUser(@Param('userId') userId: string) {
     return this.authService.unblockUser(userId);
+  }
+
+  @Delete('users/:userId')
+  @ApiOperation({ summary: 'Admin deletes a user' })
+  @TokenRequirements(TokenType.CLIENT, [UserRole.ADMIN])
+  @ApiBearerAuth()
+  public async deleteUser(@Param('userId') userId: string) {
+    return this.authService.deleteUser(userId);
   }
 
   private returnUserAndToken(user: any) {
