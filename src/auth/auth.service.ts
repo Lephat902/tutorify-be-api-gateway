@@ -4,7 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { AuthConstants } from './auth.constants';
 import { IAccessToken, TokenType } from './auth.interfaces';
 import { firstValueFrom } from 'rxjs';
-import { LoginDto, SignUpDto } from './dtos';
+import { FindOneUserOptions, LoginDto, SignUpDto } from './dtos';
 import { QueueNames } from '@tutorify/shared';
 import { UserQueryArgs } from './args';
 import { UpdateDto } from './dtos/update';
@@ -68,8 +68,8 @@ export class AuthService {
     return firstValueFrom(this.client.send({ cmd: 'unblockUser' }, userId));
   }
 
-  public async deleteUser(userId: string) {
-    return firstValueFrom(this.client.send({ cmd: 'deleteUser' }, userId));
+  public async deleteUser(findOneUserOptions: FindOneUserOptions) {
+    return firstValueFrom(this.client.send({ cmd: 'deleteUser' }, findOneUserOptions));
   }
 
   public validateAccessToken(token: string): IAccessToken {
