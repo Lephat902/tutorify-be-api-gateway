@@ -23,10 +23,9 @@ export class TokenGuard implements CanActivate {
       context.getHandler(),
     );
 
-    // If no bearer token is present in the request
-    if (!this.isBearerTokenPresent(context)) {
-      // If the current action doesn't require a token, allow access; otherwise, deny it
-      return !tokenRequirements;
+    // If token not required
+    if (!tokenRequirements) {
+      return true;
     }
 
     try {
