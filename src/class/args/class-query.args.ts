@@ -7,7 +7,7 @@ import {
 } from '@nestjs/graphql';
 import { ClassOrderBy, ClassStatus, UserMakeRequest } from '@tutorify/shared';
 import { Expose } from 'class-transformer';
-import { IsOptional } from 'class-validator';
+import { IsOptional, Min } from 'class-validator';
 import { PaginationArgs, SortingDirectionArgs } from 'src/common/graphql';
 import { ClassQueryInput } from 'src/class-session/inputs';
 
@@ -141,6 +141,23 @@ export class ClassQueryArgs extends IntersectionType(
     description: `Max creation date`,
   })
   createdAtMax: Date;
+
+  @IsOptional()
+  @Min(0)
+  @Field({
+    nullable: true,
+    description: 'Minimum wage range for classes',
+    defaultValue: 0,
+  })
+  minWage: number;
+
+  @IsOptional()
+  @Min(0)
+  @Field({
+    nullable: true,
+    description: 'Maximum wage range for classes',
+  })
+  maxWage: number;
 
   @HideField()
   userMakeRequest: UserMakeRequest;
