@@ -9,7 +9,7 @@ export class TokenGuard implements CanActivate {
   constructor(
     private readonly reflector: Reflector,
     private readonly authService: AuthService,
-  ) {}
+  ) { }
 
   /**
    * Determines whether the request is allowed to proceed.
@@ -23,9 +23,10 @@ export class TokenGuard implements CanActivate {
       context.getHandler(),
     );
 
-    // If token not required
-    if (!tokenRequirements) {
-      return true;
+    // If no bearer token is present in the request
+    if (!this.isBearerTokenPresent(context)) {
+      // If the current action doesn't require a token, allow access; otherwise, deny it
+      return !tokenRequirements;
     }
 
     try {
