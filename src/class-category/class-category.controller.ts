@@ -1,14 +1,20 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { ClassCategoryInsertDto } from './dtos';
 import { ClassCategoryService } from './class-category.service';
+import { TokenGuard } from 'src/auth/guards';
+import { TokenType } from 'src/auth/auth.interfaces';
+import { UserRole } from '@tutorify/shared';
+import { TokenRequirements } from 'src/auth/decorators';
 
 @Controller('class-category')
 @ApiTags('Class Category')
+@UseGuards(TokenGuard)
 export class ClassCategoryController {
   constructor(private readonly classCategoryService: ClassCategoryService) { }
 
   @Post()
+  @TokenRequirements(TokenType.CLIENT, [UserRole.ADMIN])
   @ApiOperation({
     summary: 'Insert class category',
     description:
