@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsNumber } from 'class-validator';
+import { IsNotEmpty, IsInt, Min, Max } from 'class-validator';
 
 export class FeedbackDto {
   @ApiProperty({
@@ -15,6 +15,8 @@ export class FeedbackDto {
     example: 4.0,
     required: true,
   })
-  @IsNumber()
+  @IsInt()
+  @Min(1)
+  @Max(5)
   public readonly rate: number;
 }
