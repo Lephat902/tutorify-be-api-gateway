@@ -83,7 +83,7 @@ export class SignUpTutorDto extends SignUpDto {
   @IsNotEmpty({ each: true })
   @ValidateNested({ each: true })
   @Type(() => FileObject)
-  public readonly portfolios?: FileObject[];
+  public readonly tutorPortfolios?: FileObject[];
 
   @IsOptional()
   @ApiProperty({
