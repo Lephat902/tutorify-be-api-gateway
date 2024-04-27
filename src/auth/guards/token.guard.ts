@@ -29,11 +29,11 @@ export class TokenGuard implements CanActivate {
       return !tokenRequirements;
     }
 
-    try {
-      // Extract and validate the bearer token
-      const token = this.extractBearerToken(context);
-      const decodedToken = this.authService.validateAccessToken(token);
+    // Extract and validate the bearer token
+    const token = this.extractBearerToken(context);
+    const decodedToken = this.authService.validateAccessToken(token);
 
+    try {
       // Assign the decoded token to the request for later access
       this.assignTokenToRequest(context, decodedToken);
 
