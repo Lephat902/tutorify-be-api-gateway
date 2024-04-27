@@ -1,7 +1,6 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { JwtService } from '@nestjs/jwt';
-import { AuthConstants } from './auth.constants';
 import { IAccessToken, TokenType } from './auth.interfaces';
 import { firstValueFrom } from 'rxjs';
 import { FindOneUserOptions, LoginDto, SignUpDto } from './dtos';
@@ -14,7 +13,7 @@ export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
     @Inject(QueueNames.AUTH) private readonly client: ClientProxy,
-  ) {}
+  ) { }
 
   public async getUserById(id: string) {
     if (!id) return null;
@@ -42,7 +41,7 @@ export class AuthService {
   public async updateUser(id: string, updateUserDto: UpdateDto) {
     return firstValueFrom(
       this.client.send({ cmd: 'updateUser' }, {
-        id, 
+        id,
         updateUserDto
       }),
     );
@@ -73,9 +72,11 @@ export class AuthService {
   }
 
   public validateAccessToken(token: string): IAccessToken {
-    return this.jwtService.verify(token, {
-      issuer: AuthConstants.access_token.options.issuer,
-    });
+    try {
+      return this.jwtService.verify(token);
+    } catch {
+      throw new UnauthorizedException("ExpiredToken");
+    }
   }
 
   public createAccessTokenFromAuthUser(user: any): string {
@@ -85,6 +86,8 @@ export class AuthService {
       roles: [user.role],
       type: TokenType.CLIENT,
     };
-    return this.jwtService.sign(payload, AuthConstants.access_token.options);
+    return this.jwtService.sign(payload, {
+      expiresIn: process.env.EXPIRY_DURATION,
+    });
   }
 }
