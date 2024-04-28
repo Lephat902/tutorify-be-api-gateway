@@ -4,12 +4,12 @@ import {
   IntersectionType,
   registerEnumType,
 } from '@nestjs/graphql';
-import { Gender, TutorOrderBy, UserRole } from '@tutorify/shared';
+import { Gender, UserOrder, UserRole } from '@tutorify/shared';
 import { IsOptional } from 'class-validator';
 import { PaginationArgs, SortingDirectionArgs } from 'src/common/graphql';
 
-registerEnumType(TutorOrderBy, {
-  name: 'TutorOrderBy',
+registerEnumType(UserOrder, {
+  name: 'UserOrder',
 });
 
 @ArgsType()
@@ -17,6 +17,13 @@ export class UserQueryArgs extends IntersectionType(
   PaginationArgs,
   SortingDirectionArgs,
 ) {
+  @IsOptional()
+  @Field(() => UserOrder, {
+    nullable: true,
+    description: 'Order attribute of user',
+  })
+  order: UserOrder;
+
   @IsOptional()
   @Field({
     nullable: true,
@@ -35,14 +42,14 @@ export class UserQueryArgs extends IntersectionType(
   @Field({
     nullable: true,
     description: 'Filters users by block status. True for blocked, false for otherwise, null for both.',
-  })  
+  })
   emailVerified: boolean;
 
   @IsOptional()
   @Field({
     nullable: true,
     description: 'Filters users by block status. True for blocked, false for otherwise, null for both.',
-  })  
+  })
   isBlocked: boolean;
 
   @IsOptional()
