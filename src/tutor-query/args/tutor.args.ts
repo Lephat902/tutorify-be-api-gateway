@@ -8,7 +8,7 @@ registerEnumType(TutorOrderBy, {
 });
 
 @ArgsType()
-export class TutorQueryArgs extends OmitType(UserQueryArgs, ['role'] as const) {
+export class TutorQueryArgs extends OmitType(UserQueryArgs, ['role', 'order'] as const) {
   @IsOptional()
   @Field({
     nullable: true,
@@ -20,7 +20,7 @@ export class TutorQueryArgs extends OmitType(UserQueryArgs, ['role'] as const) {
   @IsOptional()
   @Field(() => TutorOrderBy, {
     nullable: true,
-    description: 'Order attribute of user',
+    description: 'Order attribute of tutor',
   })
   order: TutorOrderBy;
 
