@@ -2,10 +2,27 @@ import {
   ArgsType,
   Field,
 } from '@nestjs/graphql';
+import { ClassStatus } from '@tutorify/shared';
 import { IsOptional } from 'class-validator';
+
+
 
 @ArgsType()
 export class ClassCategoryQueryArgs {
+  @IsOptional()
+  @Field(() => [ClassStatus], {
+    nullable: true,
+    description: `Statuses of classes to be counted in classCount`,
+  })
+  statuses: ClassStatus[];
+
+  @IsOptional()
+  @Field({
+    nullable: true,
+    description: 'Count hidden classes in classCount',
+  })
+  includeHidden: boolean;
+
   @IsOptional()
   @Field({
     nullable: true,
