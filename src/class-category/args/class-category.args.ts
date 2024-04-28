@@ -10,18 +10,25 @@ import { IsOptional } from 'class-validator';
 @ArgsType()
 export class ClassCategoryQueryArgs {
   @IsOptional()
+  @Field(() => String, {
+    nullable: true,
+    description: "A query string used to narrow down results based on a case-insensitive match within the class category's subject and level.",
+  })
+  q: string;
+
+  @IsOptional()
   @Field(() => [ClassStatus], {
     nullable: true,
     description: `Statuses of classes to be counted in classCount`,
   })
-  statuses: ClassStatus[];
+  classStatuses: ClassStatus[];
 
   @IsOptional()
   @Field({
     nullable: true,
     description: 'Count hidden classes in classCount',
   })
-  includeHidden: boolean;
+  includeHiddenClass: boolean;
 
   @IsOptional()
   @Field({
