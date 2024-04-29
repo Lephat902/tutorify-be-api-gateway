@@ -9,6 +9,7 @@ import { IAccessToken } from 'src/auth/auth.interfaces';
 import { UserRole } from '@tutorify/shared';
 import { ClassSessionService } from 'src/class-session/class-session.service';
 import { isNotEmptyObject } from 'class-validator';
+import { ClassSessionQueryArgs } from 'src/class-session/args';
 
 @Resolver(() => ClassPaginatedResults)
 @UseGuards(TokenGuard)
@@ -48,7 +49,8 @@ export class ClassPaginatedResultsResolver {
     // If it is set then need to query list of classes's ids first
     if (isNotEmptyObject(filters.sessionsFilter)) {
       filters.sessionsFilter.userMakeRequest = filters.userMakeRequest;
-      const result = await this.classSessionService.getClassesBySessionFilters(filters.sessionsFilter);
+      filters.sessionsFilter.limit = Infinity;
+      const result = await this.classSessionService.getClassesBySessionFilters(filters.sessionsFilter as ClassSessionQueryArgs);
       console.log("Class ids after applying session filters", result);
       if (result.results.length)
         filters.ids = result.results.map(cl => cl.classId);
