@@ -1,6 +1,6 @@
 import { Controller, Post, Body, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { ClassCategoryInsertDto } from './dtos';
+import { ClassCategoriesInsertByNameDto, ClassCategoryInsertDto } from './dtos';
 import { ClassCategoryService } from './class-category.service';
 import { TokenGuard } from 'src/auth/guards';
 import { TokenType } from 'src/auth/auth.interfaces';
@@ -26,5 +26,20 @@ export class ClassCategoryController {
   })
   insert(@Body() dto: ClassCategoryInsertDto) {
     return this.classCategoryService.insert(dto.level, dto.subject);
+  }
+
+  @Post("/multiple")
+  @TokenRequirements(TokenType.CLIENT, [UserRole.ADMIN])
+  @ApiOperation({
+    summary: 'Insert multiple class category',
+    description:
+      'Insert multiple class category of a subject by name.',
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'Returns the created class category',
+  })
+  insertMultiple(@Body() dto: ClassCategoriesInsertByNameDto) {
+    return this.classCategoryService.insertMultiple(dto.name);
   }
 }

@@ -67,4 +67,13 @@ export class ClassCategoryService {
       this.client.send<number>({ cmd: 'getNumberOfClassesByCategoryId' }, classCategoryId),
     );
   }
+
+  insertMultiple(name: string) {
+    return firstValueFrom(
+      this.client.send<ClassCategory[]>(
+        { cmd: 'insert_multiple_categories' },
+        { name },
+      ),
+    );
+  }
 }
