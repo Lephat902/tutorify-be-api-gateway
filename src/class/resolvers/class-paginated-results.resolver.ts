@@ -6,7 +6,7 @@ import { TokenGuard } from 'src/auth/guards';
 import { ClassPaginatedResults } from '../models/class-paginated-results.model';
 import { Token } from 'src/auth/decorators';
 import { IAccessToken } from 'src/auth/auth.interfaces';
-import { UserRole } from '@tutorify/shared';
+import { ClassStatus, UserRole } from '@tutorify/shared';
 import { ClassSessionService } from 'src/class-session/class-session.service';
 import { isNotEmptyObject } from 'class-validator';
 import { ClassSessionQueryArgs } from 'src/class-session/args';
@@ -48,6 +48,10 @@ export class ClassPaginatedResultsResolver {
 
     // If it is set then need to query list of classes's ids first
     if (isNotEmptyObject(filters.sessionsFilter)) {
+      // Only assigned class can have sessions
+      if (!filters.statuses?.includes(ClassStatus.ASSIGNED)) {
+        filters.statuses = [ClassStatus.ASSIGNED];
+      }
       filters.sessionsFilter.userMakeRequest = filters.userMakeRequest;
       filters.sessionsFilter.limit = Infinity;
       const result = await this.classSessionService.getClassesBySessionFilters(filters.sessionsFilter as ClassSessionQueryArgs);
