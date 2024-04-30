@@ -7,6 +7,7 @@ import {
   UseGuards,
   Param,
   BadRequestException,
+  Patch,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -19,6 +20,8 @@ import { Token, TokenRequirements } from '../decorators';
 import { IAccessToken, TokenType } from '../auth.interfaces';
 import {
   LoginDto,
+  ResetPasswordDto,
+  ResetPasswordRequestDto,
   SignUpDto,
   SignUpStudentDto,
   SignUpTutorDto,
@@ -95,6 +98,22 @@ export class AuthController {
       throw new BadRequestException("Provide either email or username to log in");
     const user = await this.authService.login(loginDto);
     return this.returnUserAndToken(user);
+  }
+
+  @Post('/users/password/reset-request')
+  @ApiOperation({
+    summary: 'Call this to request a password-reset email',
+  })
+  public async requestResetPassword(@Body() resetPasswordRequestDto: ResetPasswordRequestDto) {
+    return this.authService.requestResetPassword(resetPasswordRequestDto.email);
+  }
+
+  @Patch('/users/password/reset')
+  @ApiOperation({
+    summary: 'Submit new password along with token',
+  })
+  public async resetPassword(@Body() resetPasswordDto: ResetPasswordDto) {
+    return this.authService.resetPassword(resetPasswordDto);
   }
 
   private returnUserAndToken(user: any) {

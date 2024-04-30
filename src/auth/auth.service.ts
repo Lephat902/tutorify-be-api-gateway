@@ -3,7 +3,7 @@ import { ClientProxy } from '@nestjs/microservices';
 import { JwtService } from '@nestjs/jwt';
 import { IAccessToken, TokenType } from './auth.interfaces';
 import { firstValueFrom } from 'rxjs';
-import { FindOneUserOptions, LoginDto, SignUpDto } from './dtos';
+import { FindOneUserOptions, LoginDto, ResetPasswordDto, SignUpDto } from './dtos';
 import { QueueNames } from '@tutorify/shared';
 import { UserQueryArgs } from './args';
 import { UpdateDto } from './dtos/update';
@@ -69,6 +69,14 @@ export class AuthService {
 
   public async deleteUser(findOneUserOptions: FindOneUserOptions) {
     return firstValueFrom(this.client.send({ cmd: 'deleteUser' }, findOneUserOptions));
+  }
+
+  public async requestResetPassword(email: string) {
+    return firstValueFrom(this.client.send({ cmd: 'requestResetPassword' }, email));
+  }
+
+  public async resetPassword(resetPasswordDto: ResetPasswordDto) {
+    return firstValueFrom(this.client.send({ cmd: 'resetPassword' }, resetPasswordDto));
   }
 
   public validateAccessToken(token: string): IAccessToken {
