@@ -34,6 +34,9 @@ import { UserRole } from '@tutorify/shared';
 export class AuthController {
   constructor(private readonly authService: AuthService) { }
 
+  @Get()
+  public checkHealth() {}
+
   @Get('profile')
   @ApiOperation({ summary: 'Get self information' })
   @ApiBearerAuth()
