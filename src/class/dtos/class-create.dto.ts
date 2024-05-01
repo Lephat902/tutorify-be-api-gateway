@@ -10,6 +10,8 @@ import {
   IsArray,
   ValidateIf,
   ValidateNested,
+  IsPositive,
+  IsInt,
 } from 'class-validator';
 import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 import { GenderPref, TutorPositionPref } from '@tutorify/shared';
@@ -120,7 +122,8 @@ export class ClassCreateDto {
     example: 10,
   })
   @IsNotEmpty()
-  @IsNumber()
+  @IsPositive()
+  @IsInt()
   studentQty: number;
 
   @ApiProperty({
