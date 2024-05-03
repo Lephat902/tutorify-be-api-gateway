@@ -6,6 +6,9 @@ export class ClassCategory {
   @Field(() => ID)
   id: string;
 
+  @Field(() => ID)
+  slug: string;
+
   @Field()
   subject: Subject;
 
