@@ -1,6 +1,7 @@
 import { Resolver, Query, Args } from '@nestjs/graphql';
 import { Ward } from '../models';
 import { AddressProxy } from '@tutorify/shared';
+import { AddressFindOptionArgs } from '../args';
 
 @Resolver(() => Ward)
 export class WardResolver {
@@ -9,8 +10,13 @@ export class WardResolver {
   ) { }
 
   @Query(() => Ward, { name: 'ward' })
-  async getWardById(@Args('id') wardId: string) {
-    return this.addressProxy.getFullAddressByWardCode(wardId);
+  async getWardById(@Args() addressFindOptionArgs: AddressFindOptionArgs) {
+    if (addressFindOptionArgs.id) {
+      return this.addressProxy.getFullAddressByWardCode(addressFindOptionArgs.id);
+    } else if (addressFindOptionArgs.slug) {
+      return this.addressProxy.getFullAddressByWardSlug(addressFindOptionArgs.slug);
+    }
+    return null;
   }
 
   @Query(() => [Ward], { name: 'wards' })

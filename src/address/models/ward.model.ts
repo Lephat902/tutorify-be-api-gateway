@@ -6,6 +6,9 @@ export class Ward {
   @Field(() => ID)
   readonly id: string;
 
+  @Field(() => ID)
+  readonly slug: string;
+
   @Field()
   readonly name: string;
 
