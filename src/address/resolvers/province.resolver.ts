@@ -10,11 +10,11 @@ export class ProvinceResolver {
   ) {}
 
   @Query(() => Province, { name: 'province' })
-  async getProvinceById(@Args() addressFindOptionArgs: AddressFindOptionArgs) {
+  async getProvinceByProvinceIdById(@Args() addressFindOptionArgs: AddressFindOptionArgs) {
     if (addressFindOptionArgs.id) {
-      return this.addressProxy.getProvinceByProvinceCode(addressFindOptionArgs.id);
+      return this.addressProxy.getProvinceByProvinceId(addressFindOptionArgs.id);
     } else if (addressFindOptionArgs.slug) {
-      return this.addressProxy.getProvinceByProvinceSlug(addressFindOptionArgs.slug);
+      return this.addressProxy.getProvinceByProvinceId(addressFindOptionArgs.slug);
     }
     return null;
   }
