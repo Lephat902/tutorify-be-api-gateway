@@ -14,7 +14,7 @@ export class ProvinceResolver {
     if (addressFindOptionArgs.id) {
       return this.addressProxy.getProvinceByProvinceId(addressFindOptionArgs.id);
     } else if (addressFindOptionArgs.slug) {
-      return this.addressProxy.getProvinceByProvinceId(addressFindOptionArgs.slug);
+      return this.addressProxy.getProvinceByProvinceSlug(addressFindOptionArgs.slug);
     }
     return null;
   }
