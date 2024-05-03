@@ -17,6 +17,13 @@ export class ClassCategoryQueryArgs {
   q: string;
 
   @IsOptional()
+  @Field(() => [String], {
+    nullable: true,
+    description: "Ids of class categories",
+  })
+  ids: string[];
+
+  @IsOptional()
   @Field(() => [ClassStatus], {
     nullable: true,
     description: `Statuses of classes to be counted in classCount`,
