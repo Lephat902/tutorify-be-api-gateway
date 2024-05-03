@@ -134,7 +134,7 @@ export class ClassResolver {
     @Parent() cl: Class,
   ) {
     const { wardId } = cl;
-    return this.addressProxy.getWardHierarchyById(wardId);
+    return this.addressProxy.getFullAddressByWardCode(wardId);
   }
 
   @ResolveField('googleMapAddress', () => String, {

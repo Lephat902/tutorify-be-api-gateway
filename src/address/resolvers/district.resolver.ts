@@ -8,6 +8,11 @@ export class DistrictResolver {
     private readonly addressProxy: AddressProxy,
   ) {}
 
+  @Query(() => District, { name: 'district' })
+  async getDistrictById(@Args('id') districtId: string) {
+    return this.addressProxy.getFullAddressByDistrictCode(districtId);
+  }
+
   @Query(() => [District], { name: 'districts' })
   async getAllDistricts(@Args('districtCode') districtCode: string) {
     return this.addressProxy.getAllDistricts(districtCode);

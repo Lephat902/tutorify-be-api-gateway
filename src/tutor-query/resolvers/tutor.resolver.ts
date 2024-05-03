@@ -24,6 +24,6 @@ export class TutorResolver {
     @Parent() tutor: TutorQuery,
   ) {
     const { wardId } = tutor;
-    return this.addressProxy.getWardHierarchyById(wardId);
+    return this.addressProxy.getFullAddressByWardCode(wardId);
   }
 }

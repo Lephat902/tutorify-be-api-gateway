@@ -39,6 +39,6 @@ export class UserResolver {
     @Parent() user: User,
   ) {
     const { wardId } = user;
-    return this.addressProxy.getWardHierarchyById(wardId);
+    return this.addressProxy.getFullAddressByWardCode(wardId);
   }
 }

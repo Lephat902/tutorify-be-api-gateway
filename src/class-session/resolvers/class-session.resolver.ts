@@ -39,6 +39,6 @@ export class ClassSessionResolver {
     @Parent() classSession: ClassSession,
   ) {
     const { wardId } = classSession;
-    return this.addressProxy.getWardHierarchyById(wardId);
+    return this.addressProxy.getFullAddressByWardCode(wardId);
   }
 }
