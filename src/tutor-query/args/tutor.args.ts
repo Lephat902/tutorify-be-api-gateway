@@ -98,6 +98,27 @@ export class TutorQueryArgs extends OmitType(UserQueryArgs, ['role', 'order'] as
   })
   provinceId: string;
 
+  @IsOptional()
+  @Field(() => String, {
+    nullable: true,
+    description: 'Prioritize classes that are nearest to this ward',
+  })
+  wardSlug: string;
+
+  @IsOptional()
+  @Field(() => String, {
+    nullable: true,
+    description: 'Prioritize classes that are nearest to this district',
+  })
+  districtSlug: string;
+
+  @IsOptional()
+  @Field(() => String, {
+    nullable: true,
+    description: 'Prioritize classes that are nearest to this province',
+  })
+  provinceSlug: string;
+
   @HideField()
   userMakeRequest: UserMakeRequest;
 }
