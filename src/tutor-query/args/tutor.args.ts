@@ -35,9 +35,16 @@ export class TutorQueryArgs extends OmitType(UserQueryArgs, ['role', 'order'] as
   @IsOptional()
   @Field(() => [String], {
     nullable: true,
-    description: "Classes' ids Categories classes categorized to",
+    description: "Categories's ids that tutors are proficient in",
   })
   classCategoryIds: string[];
+
+  @IsOptional()
+  @Field(() => [String], {
+    nullable: true,
+    description: "Categories's slugs that tutors are proficient in",
+  })
+  classCategorySlugs: string[];
 
   @IsOptional()
   @Field(() => [String], {

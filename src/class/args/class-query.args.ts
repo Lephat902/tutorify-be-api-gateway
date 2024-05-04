@@ -51,9 +51,16 @@ export class ClassQueryArgs extends IntersectionType(
   @IsOptional()
   @Field(() => [String], {
     nullable: true,
-    description: "Classes' ids Categories classes categorized to",
+    description: "Categories's ids that classes categorized to",
   })
   classCategoryIds: string[];
+
+  @IsOptional()
+  @Field(() => [String], {
+    nullable: true,
+    description: "Categories's slugs that classes categorized to",
+  })
+  classCategorySlugs: string[];
 
   @IsOptional()
   @Field(() => [String], {
