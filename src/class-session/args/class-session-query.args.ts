@@ -61,6 +61,14 @@ export class ClassSessionQueryArgs extends IntersectionType(
   })
   statuses: ClassSessionStatus[];
 
+  @IsOptional()
+  @Field({
+    nullable: true,
+    description:
+      'Mark item id',
+  })
+  markItemId: string;
+
   @HideField()
   userMakeRequest: UserMakeRequest;
 }

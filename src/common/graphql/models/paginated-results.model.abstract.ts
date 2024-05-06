@@ -8,6 +8,9 @@ export function PaginatedResults<TItem>(TItemClass: new () => TItem) {
 
     @Field()
     totalCount: number;
+
+    @Field({ nullable: true })
+    newPageIndex?: number;
   }
   return PaginatedResultsClass;
 }
