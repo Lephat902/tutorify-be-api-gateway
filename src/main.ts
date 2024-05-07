@@ -1,14 +1,14 @@
-import { NestFactory, Reflector } from '@nestjs/core';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import helmet from 'helmet';
 import {
   ClassSerializerInterceptor,
   INestApplication,
-  InternalServerErrorException,
-  ValidationPipe,
+  ValidationPipe
 } from '@nestjs/common';
-import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
+import { NestFactory, Reflector } from '@nestjs/core';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { originCallback } from '@tutorify/shared';
+import helmet from 'helmet';
+import { AppModule } from './app.module';
 import { GlobalExceptionFilter } from './global-exception-filter';
 
 async function bootstrap() {
@@ -20,34 +20,9 @@ async function bootstrap() {
 
   // Enable CORS with specific domain patterns
   app.enableCors({
-    allowedHeaders: ['content-type'],
     credentials: true,
     methods: 'GET,PUT,POST,PATCH,DELETE,UPDATE,OPTIONS',
-    origin: (origin, callback) => {
-      if (!origin) {
-        // Allow requests with no origin (like mobile apps or curl requests)
-        return callback(null, true);
-      }
-      // Define the regular expression pattern for the Vercel app domain
-      const vercelPattern =
-        /^https:\/\/tutorify-[a-zA-Z0-9-]+-caotrananhkhoa\.vercel\.app$/;
-      // Define the regular expression pattern for localhost
-      const localhostPattern = /^https?:\/\/localhost(?::\d+)?$/; // Match http://localhost[:port_number]
-      // Define the regular expression pattern for tutorify.site subdomains
-      const tutorifyPattern = /^https?:\/\/[a-zA-Z0-9-]+\.tutorify\.site$/;
-
-      // Use RegExp.test() to match the patterns
-      if (
-        origin === 'https://tutorify-project.vercel.app' ||
-        vercelPattern.test(origin) ||
-        localhostPattern.test(origin) ||
-        tutorifyPattern.test(origin)
-      ) {
-        callback(null, true);
-      } else {
-        callback(new InternalServerErrorException('Not allowed by CORS'));
-      }
-    },
+    origin: originCallback,
   });
 
   // Apply the custom exception filter globally
