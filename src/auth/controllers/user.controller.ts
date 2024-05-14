@@ -122,4 +122,11 @@ export class UserController {
   public async deleteUserByEmail(@Param('email') email: string) {
     return this.authService.deleteUser({ email });
   }
+
+  @Delete('users/test/all')
+  @ApiOperation({ summary: 'Admin cleans up test accounts' })
+  @ApiBearerAuth()
+  public async cleanupTestAccount() {
+    return this.authService.cleanupTestAccount();
+  }
 }

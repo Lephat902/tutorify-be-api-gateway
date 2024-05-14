@@ -79,6 +79,10 @@ export class AuthService {
     return firstValueFrom(this.client.send({ cmd: 'resetPassword' }, resetPasswordDto));
   }
 
+  public async cleanupTestAccount() {
+    return firstValueFrom(this.client.send({ cmd: 'cleanupTestAccount' }, {}));
+  }
+
   public validateAccessToken(token: string): IAccessToken {
     try {
       return this.jwtService.verify(token);
