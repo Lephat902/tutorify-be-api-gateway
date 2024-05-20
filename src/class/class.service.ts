@@ -81,6 +81,10 @@ export class ClassService {
     return firstValueFrom(this.client.send({ cmd: 'getClassesAndTotalCount' }, filters));
   }
 
+  async cleanupTestClasses() {
+    return firstValueFrom(this.client.send({ cmd: 'cleanupTestClasses' }, {}));
+  }
+
   // Return class data in case of success, throw error if failed
   async assertClassOwnership(token: IAccessToken, classId: string) {
     const userId = token.id;

@@ -30,7 +30,7 @@ async function bootstrap() {
 
   // Use helmet middleware for security headers
   app.use(
-    helmet({
+    helmet(process.env.DISPLAY_GRAPHQL ? {
       // crossOriginEmbedderPolicy: false,
       contentSecurityPolicy: {
         directives: {
@@ -47,7 +47,7 @@ async function bootstrap() {
           frameSrc: [`'self'`, 'sandbox.embed.apollographql.com'],
         },
       },
-    }),
+    } : {}),
   );
 
   // Set up global validation pipe to validate input

@@ -85,4 +85,11 @@ export class ClassController {
   ): Promise<boolean> {
     return this.classService.cancelClass(classId);
   }
+
+  @Delete('classes/test/all')
+  @ApiOperation({ summary: 'Admin cleans up test classes' })
+  @ApiBearerAuth()
+  public async cleanupTestClasses() {
+    return this.classService.cleanupTestClasses();
+  }
 }
