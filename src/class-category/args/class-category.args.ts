@@ -53,6 +53,14 @@ export class ClassCategoryQueryArgs {
   includeClassCount: boolean;
 
   @IsOptional()
+  @Field({
+    nullable: true,
+    description: `Set to true if you want to include tutorCount to each class category.
+    Note that it will automatically sort the results based on the tutorCount.`,
+  })
+  includeTutorCount: boolean;
+
+  @IsOptional()
   @Field(() => Date, {
     nullable: true,
     description: `Min creation date of class of this category`,

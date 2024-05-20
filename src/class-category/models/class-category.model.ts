@@ -20,4 +20,10 @@ export class ClassCategory {
     nullable: true
   })
   classCount: number;
+
+  @Field({
+    description: 'Set `includeTutorCount` arg to true to use this field',
+    nullable: true
+  })
+  tutorCount: number;
 }

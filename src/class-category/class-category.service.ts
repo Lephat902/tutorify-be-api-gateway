@@ -8,54 +8,58 @@ import { ClassCategoryQueryArgs } from './args';
 @Injectable()
 export class ClassCategoryService {
   constructor(
-    @Inject(QueueNames.CLASS_AND_CATEGORY) private readonly client: ClientProxy,
-  ) {}
+    @Inject(QueueNames.CLASS_AND_CATEGORY) private readonly classAndCategoryClient: ClientProxy,
+    @Inject(QueueNames.TUTOR_QUERY) private readonly tutorQueryClient: ClientProxy,
+  ) { }
 
   findAll(classCategoryQueryArgs: ClassCategoryQueryArgs): Promise<ClassCategory[]> {
+    const clientToQuery = classCategoryQueryArgs.includeTutorCount ?
+      this.tutorQueryClient :
+      this.classAndCategoryClient;
     return firstValueFrom(
-      this.client.send<ClassCategory[]>({ cmd: 'get_all_categories' }, classCategoryQueryArgs),
+      clientToQuery.send<ClassCategory[]>({ cmd: 'get_all_categories' }, classCategoryQueryArgs),
     );
   }
 
   findById(id: string): Promise<ClassCategory> {
     return firstValueFrom(
-      this.client.send<ClassCategory>({ cmd: 'get_category_by_id' }, id),
+      this.classAndCategoryClient.send<ClassCategory>({ cmd: 'get_category_by_id' }, id),
     );
   }
 
   findWholeCategoryHierarchyByIds(ids: string[]): Promise<ClassCategory[]> {
     return firstValueFrom(
-      this.client.send<ClassCategory[]>({ cmd: 'get_whole_category_hierarchy_by_ids' }, ids),
+      this.classAndCategoryClient.send<ClassCategory[]>({ cmd: 'get_whole_category_hierarchy_by_ids' }, ids),
     );
   }
 
   findAllSubjects(): Promise<Subject[]> {
     return firstValueFrom(
-      this.client.send<Subject[]>({ cmd: 'get_all_subjects' }, {}),
+      this.classAndCategoryClient.send<Subject[]>({ cmd: 'get_all_subjects' }, {}),
     );
   }
 
   findAllLevels(): Promise<Level[]> {
     return firstValueFrom(
-      this.client.send<Level[]>({ cmd: 'get_all_levels' }, {}),
+      this.classAndCategoryClient.send<Level[]>({ cmd: 'get_all_levels' }, {}),
     );
   }
 
   findSubjectsByLevel(levelId: string): Promise<Subject[]> {
     return firstValueFrom(
-      this.client.send<Subject[]>({ cmd: 'get_subjects_by_level' }, levelId),
+      this.classAndCategoryClient.send<Subject[]>({ cmd: 'get_subjects_by_level' }, levelId),
     );
   }
 
   findLevelsBySubject(subjectId: string): Promise<Level[]> {
     return firstValueFrom(
-      this.client.send<Level[]>({ cmd: 'get_levels_by_subject' }, subjectId),
+      this.classAndCategoryClient.send<Level[]>({ cmd: 'get_levels_by_subject' }, subjectId),
     );
   }
 
   insert(level: Level, subject: Subject): Promise<ClassCategory> {
     return firstValueFrom(
-      this.client.send<ClassCategory>(
+      this.classAndCategoryClient.send<ClassCategory>(
         { cmd: 'insert_category' },
         { level, subject },
       ),
@@ -64,7 +68,7 @@ export class ClassCategoryService {
 
   getNumberOfClassesByCategoryId(classCategoryId: string): Promise<number> {
     return firstValueFrom(
-      this.client.send<number>({ cmd: 'getNumberOfClassesByCategoryId' }, classCategoryId),
+      this.classAndCategoryClient.send<number>({ cmd: 'getNumberOfClassesByCategoryId' }, classCategoryId),
     );
   }
 }

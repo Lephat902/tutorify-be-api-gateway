@@ -23,6 +23,20 @@ import { Resolvers } from './resolvers';
           },
         }),
       },
+      {
+        name: QueueNames.TUTOR_QUERY,
+        inject: [ConfigService],
+        useFactory: async (configService: ConfigService) => ({
+          transport: Transport.RMQ,
+          options: {
+            urls: [configService.get<string>('RABBITMQ_URI')],
+            queue: QueueNames.TUTOR_QUERY,
+            queueOptions: {
+              durable: false,
+            },
+          },
+        }),
+      },
     ]),
   ],
   controllers: [ClassCategoryController],
