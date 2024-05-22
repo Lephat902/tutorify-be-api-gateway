@@ -55,6 +55,14 @@ export class ClassCategoryQueryArgs {
   @IsOptional()
   @Field({
     nullable: true,
+    description: `Sort categories by classCount first then their name. Default is true`,
+    defaultValue: true,
+  })
+  sortByClassCount: boolean;
+
+  @IsOptional()
+  @Field({
+    nullable: true,
     description: `Set to true if you want to include tutorCount to each class category.
     Note that it will automatically sort the results based on the tutorCount.`,
   })
@@ -73,4 +81,18 @@ export class ClassCategoryQueryArgs {
     description: `Max creation date of class of this category`,
   })
   classCreatedAtMax: Date;
+
+  @IsOptional()
+  @Field(() => [String], {
+    nullable: true,
+    description: "Subjects' ids classes categorized to",
+  })
+  subjectIds: string[];
+
+  @IsOptional()
+  @Field(() => [String], {
+    nullable: true,
+    description: "Levels' ids classes categorized to",
+  })
+  levelIds: string[];
 }

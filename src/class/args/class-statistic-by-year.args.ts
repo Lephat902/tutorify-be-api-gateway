@@ -1,18 +1,13 @@
 import {
   ArgsType,
-  Field,
-  registerEnumType
+  Field
 } from '@nestjs/graphql';
-import { ClassOrderBy, ClassStatus } from '@tutorify/shared';
+import { ClassStatus } from '@tutorify/shared';
 import { IsOptional } from 'class-validator';
 import { StatisticArgs } from 'src/common/graphql';
 
-registerEnumType(ClassOrderBy, {
-  name: 'ClassOrderBy',
-});
-
 @ArgsType()
-export class ClassStatisticArgs extends StatisticArgs {
+export class ClassStatisticByYearArgs extends StatisticArgs {
   @IsOptional()
   @Field(() => [ClassStatus], {
     nullable: true,

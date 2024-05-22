@@ -4,7 +4,7 @@ import { QueueNames, UserRole } from '@tutorify/shared';
 import { firstValueFrom } from 'rxjs';
 import { IAccessToken } from 'src/auth/auth.interfaces';
 import { isAdmin } from 'src/common/helpers';
-import { ClassQueryArgs, ClassStatisticArgs } from './args';
+import { ClassQueryArgs, ClassStatisticByYearArgs } from './args';
 import {
   ClassCreateDto,
   ClassUpdateDto,
@@ -85,8 +85,8 @@ export class ClassService {
     return firstValueFrom(this.client.send({ cmd: 'cleanupTestClasses' }, {}));
   }
 
-  async getClassStatistic(classStatisticArgs: ClassStatisticArgs) {
-    return firstValueFrom(this.client.send({ cmd: 'getClassStatistic' }, classStatisticArgs));
+  async getClassStatisticByYear(classStatisticArgs: ClassStatisticByYearArgs) {
+    return firstValueFrom(this.client.send({ cmd: 'getClassStatisticByYear' }, classStatisticArgs));
   }
 
   // Return class data in case of success, throw error if failed

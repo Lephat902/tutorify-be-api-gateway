@@ -8,23 +8,21 @@ import { TokenRequirements } from 'src/auth/decorators';
 import { TokenGuard } from 'src/auth/guards';
 import { StatisticByYear } from 'src/common/graphql';
 import { ClassService } from '../class.service';
-import { ClassStatisticArgs } from '../args';
+import { ClassStatisticByYearArgs } from '../args';
 
 @Resolver(() => StatisticByYear)
 @UseGuards(TokenGuard)
-export class ClassStatisticResolver {
+export class ClassStatisticByYearResolver {
   constructor(
     private readonly classService: ClassService,
   ) { }
 
   @Query(() => [StatisticByYear], { name: 'classStatisticByYear', nullable: true })
-  // @TokenRequirements(TokenType.CLIENT, [
-  //   UserRole.ADMIN,
-  //   UserRole.MANAGER,
-  // ])
-  async getClassStatistic(@Args() classStatisticArgs: ClassStatisticArgs) {
-    const a = await this.classService.getClassStatistic(classStatisticArgs);
-    console.log(a)
-    return a
+  @TokenRequirements(TokenType.CLIENT, [
+    UserRole.ADMIN,
+    UserRole.MANAGER,
+  ])
+  async getClassStatisticByYear(@Args() classStatisticArgs: ClassStatisticByYearArgs) {
+    return this.classService.getClassStatisticByYear(classStatisticArgs);
   }
 }
