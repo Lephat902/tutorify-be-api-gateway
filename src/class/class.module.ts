@@ -1,11 +1,11 @@
 import { Module, forwardRef } from '@nestjs/common';
-import { ClassController } from './class.controller';
-import { ClassService } from './class.service';
 import { ProxiesModule } from '@tutorify/shared';
-import { ClassPaginatedResultsResolver, ClassResolver } from './resolvers';
+import { ClassSessionModule } from 'src/class-session/class-session.module';
 import { TutorApplyForClassModule } from 'src/tutor-apply-for-class/tutor-apply-for-class.module';
 import { TutorQueryModule } from 'src/tutor-query/tutor-query.module';
-import { ClassSessionModule } from 'src/class-session/class-session.module';
+import { ClassController } from './class.controller';
+import { ClassService } from './class.service';
+import { Resolvers } from './resolvers';
 
 @Module({
   imports: [
@@ -15,7 +15,7 @@ import { ClassSessionModule } from 'src/class-session/class-session.module';
     forwardRef(() => ClassSessionModule),
   ],
   controllers: [ClassController],
-  providers: [ClassService, ClassResolver, ClassPaginatedResultsResolver],
+  providers: [ClassService, ...Resolvers],
   exports: [ClassService],
 })
 export class ClassModule {}

@@ -1,15 +1,15 @@
 import { ForbiddenException, Inject, Injectable } from '@nestjs/common';
+import { ClientProxy } from '@nestjs/microservices';
+import { QueueNames, UserRole } from '@tutorify/shared';
+import { firstValueFrom } from 'rxjs';
+import { IAccessToken } from 'src/auth/auth.interfaces';
+import { isAdmin } from 'src/common/helpers';
+import { ClassQueryArgs, ClassStatisticArgs } from './args';
 import {
   ClassCreateDto,
   ClassUpdateDto,
 } from './dtos';
-import { ClientProxy } from '@nestjs/microservices';
-import { firstValueFrom } from 'rxjs';
-import { IAccessToken } from 'src/auth/auth.interfaces';
-import { QueueNames, UserRole } from '@tutorify/shared';
-import { ClassQueryArgs } from './args';
 import { ClassPaginatedResults } from './models/class-paginated-results.model';
-import { isAdmin } from 'src/common/helpers';
 
 @Injectable()
 export class ClassService {
@@ -83,6 +83,10 @@ export class ClassService {
 
   async cleanupTestClasses() {
     return firstValueFrom(this.client.send({ cmd: 'cleanupTestClasses' }, {}));
+  }
+
+  async getClassStatistic(classStatisticArgs: ClassStatisticArgs) {
+    return firstValueFrom(this.client.send({ cmd: 'getClassStatistic' }, classStatisticArgs));
   }
 
   // Return class data in case of success, throw error if failed
