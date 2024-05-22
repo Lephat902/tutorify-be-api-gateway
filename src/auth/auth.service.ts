@@ -5,7 +5,7 @@ import { IAccessToken, TokenType } from './auth.interfaces';
 import { firstValueFrom } from 'rxjs';
 import { FindOneUserOptions, LoginDto, ResetPasswordDto, SignUpDto } from './dtos';
 import { QueueNames } from '@tutorify/shared';
-import { UserQueryArgs } from './args';
+import { UserQueryArgs, UserStatisticByYearArgs } from './args';
 import { UpdateDto } from './dtos/update';
 
 @Injectable()
@@ -81,6 +81,10 @@ export class AuthService {
 
   public async cleanupTestAccount() {
     return firstValueFrom(this.client.send({ cmd: 'cleanupTestAccount' }, {}));
+  }
+
+  public async getUserStatisticByYear(userStatisticByYearArgs: UserStatisticByYearArgs) {
+    return firstValueFrom(this.client.send({ cmd: 'getUserStatisticByYear' }, userStatisticByYearArgs));
   }
 
   public validateAccessToken(token: string): IAccessToken {
