@@ -9,6 +9,14 @@ import { StatisticArgs } from 'src/common/graphql';
 @ArgsType()
 export class UserStatisticByYearArgs extends StatisticArgs {
   @IsOptional()
+  @Field({
+    defaultValue: false,
+    nullable: true,
+    description: 'Return short month name',
+  })
+  shortMonthName: boolean;
+
+  @IsOptional()
   @Field(() => [UserRole], {
     nullable: true,
     description: 'Roles of users in the results',
