@@ -4,7 +4,7 @@ import {
   registerEnumType
 } from '@nestjs/graphql';
 import { DataPresentationOption, StatisticTimeIntervalOption } from '@tutorify/shared';
-import { IsInt, IsOptional } from 'class-validator';
+import { IsInt, IsNotEmpty } from 'class-validator';
 
 registerEnumType(StatisticTimeIntervalOption, {
   name: 'StatisticTimeIntervalOption',
@@ -18,21 +18,21 @@ registerEnumType(DataPresentationOption, {
 export class StatisticArgs {
   @IsInt()
   @Field({
-    nullable: true,
+    nullable: false,
     description: 'Year to display statistic',
   })
   year: number;
 
-  @IsOptional()
+  @IsNotEmpty()
   @Field(() => StatisticTimeIntervalOption, {
-    nullable: true,
+    nullable: false,
     description: 'Time interval option: quarter or month',
   })
   timeIntervalOption: StatisticTimeIntervalOption;
 
-  @IsOptional()
+  @IsNotEmpty()
   @Field(() => DataPresentationOption, {
-    nullable: true,
+    nullable: false,
     description: 'Data presentation option: breakdown or accumulation',
   })
   presentationOption: DataPresentationOption;
