@@ -65,4 +65,18 @@ export class UserQueryArgs extends IntersectionType(
     description: 'Role of user',
   })
   role: UserRole;
+
+  @IsOptional()
+  @Field(() => Date, {
+    nullable: true,
+    description: `Min creation date`,
+  })
+  createdAtMin: Date;
+
+  @IsOptional()
+  @Field(() => Date, {
+    nullable: true,
+    description: `Max creation date`,
+  })
+  createdAtMax: Date;
 }
