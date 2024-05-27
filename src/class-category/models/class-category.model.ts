@@ -17,13 +17,15 @@ export class ClassCategory {
 
   @Field({
     description: 'Set `includeClassCount` arg to true to use this field',
-    nullable: true
+    nullable: true,
+    defaultValue: 0,
   })
   classCount: number;
 
   @Field({
     description: 'Set `includeTutorCount` arg to true to use this field',
-    nullable: true
+    nullable: true,
+    defaultValue: 0,
   })
   tutorCount: number;
 }

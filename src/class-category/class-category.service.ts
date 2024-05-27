@@ -1,9 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
+import { QueueNames, mergeArraysById } from '@tutorify/shared';
 import { firstValueFrom } from 'rxjs';
-import { QueueNames } from '@tutorify/shared';
-import { ClassCategory, Level, Subject } from './models';
 import { ClassCategoryQueryArgs } from './args';
+import { ClassCategory, Level, Subject } from './models';
 
 @Injectable()
 export class ClassCategoryService {
@@ -12,13 +12,30 @@ export class ClassCategoryService {
     @Inject(QueueNames.TUTOR_QUERY) private readonly tutorQueryClient: ClientProxy,
   ) { }
 
-  findAll(classCategoryQueryArgs: ClassCategoryQueryArgs): Promise<ClassCategory[]> {
-    const clientToQuery = classCategoryQueryArgs.includeTutorCount ?
-      this.tutorQueryClient :
-      this.classAndCategoryClient;
-    return firstValueFrom(
-      clientToQuery.send<ClassCategory[]>({ cmd: 'get_all_categories' }, classCategoryQueryArgs),
-    );
+  async findAll(classCategoryQueryArgs: ClassCategoryQueryArgs): Promise<ClassCategory[]> {
+    // Query when tutorCount is required
+    const classCategoriesFromTutorQueryP = classCategoryQueryArgs.includeTutorCount ?
+      firstValueFrom(
+        this.tutorQueryClient.send<ClassCategory[]>({ cmd: 'get_all_categories' }, classCategoryQueryArgs),
+      ) :
+      null;
+    // Query when classCount is required or in default case (nothing is required)
+    const classCategoriesFromClassCategoryP = (
+      classCategoryQueryArgs.includeClassCount ||
+      !classCategoryQueryArgs.includeTutorCount
+    ) ?
+      firstValueFrom(
+        this.classAndCategoryClient.send<ClassCategory[]>({ cmd: 'get_all_categories' }, classCategoryQueryArgs),
+      ) :
+      null;
+    const [classCategoriesFromTutorQuery, classCategoriesFromClassCategory] = await Promise.all([
+      classCategoriesFromTutorQueryP,
+      classCategoriesFromClassCategoryP,
+    ]);
+    if (classCategoriesFromTutorQuery && classCategoriesFromClassCategory)
+      return mergeArraysById(classCategoriesFromClassCategory, classCategoriesFromTutorQuery);
+
+    return classCategoriesFromClassCategory ?? classCategoriesFromTutorQuery;
   }
 
   findById(id: string): Promise<ClassCategory> {
